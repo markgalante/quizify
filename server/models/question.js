@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const questionSchema = new Schema({
     question: String, 
-    options: [optionID]
+    quizId: String,
 }); 
 
 module.exports = mongoose.model("Question", questionSchema); 
