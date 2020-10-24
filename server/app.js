@@ -5,15 +5,7 @@ const schema = require("./schema/schema");
 
 const app = express();
 
-const Quiz = require('./models/quiz'); 
-const Question = require('./models/question');
-const Option = require('./models/option'); 
-
-Quiz.create({
-    title: "Football Quiz",
-}).then(()=> console.log("success")).catch(err => console.error(err.message));
-
-mongoose.connect("mongodb://localhost/kinetic", {
+mongoose.connect("mongodb://localhost/quizify", {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
