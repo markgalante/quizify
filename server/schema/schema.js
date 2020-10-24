@@ -22,6 +22,12 @@ const UserType = new GraphQLObjectType({
     fields: () => ({
         name: { type: GraphQLString },
         id: { type: GraphQLID },
+        quizes: {
+            type: new GraphQLList(QuizType),
+            resolve(parent, args) {
+                return Quiz.find({ creatorId: parent.id });
+            }
+        }
     }),
 });
 
@@ -62,7 +68,7 @@ const QuizType = new GraphQLObjectType({
         creator: {
             type: UserType,
             resolve(parent, args) {
-                return User.findById(creatorId);
+                return User.findById(parent.creatorId);
             }
         }
     })
