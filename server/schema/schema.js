@@ -5,6 +5,7 @@ const graphql = require("graphql");
 const Quiz = require("../models/quiz");
 const Question = require("../models/question");
 const Option = require("../models/option");
+const User = require("../models/user");
 
 const {
     GraphQLObjectType,
@@ -15,6 +16,14 @@ const {
     GraphQLString,
     GraphQLBoolean
 } = graphql;
+
+const UserType = new GraphQLObjectType({
+    name: "User",
+    fields: () => ({
+        name: { type: GraphQLString },
+        id: { type: GraphQLID },
+    }),
+});
 
 const OptionType = new GraphQLObjectType({
     name: "Option",
@@ -49,6 +58,12 @@ const QuizType = new GraphQLObjectType({
             resolve(parent, args) {
                 return Question.find({ quizId: parent.id });
             }
+        },
+        creator: {
+            type: UserType,
+            resolve(parent, args) {
+                return User.findById(creatorId);
+            }
         }
     })
 });
@@ -69,7 +84,20 @@ const RootQuery = new GraphQLObjectType({
                 return Quiz.find();
             }
         },
-    }
+        user: {
+            type: UserType,
+            args: { id: { type: new GraphQLNonNull(GraphQLID) } },
+            resolve(parent, args) {
+                return User.findById(args.id);
+            }
+        },
+        users: {
+            type: new GraphQLList(UserType),
+            resolve() {
+                return User.find();
+            },
+        },
+    },
 });
 
 const Mutation = new GraphQLObjectType({
@@ -79,10 +107,12 @@ const Mutation = new GraphQLObjectType({
             type: QuizType,
             args: {
                 title: { type: new GraphQLNonNull(GraphQLString) },
+                creatorId: { type: new GraphQLNonNull(GraphQLID) }
             },
             resolve(parent, args) {
                 const quiz = new Quiz({
                     title: args.title,
+                    creatorId: args.creatorId,
                 });
                 return quiz.save();
             }
@@ -116,8 +146,20 @@ const Mutation = new GraphQLObjectType({
                 });
                 return option.save();
             }
-        }
-    }
+        },
+        addUser: {
+            type: UserType,
+            args: {
+                name: { type: new GraphQLNonNull(GraphQLString) },
+            },
+            resolve(parent, args) {
+                const user = new User({
+                    name: args.name
+                });
+                return user.save(); //5f9400bfa74aa73a3cee98ac
+            },
+        },
+    },
 });
 
 module.exports = new GraphQLSchema({
