@@ -10,6 +10,7 @@ const {
     GraphQLObjectType,
     GraphQLList,
     GraphQLSchema,
+    GraphQLNonNull,
     GraphQLID,
     GraphQLString,
     GraphQLBoolean
@@ -63,7 +64,7 @@ const RootQuery = new GraphQLObjectType({
             },
         },
         quizes: {
-            type: QuizType,
+            type: new GraphQLList(QuizType),
             resolve(parent, args) {
                 return Quiz.find();
             }
@@ -71,6 +72,55 @@ const RootQuery = new GraphQLObjectType({
     }
 });
 
+const Mutation = new GraphQLObjectType({
+    name: "Mutation",
+    fields: {
+        createQuiz: {
+            type: QuizType,
+            args: {
+                title: { type: new GraphQLNonNull(GraphQLString) },
+            },
+            resolve(parent, args) {
+                const quiz = new Quiz({
+                    title: args.title,
+                });
+                return quiz.save();
+            }
+        },
+        addQuestion: {
+            type: QuestionType,
+            args: {
+                question: { type: new GraphQLNonNull(GraphQLString) },
+                quizId: { type: GraphQLID },
+            },
+            resolve(parent, args) {
+                const question = new Question({
+                    question: args.question,
+                    quizId: args.quizId
+                });
+                return question.save();
+            },
+        },
+        addOption: {
+            type: OptionType,
+            args: {
+                option: { type: GraphQLString },
+                isCorrect: { type: GraphQLBoolean }, 
+                questionId: { type: GraphQLID}
+            }, 
+            resolve(parent, args){
+                const option = new Option({
+                    option: args.option, 
+                    isCorrect: args.isCorrect, 
+                    questionId: args.questionId, 
+                }); 
+                return option.save(); 
+            }
+        }
+    }
+});
+
 module.exports = new GraphQLSchema({
     query: RootQuery,
+    mutation: Mutation,
 }); 
