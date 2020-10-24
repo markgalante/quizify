@@ -105,16 +105,16 @@ const Mutation = new GraphQLObjectType({
             type: OptionType,
             args: {
                 option: { type: GraphQLString },
-                isCorrect: { type: GraphQLBoolean }, 
-                questionId: { type: GraphQLID}
-            }, 
-            resolve(parent, args){
+                isCorrect: { type: GraphQLBoolean },
+                questionId: { type: GraphQLID }
+            },
+            resolve(parent, args) {
                 const option = new Option({
-                    option: args.option, 
-                    isCorrect: args.isCorrect, 
-                    questionId: args.questionId, 
-                }); 
-                return option.save(); 
+                    option: args.option,
+                    isCorrect: args.isCorrect,
+                    questionId: args.questionId,
+                });
+                return option.save();
             }
         }
     }
