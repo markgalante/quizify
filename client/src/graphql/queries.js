@@ -11,4 +11,23 @@ export const GET_QUIZZES = gql`
             }
         }
     }
-`
+`; 
+
+export const GET_QUIZ = gql`
+    query($id: ID!){
+        quiz(id:$id){
+            id
+            title
+            questions{
+                id
+                question{
+                    options{
+                        id
+                        option
+                        isCorrect
+                    }
+                }
+            }
+        }
+    }
+`; 
