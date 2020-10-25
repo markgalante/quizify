@@ -1,7 +1,7 @@
 import React from "react";
 
 //Imports of components 
-import QuizList from "./components/quiz-list"; 
+import QuizList from "./components/QuizList"; 
 
 function App() {
   return (
