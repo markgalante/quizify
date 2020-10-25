@@ -1,9 +1,12 @@
-import React from "react"; 
+import React from "react";
+import { useRouteMatch } from "react-router-dom";
 
 const Quiz = () => {
-    return(
+    let match = useRouteMatch();
+    console.log({match})
+    return (
         <div>Quiz</div>
-    ); 
-}; 
+    );
+};
 
 export default Quiz; 
