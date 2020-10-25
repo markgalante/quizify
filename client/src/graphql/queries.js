@@ -11,7 +11,7 @@ export const GET_QUIZZES = gql`
             }
         }
     }
-`; 
+`;
 
 export const GET_QUIZ = gql`
     query($id: ID!){
@@ -20,12 +20,11 @@ export const GET_QUIZ = gql`
             title
             questions{
                 id
-                question{
-                    options{
-                        id
-                        option
-                        isCorrect
-                    }
+                question
+                options{
+                    id
+                    option
+                    isCorrect
                 }
             }
         }
