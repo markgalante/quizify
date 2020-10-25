@@ -6,9 +6,6 @@ import Error from "./Error";
 
 const QuizList = () => {
     const { loading, data, error } = useQuery(GET_QUIZZES);
-    if (loading) console.log("loading")
-    if (data) console.log({ data });
-    if (error) console.log({ error });
 
     return (
         <div className="quiz-list">
@@ -16,11 +13,11 @@ const QuizList = () => {
                 loading
                     ? (<LoadingSpinner />)
                     : error
-                        ? <Error />
+                        ? <Error message={error.message}/>
                         : <ul>
                             {
                                 data.quizes.map(quiz => (
-                                    <li key={quiz.id}>{quiz.title}</li>
+                                    <li key={quiz.id}><a href={`/${quiz.id}`}>{quiz.title}</a></li>
                                 ))
                             }
                         </ul>
