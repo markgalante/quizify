@@ -123,6 +123,15 @@ const Mutation = new GraphQLObjectType({
                 return quiz.save();
             }
         },
+        deleteQuiz: {
+            type: QuizType,
+            args: {
+                id: { type: new GraphQLNonNull(GraphQLID) }, 
+            }, 
+            resolve(parent, args) {
+                return Quiz.findByIdAndDelete(args.id); 
+            }
+        },
         addQuestion: {
             type: QuestionType,
             args: {
