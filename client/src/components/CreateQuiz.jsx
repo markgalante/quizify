@@ -1,11 +1,11 @@
 import React from "react"; 
 
-const AddQuiz = () => {
+const CreateQuiz = () => {
     return(
         <div>
-            Add Quiz
+            CreateQuiz
         </div>
     ); 
 };
 
-export default AddQuiz; 
+export default CreateQuiz; 

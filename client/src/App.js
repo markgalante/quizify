@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Link, Switch, Route } from "react-router-dom";
 
 //Imports of components 
 import QuizList from "./components/QuizList";
-import AddQuiz from "./components/AddQuiz";
+import CreateQuiz from "./components/CreateQuiz";
 
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
         </div>
         <Switch>
           <Route exact path="/"><QuizList /></Route>
-          <Route path="/create"><AddQuiz /> </Route>
+          <Route path="/create"><CreateQuiz /> </Route>
         </Switch>
       </Router>
     </div>
