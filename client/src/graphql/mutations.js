@@ -6,5 +6,12 @@ export const CREATE_QUIZ = gql`
             id
             title
         }
+    }; 
+
+    mutation AddQuestion($question:String!, $quizId: ID!){
+        addQuestion(question:$question, quizId:$quizId){
+            id
+            question
+        }
     }
 `; 
