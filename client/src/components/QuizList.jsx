@@ -26,7 +26,7 @@ const QuizList = () => {
                                 <Route>
                                     {
                                         data.quizes.map(quiz => (
-                                            <li key={quiz.id}><Link to={`${quiz.id}`}>{quiz.title}</Link></li>
+                                            <li key={quiz.id}><Link to={`/${quiz.id}`}>{quiz.title}</Link></li>
                                         ))
                                     }
                                 </Route>
