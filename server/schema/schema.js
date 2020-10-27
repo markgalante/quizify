@@ -126,10 +126,10 @@ const Mutation = new GraphQLObjectType({
         deleteQuiz: {
             type: QuizType,
             args: {
-                id: { type: new GraphQLNonNull(GraphQLID) }, 
-            }, 
+                id: { type: new GraphQLNonNull(GraphQLID) },
+            },
             resolve(parent, args) {
-                return Quiz.findByIdAndDelete(args.id); 
+                return Quiz.findByIdAndDelete(args.id);
             }
         },
         addQuestion: {
@@ -175,6 +175,16 @@ const Mutation = new GraphQLObjectType({
             },
         },
     },
+});
+
+const Subscription = new GraphQLObjectType({
+    name: "Subscription",
+    fields: {
+        quizAdded: {
+            type: QuizType,
+            args: { type: new GraphQLNonNull(GraphQLID) }, 
+        }
+    }
 });
 
 module.exports = new GraphQLSchema({
