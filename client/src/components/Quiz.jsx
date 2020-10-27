@@ -1,11 +1,12 @@
 import React from "react";
 import { GET_QUIZ } from "../graphql/queries";
 import { useQuery } from "@apollo/client"
-import { useRouteMatch } from "react-router-dom";
+import { useRouteMatch, Link, Switch, Route, BrowserRouter as Router } from "react-router-dom";
 
 import LoadingSpinner from "./LoadingSpinner";
 import Error from "./Error";
-import Questions from "./Questions"
+import Questions from "./Questions";
+import AddQuestion from "./AddQuestion";
 
 const Quiz = () => {
     let match = useRouteMatch();
@@ -13,7 +14,8 @@ const Quiz = () => {
         variables: {
             id: match.params.id,
         }
-    }); 
+    });
+    console.log(match.params.id); 
 
     return (
         <div>
@@ -26,6 +28,16 @@ const Quiz = () => {
                             <div>
                                 <h1>{data.quiz.title}</h1>
                                 <Questions questions={data.quiz.questions} />
+                                <Router>
+                                    <ul>
+                                        <li><Link to={`/${match.params.id}/addquestion`}>Add Question</Link></li>
+                                    </ul>
+
+                                    <Switch>
+                                        <Route path={`/${match.params.id}/addquestion`}><AddQuestion /></Route>
+                                    </Switch>
+                                </Router>
+
                             </div>
                         )
             }
