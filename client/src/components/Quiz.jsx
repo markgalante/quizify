@@ -34,7 +34,7 @@ const Quiz = () => {
                                     </ul>
 
                                     <Switch>
-                                        <Route path={`/${match.params.id}/addquestion`}><AddQuestion /></Route>
+                                        <Route path={`/${match.params.id}/addquestion`}><AddQuestion id={match.params.id} /></Route>
                                     </Switch>
                                 </Router>
 
