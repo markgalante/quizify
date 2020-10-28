@@ -1,8 +1,8 @@
 const { graphqlHTTP } = require("express-graphql");
 const graphql = require("graphql");
-const { PubSub } = require("graphql-subscriptions"); 
+const { PubSub } = require("graphql-subscriptions");
 
-const pubsub = new PubSub(); 
+const pubsub = new PubSub();
 
 //Import of Mongoose Schemas: 
 const Quiz = require("../models/quiz");
@@ -184,12 +184,18 @@ const Subscription = new GraphQLObjectType({
     name: "Subscription",
     fields: {
         quizAdded: {
-            type: QuizType, 
-            subscribe: () => pubsub.asyncIterator(Mutation.createQuiz), 
-        }, 
+            type: QuizType,
+            args: {
+                id: { type: new GraphQLNonNull(GraphQLID) }
+            },
+            subscribe: () => pubsub.asyncIterator(Mutation.createQuiz),
+        },
         questionAdded: {
-            type: QuestionType, 
-            subscribe: () => pubsub.asyncIterator(Mutation.addQuestion), 
+            type: QuestionType,
+            args: {
+                id: { type: new GraphQLNonNull(GraphQLID) }
+            }, 
+            subscribe: () => pubsub.asyncIterator(Mutation.addQuestion),
         }
     }
 });
@@ -197,5 +203,5 @@ const Subscription = new GraphQLObjectType({
 module.exports = new GraphQLSchema({
     query: RootQuery,
     mutation: Mutation,
-    subscription: Subscription, 
+    subscription: Subscription,
 }); 
