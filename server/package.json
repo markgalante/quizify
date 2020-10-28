@@ -9,9 +9,12 @@
   "author": "Mark Galante",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-graphql": "^0.11.0",
     "graphql": "^15.3.0",
-    "mongoose": "^5.10.9"
+    "graphql-subscriptions": "^1.1.0",
+    "mongoose": "^5.10.9",
+    "subscriptions-transport-ws": "^0.9.18"
   }
 }
