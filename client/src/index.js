@@ -4,11 +4,45 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import { ApolloClient, InMemoryCache, ApolloProvider, split, createHttpLink } from "@apollo/client";
+import { WebSocketLink } from "@apollo/client/link/ws"
 import { BrowserRouter } from "react-router-dom"
+import { getMainDefinition } from '@apollo/client/utilities';
+// import quiz from '../../server/models/quiz';
+
+//for queries or mutations: 
+const httpLink = createHttpLink({
+  uri: "http://localhost:4000/graphql"
+})
+
+//initialise a web socket link for subscriptions
+const wsLink = new WebSocketLink({
+  uri: "ws://localhost:4000/subscriptions",
+  options: {
+    reconnect: true, 
+    // connectionParams: {
+    //   authToken: user.authToken
+    // }
+  },
+});
+
+//different transports for different operations: 
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
+    );
+  },
+  wsLink,
+  httpLink,
+);
 
 const client = new ApolloClient({
-  uri: "http://localhost:4000/graphql",
+  // uri: "http://localhost:4000/graphql",
+  // uri: splitLink, 
+  link: splitLink,
   cache: new InMemoryCache(),
 });
 
