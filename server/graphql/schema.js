@@ -109,6 +109,7 @@ const RootQuery = new GraphQLObjectType({
     },
 });
 
+
 const Mutation = new GraphQLObjectType({
     name: "Mutation",
     fields: {
@@ -119,10 +120,11 @@ const Mutation = new GraphQLObjectType({
                 creatorId: { type: new GraphQLNonNull(GraphQLID) }
             },
             resolve(parent, args) {
-                const quiz = new Quiz({
+                const newQuiz = {
                     title: args.title,
                     creatorId: args.creatorId,
-                });
+                };
+                const quiz = new Quiz(newQuiz);
                 return quiz.save();
             }
         },
@@ -185,17 +187,13 @@ const Subscription = new GraphQLObjectType({
     fields: {
         quizAdded: {
             type: QuizType,
-            args: {
-                id: { type: new GraphQLNonNull(GraphQLID) }
+            subscribe: () => {
+                pubsub.asyncIterator(NEW_QUIZ_ADDED);
             },
-            subscribe: () => pubsub.asyncIterator(Mutation.createQuiz),
         },
         questionAdded: {
             type: QuestionType,
-            args: {
-                id: { type: new GraphQLNonNull(GraphQLID) }
-            }, 
-            subscribe: () => pubsub.asyncIterator(Mutation.addQuestion),
+            subscribe: () => pubsub.asyncIterator("questionAdded"),
         }
     }
 });
