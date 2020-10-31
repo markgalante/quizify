@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { ADD_QUESTION } from "../graphql/mutations"
+import { ADD_QUESTION } from "../graphql/mutations";
+import { QUESTION_LIST } from "../graphql/queries"
 
 const AddQuestion = ({ id }) => {
     const [question, setQuestion] = useState('');
@@ -11,9 +12,13 @@ const AddQuestion = ({ id }) => {
             variables: {
                 question,
                 quizId: id
-            }
+            },
+            refetchQueries: [{
+                query: QUESTION_LIST,
+                variables: { id: id },
+            }]
         });
-        setQuestion(''); 
+        setQuestion('');
     };
     console.log({ data })
     console.log({ question, addQuestion })
@@ -21,7 +26,7 @@ const AddQuestion = ({ id }) => {
         <div>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="question">Add question</label>
-                <input id="question" onChange={e => setQuestion(e.target.value)} />
+                <input id="question" onChange={e => setQuestion(e.target.value)} value={question} />
                 <button type="submit">Add Question</button>
             </form>
         </div>
