@@ -15,7 +15,6 @@ const Quiz = () => {
             id: match.params.id,
         }
     });
-    console.log(match.params.id); 
 
     return (
         <div>
