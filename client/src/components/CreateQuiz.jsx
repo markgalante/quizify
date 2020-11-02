@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_QUIZ } from "../graphql/mutations";
 import { GET_QUIZZES } from "../graphql/queries";
@@ -16,10 +16,14 @@ const CreateQuiz = () => {
             },
             refetchQueries: [{ query: GET_QUIZZES }]
         });
-        setTitle('');
         if (error) console.log(error)
         console.log({ data, error });
     }
+
+    useEffect(()=>{
+        setTitle(''); 
+    }, []);
+
     return (
         <div>
             <form onSubmit={handleSubmit}>
