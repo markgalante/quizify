@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { ADD_QUESTION } from "../graphql/mutations";
 import { QUESTION_LIST } from "../graphql/queries"
 
 const AddQuestion = ({ id }) => {
     const [question, setQuestion] = useState('');
-    const [addQuestion, { data }] = useMutation(ADD_QUESTION);
+    const [addQuestion] = useMutation(ADD_QUESTION);
     function handleSubmit(e) {
         e.preventDefault();
         addQuestion({
@@ -18,15 +18,9 @@ const AddQuestion = ({ id }) => {
                 variables: { id: id },
             }]
         });
-        // setQuestion('');
+        setQuestion('');
     };
 
-    useEffect(()=>{
-        setQuestion('')
-    },[]); 
-
-    console.log({ data })
-    console.log({ question, addQuestion })
     return (
         <div>
             <form onSubmit={handleSubmit}>
