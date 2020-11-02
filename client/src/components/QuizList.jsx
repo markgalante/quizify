@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { GET_QUIZZES } from "../graphql/queries";
 import LoadingSpinner from "./LoadingSpinner";
 import Error from "./Error";
@@ -12,25 +12,40 @@ import {
 } from "react-router-dom";
 
 const QuizList = () => {
+    //Using useQuery above useState only causes useEffect to run once. 
     const { loading, data, error } = useQuery(GET_QUIZZES);
+    const [quizes, setQuizes] = useState(null);
+    const [pageLoading, setLoading] = useState(true);
+    const [fetchError, setError] = useState(null);
+    
+
+    useEffect(() => {
+        if(!loading)setLoading(false); 
+        if(error) setError(error);
+        if(data) setQuizes(data);
+        console.log({ error, loading, data });
+    }, [loading, data, error]);
 
     return (
         <div className="quiz-list">
             <Router>
                 {
-                    loading
+                    pageLoading
                         ? (<LoadingSpinner />)
-                        : error
+                        : fetchError
                             ? <Error message={error.message} />
-                            : <ul>
-                                <Route>
-                                    {
-                                        data.quizes.map(quiz => (
-                                            <li key={quiz.id}><Link to={`/${quiz.id}`}>{quiz.title}</Link></li>
-                                        ))
-                                    }
-                                </Route>
-                            </ul>
+                            :
+                            quizes ?
+                                <ul>
+                                    <Route>
+                                        {
+                                            quizes.quizes.map(quiz => (
+                                                <li key={quiz.id}><Link to={`/${quiz.id}`}>{quiz.title}</Link></li>
+                                            ))
+                                        }
+                                    </Route>
+                                </ul>
+                            : null
                 }
 
                 <Switch>
