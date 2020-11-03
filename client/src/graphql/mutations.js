@@ -16,3 +16,13 @@ export const ADD_QUESTION = gql`
         }
     }
 `;
+
+export const ADD_OPTION = gql`
+    mutation AddOption($option:String!, $isCorrect: Boolean, $questionId: ID!){
+        addOption(option:$option, isCorrect:$isCorrect, questionId:$questionId){
+            id
+            option
+            isCorrect
+        }
+    }
+`; 
