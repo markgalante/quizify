@@ -13,7 +13,7 @@ const Options = ({ options, questionId }) => {
             <form>
                 {answerOptions}
             </form>
-            <AddOption length={options.length} questionId={questionId} /> 
+            <AddOption options={options} questionId={questionId} /> 
         </div>
     );
 };
