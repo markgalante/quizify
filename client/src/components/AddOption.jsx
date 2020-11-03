@@ -1,15 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { ADD_OPTION } from "../graphql/mutations";
 
 const AddOption = ({ options, questionId }) => {
+    const [addOption] = useMutation(ADD_OPTION);
+    const [option, setOption] = useState('');
+    const [isCorrect, setIsCorrect] = useState(false);
 
     let allowCorrectAnser = true;
     for (let i = 0; i < options.length; i++) {
-        if (options[i].isCorrect) return true;
+        if (options[i].isCorrect) allowCorrectAnser = false;
     };
 
+    function handleSubmit(e) {
+        e.preventDefault();
+        addOption({
+            variables: {
+                questionId,
+                option,
+                isCorrect
+            }
+        })
+    }
     return (
         <div>
-            <form>
+            <form onSubmit={handleSubmit}>
 
                 {options.length > 5
                     ? (<input type="text" disabled />)
@@ -17,10 +32,10 @@ const AddOption = ({ options, questionId }) => {
                         <div>
                             {
                                 allowCorrectAnser
-                                    ? <input type="radio" />
-                                    : <input type="radio" disabled />
+                                    ? <input type="checkbox" onChange={() => setIsCorrect(!isCorrect)} />
+                                    : <input type="checkbox" disabled />
                             }
-                            <input type="text" />
+                            <input type="text" onChange={e => setOption(e.target.value)} />
                             <button type="submit">Add</button>
                         </div>)
                 }
