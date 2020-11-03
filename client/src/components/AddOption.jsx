@@ -1,12 +1,17 @@
-import React from "react"; 
+import React from "react";
 
-const AddOption = () => {
+const AddOption = ({ length, questionId }) => {
 
     return (
         <div>
-            Add Option
+            <form>
+                {length > 5
+                    ? (<input type="text" disabled />)
+                    : (<input type="text" />)}
+                <button type="submit">Add</button>
+            </form>
         </div>
-    ); 
-}; 
+    );
+};
 
 export default AddOption; 
