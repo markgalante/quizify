@@ -1,14 +1,30 @@
 import React from "react";
 
-const AddOption = ({ length, questionId }) => {
+const AddOption = ({ options, questionId }) => {
+
+    let allowCorrectAnser = true;
+    for (let i = 0; i < options.length; i++) {
+        if (options[i].isCorrect) return true;
+    };
 
     return (
         <div>
             <form>
-                {length > 5
+
+                {options.length > 5
                     ? (<input type="text" disabled />)
-                    : (<input type="text" />)}
-                <button type="submit">Add</button>
+                    : (
+                        <div>
+                            {
+                                allowCorrectAnser
+                                    ? <input type="radio" />
+                                    : <input type="radio" disabled />
+                            }
+                            <input type="text" />
+                            <button type="submit">Add</button>
+                        </div>)
+                }
+
             </form>
         </div>
     );
