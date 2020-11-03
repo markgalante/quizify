@@ -44,5 +44,5 @@ webServer.listen(port, () => {
     }, {
         server: webServer,
         path: '/subscriptions',
-    })
+    });
 });
