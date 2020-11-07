@@ -27,6 +27,15 @@ export const ADD_QUESTION = gql`
     }
 `;
 
+export const UPDATE_QUESTION = gql`
+    mutation UpdateQuestion($id: ID!, $question: String!){
+        updateQuestion(id:$id, question:$question){
+            id
+            question
+        }
+    }
+`; 
+
 export const ADD_OPTION = gql`
     mutation AddOption($option:String!, $isCorrect: Boolean, $questionId: ID!){
         addOption(option:$option, isCorrect:$isCorrect, questionId:$questionId){
