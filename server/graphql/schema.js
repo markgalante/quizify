@@ -191,6 +191,19 @@ const Mutation = new GraphQLObjectType({
                 return question.save();
             },
         },
+        updateQueztion: {
+            type: QuestionType,
+            args: {
+                id: { type: new GraphQLNonNull(GraphQLID) },
+                question: { type: new GraphQLNonNull(GraphQLString) },
+            },
+            resolve(parent, args) {
+                const updatedQuestion = {
+                    question: args.question
+                }; 
+                return Question.findByIdAndUpdate(args.id, updatedQuestion); 
+            },
+        },
         addOption: {
             type: OptionType,
             args: {
