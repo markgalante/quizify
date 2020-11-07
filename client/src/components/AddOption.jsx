@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { ADD_OPTION } from "../graphql/mutations";
+import { SHOW_OPTIONS } from "../graphql/queries";
 
 const AddOption = ({ options, questionId }) => {
     const [addOption] = useMutation(ADD_OPTION);
@@ -19,9 +20,12 @@ const AddOption = ({ options, questionId }) => {
                 questionId,
                 option,
                 isCorrect
-            }
-        })
+            },
+            refetchQueries: [{ query: SHOW_OPTIONS, variables: {questionId}}],
+        });
+        setOption(''); 
     }
+
     return (
         <div>
             <form onSubmit={handleSubmit}>
@@ -35,7 +39,7 @@ const AddOption = ({ options, questionId }) => {
                                     ? <input type="checkbox" onChange={() => setIsCorrect(!isCorrect)} />
                                     : <input type="checkbox" disabled />
                             }
-                            <input type="text" onChange={e => setOption(e.target.value)} />
+                            <input type="text" onChange={e => setOption(e.target.value)} value={option || ""} />
                             <button type="submit">Add</button>
                         </div>)
                 }
