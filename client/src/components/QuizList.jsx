@@ -23,7 +23,6 @@ const QuizList = () => {
         if(!loading)setLoading(false); 
         if(error) setError(error);
         if(data) setQuizes(data);
-        console.log({ error, loading, data });
     }, [loading, data, error]);
 
     return (
