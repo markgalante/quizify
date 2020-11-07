@@ -8,6 +8,16 @@ export const CREATE_QUIZ = gql`
         }
     }
 `;
+
+export const UPDATE_QUIZ = gql`
+    mutation UpdateQuiz($id: ID!, $title: String!){
+        updateQuiz(id:$id, title:$title){
+            id
+            title
+        }
+    }
+`;
+
 export const ADD_QUESTION = gql`
     mutation AddQuestion($question:String!, $quizId: ID!){
         addQuestion(question:$question, quizId:$quizId){
