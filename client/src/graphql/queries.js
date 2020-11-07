@@ -29,7 +29,7 @@ export const GET_QUIZ = gql`
             }
         }
     }
-`; 
+`;
 
 export const QUESTION_LIST = gql`
     query($id: ID!){
@@ -46,3 +46,13 @@ export const QUESTION_LIST = gql`
         }
     }
 `;
+
+export const SHOW_OPTIONS = gql`
+    query($questionId: ID!){
+        options(questionId:$questionId){
+            option
+            isCorrect
+            id
+        }
+    }
+`; 
