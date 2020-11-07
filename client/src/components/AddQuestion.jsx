@@ -25,7 +25,7 @@ const AddQuestion = ({ id }) => {
         <div>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="question">Add question</label>
-                <input id="question" onChange={e => setQuestion(e.target.value)} value={question} />
+                <input id="question" onChange={e => setQuestion(e.target.value)} value={question} required />
                 <button type="submit">Add Question</button>
             </form>
         </div>
