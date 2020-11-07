@@ -106,7 +106,33 @@ const RootQuery = new GraphQLObjectType({
                 return User.find();
             },
         },
+        options: {
+            type: new GraphQLList(OptionType),
+            args: { questionId: { type: new GraphQLNonNull(GraphQLID) } },
+            resolve(parent, args) {
+                return Option.find({ questionId: args.questionId });
+            }
+        }
     },
+});
+
+const NEW_QUIZ_ADDED = "new_quiz_added";
+
+const Subscription = new GraphQLObjectType({
+    name: "Subscription",
+    fields: {
+        quizAdded: {
+            type: QuizType,
+            subscribe: () => {
+                pubsub.asyncIterator(NEW_QUIZ_ADDED);
+            },
+            resolve: payload => payload,
+        },
+        questionAdded: {
+            type: QuestionType,
+            subscribe: () => pubsub.asyncIterator("questionAdded"),
+        }
+    }
 });
 
 
@@ -120,13 +146,27 @@ const Mutation = new GraphQLObjectType({
                 creatorId: { type: new GraphQLNonNull(GraphQLID) }
             },
             resolve(parent, args) {
-                const newQuiz = {
+                const newQuiz = new Quiz({
                     title: args.title,
                     creatorId: args.creatorId,
-                };
-                const quiz = new Quiz(newQuiz);
-                return quiz.save();
+                });
+                pubsub.publish(NEW_QUIZ_ADDED, { quizAdded: { title: newQuiz.title } });
+                console.log({ newQuiz });
+                return newQuiz.save();
             }
+        },
+        updateQuiz: {
+            type: QuizType,
+            args: {
+                id: { type: new GraphQLNonNull(GraphQLID) },
+                title: { type: new GraphQLNonNull(GraphQLString) }
+            },
+            resolve(parent, args) {
+                const updatedQuiz = {
+                    title: args.title
+                }
+                return Quiz.findByIdAndUpdate(args.id, updatedQuiz);
+            },
         },
         deleteQuiz: {
             type: QuizType,
@@ -180,22 +220,6 @@ const Mutation = new GraphQLObjectType({
             },
         },
     },
-});
-
-const Subscription = new GraphQLObjectType({
-    name: "Subscription",
-    fields: {
-        quizAdded: {
-            type: QuizType,
-            subscribe: () => {
-                pubsub.asyncIterator(NEW_QUIZ_ADDED);
-            },
-        },
-        questionAdded: {
-            type: QuestionType,
-            subscribe: () => pubsub.asyncIterator("questionAdded"),
-        }
-    }
 });
 
 module.exports = new GraphQLSchema({
