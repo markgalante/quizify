@@ -7,9 +7,12 @@ import UpdateQuestion from "./UpdateQuestion";
 const Questions = ({ questions }) => {
     const location = useLocation();
     const [editQuestion, setEditQuestion] = useState(false);
+
     useEffect(()=>{
-        setEditQuestion(false); 
+        setEditQuestion(editQuestion); 
     }, []); 
+
+    console.log(editQuestion); 
     return (
         <div>
             {
@@ -18,7 +21,7 @@ const Questions = ({ questions }) => {
                         <div key={question.id}>
                             {
                                 editQuestion
-                                    ? <UpdateQuestion question={question.question} id={question.id} editQuestion={editQuestion} />
+                                    ? <UpdateQuestion question={question.question} questionId={question.id} editQuestion={editQuestion} />
                                     : <h3 onDoubleClick={() => setEditQuestion(!editQuestion)}>{question.question}</h3>
                             }
                             <div className="options" onClick={() => setEditQuestion(false)}>
