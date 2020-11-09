@@ -39,11 +39,13 @@ const splitLink = split(
   httpLink,
 );
 
+const cache = new InMemoryCache();
+
 const client = new ApolloClient({
   // uri: "http://localhost:4000/graphql",
   // uri: splitLink, 
   link: splitLink,
-  cache: new InMemoryCache(),
+  cache,
 });
 
 ReactDOM.render(
