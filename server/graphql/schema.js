@@ -191,7 +191,7 @@ const Mutation = new GraphQLObjectType({
                 return question.save();
             },
         },
-        updateQueztion: {
+        updateQuestion: {
             type: QuestionType,
             args: {
                 id: { type: new GraphQLNonNull(GraphQLID) },
