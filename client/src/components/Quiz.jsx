@@ -41,7 +41,7 @@ const Quiz = () => {
                                         )
                                 }
 
-                                <Questions questions={data.quiz.questions} />
+                                <Questions questions={data.quiz.questions} quizId={match.params.id} />
                                 <Router>
                                     <ul>
                                         <li><Link to={`/${match.params.id}/addquestion`}>Add Question</Link></li>
