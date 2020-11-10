@@ -2,16 +2,18 @@ import React, { useEffect, useState } from "react";
 import AddOption from "./AddOption";
 import LoadingSpinner from "./LoadingSpinner";
 import Error from "./Error";
-import { useQuery } from "@apollo/client";
+import { useQuery, useReactiveVar } from "@apollo/client";
 import { SHOW_OPTIONS } from "../graphql/queries";
+import { showOptionsEdit } from "../cache";
 
 const Options = ({ questionId }) => {
+    const editOptions = useReactiveVar(showOptionsEdit); 
+    console.log({editOptions}); 
     const { data, loading, error } = useQuery(SHOW_OPTIONS, {
         variables: {
             questionId
         }
     });
-
 
     const [showOptions, setOptions] = useState(null);
     const [pageLoading, setLoading] = useState(true);
