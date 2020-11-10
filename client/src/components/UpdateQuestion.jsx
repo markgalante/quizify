@@ -3,12 +3,14 @@ import { useMutation } from "@apollo/client";
 import { UPDATE_QUESTION } from "../graphql/mutations";
 import { QUESTION_LIST } from "../graphql/queries";
 import { useParams } from "react-router-dom";
+import { showQuestionEdit } from "../cache";
 
-const UpdateQuestion = ({ question, questionId, editQuestion }) => {
+const UpdateQuestion = ({ question, questionId }) => {
     const params = useParams();
+    // const editQuestion = useReactiveVar(showQuestionEdit); 
     const [updateQuestion] = useMutation(UPDATE_QUESTION);
     const [updatedQuestion, setQuestion] = useState(question);
-    
+
     function handleSubmit(e) {
         e.preventDefault();
         updateQuestion({
@@ -18,7 +20,7 @@ const UpdateQuestion = ({ question, questionId, editQuestion }) => {
             },
             refetchQueries: [{ query: QUESTION_LIST, variables: { id: params.id } }]
         });
-        editQuestion = false;
+        showQuestionEdit(false); 
         setQuestion("");
     };
 

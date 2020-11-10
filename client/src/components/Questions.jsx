@@ -1,18 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Options from "./Options";
 import { useLocation } from "react-router-dom";
+import { showQuestionEdit } from "../cache";
+import { useReactiveVar } from "@apollo/client"
 
 import UpdateQuestion from "./UpdateQuestion";
 
 const Questions = ({ questions }) => {
+    const editQuestion = useReactiveVar(showQuestionEdit);
     const location = useLocation();
-    const [editQuestion, setEditQuestion] = useState(false);
-
-    useEffect(()=>{
-        setEditQuestion(editQuestion); 
-    }, []); 
-
-    console.log(editQuestion); 
     return (
         <div>
             {
@@ -22,9 +18,9 @@ const Questions = ({ questions }) => {
                             {
                                 editQuestion
                                     ? <UpdateQuestion question={question.question} questionId={question.id} editQuestion={editQuestion} />
-                                    : <h3 onDoubleClick={() => setEditQuestion(!editQuestion)}>{question.question}</h3>
+                                    : <h3 onDoubleClick={() => showQuestionEdit(true)}>{question.question}</h3>
                             }
-                            <div className="options" onClick={() => setEditQuestion(false)}>
+                            <div className="options" onClick={() => showQuestionEdit(false)}>
                                 <Options options={question.options} questionId={question.id} path={location.pathname} />
                             </div>
                         </div>
