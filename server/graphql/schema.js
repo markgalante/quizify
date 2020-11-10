@@ -200,8 +200,8 @@ const Mutation = new GraphQLObjectType({
             resolve(parent, args) {
                 const updatedQuestion = {
                     question: args.question
-                }; 
-                return Question.findByIdAndUpdate(args.id, updatedQuestion); 
+                };
+                return Question.findByIdAndUpdate(args.id, updatedQuestion);
             },
         },
         addOption: {
@@ -219,6 +219,29 @@ const Mutation = new GraphQLObjectType({
                 });
                 return option.save();
             }
+        },
+        updateOption: {
+            type: OptionType,
+            args: {
+                id: { type: GraphQLID },
+                questionId: { type: GraphQLID },
+                option: { type: GraphQLString },
+                isCorrect: { type: GraphQLBoolean }
+            },
+            resolve(parent, args) {
+                updatedOption = {
+                    option: args.option,
+                    isCorrect: args.isCorrect
+                }
+                if (args.isCorrect) {
+                    Option.findOne({ questionId: args.questionId, isCorrect: true })
+                        .then(option => {
+                            return Option.findByIdAndUpdate(option.id, { isCorrect: false })
+                        })
+                        .catch(err => console.log({ err }));
+                }
+                return Option.findByIdAndUpdate(args.id, updatedOption);
+            },
         },
         addUser: {
             type: UserType,
