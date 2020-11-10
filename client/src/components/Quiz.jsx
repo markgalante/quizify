@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { GET_QUIZ } from "../graphql/queries";
-import { useQuery } from "@apollo/client"
+import { useQuery, useReactiveVar } from "@apollo/client"
 import { useRouteMatch, Link, Switch, Route, BrowserRouter as Router } from "react-router-dom";
 
 import LoadingSpinner from "./LoadingSpinner";
@@ -8,19 +8,17 @@ import Error from "./Error";
 import Questions from "./Questions";
 import AddQuestion from "./AddQuestion";
 import UpdateQuizName from "./UpdateQuizName";
+import { showQuizEdit } from "../cache";
 
 const Quiz = () => {
+    const quizEdit = useReactiveVar(showQuizEdit);
+    console.log({ quizEdit });
     let match = useRouteMatch();
-    const [edit, showEdit] = useState(false);
     const { data, loading, error } = useQuery(GET_QUIZ, {
         variables: {
             id: match.params.id,
         }
     });
-
-    useEffect(() => {
-        showEdit(false);
-    }, [data])
 
     return (
         <div>
@@ -32,16 +30,18 @@ const Quiz = () => {
                         : (
                             <div>
                                 {
-                                    edit
-                                        ? (<UpdateQuizName title={data.quiz.title} id={match.params.id} edit={edit} />)
+                                    quizEdit
+                                        ? (<UpdateQuizName title={data.quiz.title} id={match.params.id} />)
                                         : (
                                             <div>
-                                                <h1 onDoubleClick={() => showEdit(true)}>{data.quiz.title}</h1>
+                                                <h1 onDoubleClick={() => showQuizEdit(true)}>{data.quiz.title}</h1>
                                             </div>
                                         )
                                 }
+                                <div onClick={() => showQuizEdit(false)}>
+                                    <Questions questions={data.quiz.questions} quizId={match.params.id} />
+                                </div>
 
-                                <Questions questions={data.quiz.questions} quizId={match.params.id} />
                                 <Router>
                                     <ul>
                                         <li><Link to={`/${match.params.id}/addquestion`}>Add Question</Link></li>

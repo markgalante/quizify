@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { UPDATE_QUIZ } from "../graphql/mutations";
 import { GET_QUIZ, GET_QUIZZES } from "../graphql/queries";
 import { useMutation } from "@apollo/client";
+import { showQuizEdit } from "../cache"; 
 
-const UpdateQuizName = ({ title, id, edit }) => {
+const UpdateQuizName = ({ title, id }) => {
     const [updateQuiz] = useMutation(UPDATE_QUIZ);
     const [newTitle, setTitle] = useState(title);
     function handleSubmit(e) {
@@ -21,7 +22,7 @@ const UpdateQuizName = ({ title, id, edit }) => {
                 { query: GET_QUIZZES }
             ], 
         });
-        edit = false; 
+        showQuizEdit(false); 
     }; 
 
     return (
