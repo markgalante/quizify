@@ -16,7 +16,7 @@ const Options = ({ questionId }) => {
     const [showOptions, setOptions] = useState(null);
     const [pageLoading, setLoading] = useState(true);
     const [fetchError, setError] = useState(null);
-    
+
     useEffect(() => {
         if (!loading) setLoading(false);
         if (data) setOptions(data);
@@ -30,22 +30,24 @@ const Options = ({ questionId }) => {
                     pageLoading
                         ? <LoadingSpinner />
                         : showOptions
-                            ? showOptions.options.map(option => (
-                                <div key={option.id}>
-                                    <input type="radio" id={option.option} name="answer" value={option.option} /> <label>{option.option}</label>
-                                </div>
-                            ))
+                            ? showOptions.options.length
+                                ? showOptions.options.map(option => (
+                                    <div key={option.id}>
+                                        <input type="radio" id={option.option} name="answer" value={option.option} /> <label>{option.option}</label>
+                                    </div>
+                                ))
+                                : <em>No options given</em>
                             : <Error message={fetchError.message} />
                 }
             </form>
             {
-                showOptions 
-                ? (
-                    <AddOption options={showOptions.options} questionId={questionId} />
-                ) 
-                : null
+                showOptions
+                    ? (
+                        <AddOption options={showOptions.options} questionId={questionId} />
+                    )
+                    : null
             }
-            
+
 
         </div>
     );
