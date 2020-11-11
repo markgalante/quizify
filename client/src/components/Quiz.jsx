@@ -12,7 +12,6 @@ import { showQuizEdit } from "../cache";
 
 const Quiz = () => {
     const quizEdit = useReactiveVar(showQuizEdit);
-    console.log({ quizEdit });
     let match = useRouteMatch();
     const { data, loading, error } = useQuery(GET_QUIZ, {
         variables: {
