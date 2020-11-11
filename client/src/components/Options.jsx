@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import AddOption from "./AddOption";
 import LoadingSpinner from "./LoadingSpinner";
+import UpdateOption from "./UpdateOption"
 import Error from "./Error";
 import { useQuery, useReactiveVar } from "@apollo/client";
 import { SHOW_OPTIONS } from "../graphql/queries";
 import { showOptionsEdit } from "../cache";
 
 const Options = ({ questionId }) => {
-    const editOptions = useReactiveVar(showOptionsEdit); 
-    console.log({editOptions}); 
+    const editOptions = useReactiveVar(showOptionsEdit);
     const { data, loading, error } = useQuery(SHOW_OPTIONS, {
         variables: {
             questionId
@@ -33,11 +33,13 @@ const Options = ({ questionId }) => {
                         ? <LoadingSpinner />
                         : showOptions
                             ? showOptions.options.length
-                                ? showOptions.options.map(option => (
-                                    <div key={option.id}>
-                                        <input type="radio" id={option.option} name="answer" value={option.option} /> <label>{option.option}</label>
-                                    </div>
-                                ))
+                                ? editOptions
+                                    ? <UpdateOption options={showOptions.options} questionId={questionId} />
+                                    : showOptions.options.map(option => (
+                                        <div key={option.id}>
+                                            <input type="radio" id={option.option} name="answer" value={option.option} /> <label>{option.option}</label>
+                                        </div>
+                                    ))
                                 : <em>No options given</em>
                             : <Error message={fetchError.message} />
                 }
