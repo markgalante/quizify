@@ -45,3 +45,13 @@ export const ADD_OPTION = gql`
         }
     }
 `; 
+
+export const UPDATE_OPTION = gql`
+    mutation UpdateOption($option: String!, $isCorrect: Boolean, $id:ID!, questionId: ID!){
+        updateOption(id:$id, questionId:$questionId, option:$option, isCorrect:$isCorrect){
+            id
+            option
+            isCorrect
+        }
+    }
+`; 
