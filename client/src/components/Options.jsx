@@ -45,7 +45,7 @@ const Options = ({ questionId }) => {
                 }
             </form>
             {
-                showOptions
+                showOptions && !editOptions
                     ? (
                         <AddOption options={showOptions.options} questionId={questionId} />
                     )
