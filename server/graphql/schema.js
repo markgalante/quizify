@@ -222,7 +222,14 @@ const Mutation = new GraphQLObjectType({
                 questionId: { type: new GraphQLNonNull(GraphQLID) }
             },
             resolve(parent, args) {
-
+                Question.findByIdAndDelete(args.questionId)
+                    .then(quest => {
+                        console.log(`Deleted question ${quest.question}`);
+                        Option.deleteMany({ questionId: args.id })
+                            .then(opt => console.log(`Deleted options ${opt}`))
+                            .catch(err => console.log(`Error deleting options ${err.message}`));
+                    })
+                    .catch(err => console.log(`Error deleting question due to ${err.message}`))
             }
         },
         addOption: {
@@ -263,6 +270,17 @@ const Mutation = new GraphQLObjectType({
                 }
                 return Option.findByIdAndUpdate(args.id, updatedOption);
             },
+        },
+        deleteOption: {
+            type: OptionType,
+            args: {
+                id: { type: new GraphQLNonNull(GraphQLID) }
+            },
+            resolve(parent, args) {
+                Option.findByIdAndDelete(args.id)
+                    .then(opt => console.log(`Successfully deleted option: ${opt.option} ID: ${opt.id}`))
+                    .catch(err => console.log(`Error deleting option due to ${err.message}`));
+            }
         },
         addUser: {
             type: UserType,
