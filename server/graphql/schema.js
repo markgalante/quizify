@@ -174,7 +174,19 @@ const Mutation = new GraphQLObjectType({
                 id: { type: new GraphQLNonNull(GraphQLID) },
             },
             resolve(parent, args) {
-                return Quiz.findByIdAndDelete(args.id);
+                Quiz.findByIdAndDelete(args.id)
+                    .then(quiz => {
+                        console.log(`Deleted quiz ${quiz.title}`);
+                        Question.deleteMany({ quizId: args.id })
+                            .then(questions => {
+                                console.log(`Deleted questions ${questions}`);
+                                Option.deleteMany({ questionId: questions.id })
+                                    .then(opt => console.log(`Deleted options ${opt}`))
+                                    .catch(err => console.log(`Error deleting option due to ${err.message}`));
+                            })
+                            .catch(err => console.log(`Error deleting question due to ${err.message}`));
+                    })
+                    .catch(err => console.log(`Error deleting quiz ${err.message}`));
             }
         },
         addQuestion: {
@@ -203,6 +215,15 @@ const Mutation = new GraphQLObjectType({
                 };
                 return Question.findByIdAndUpdate(args.id, updatedQuestion);
             },
+        },
+        deleteQuestion: {
+            type: QuestionType,
+            args: {
+                questionId: { type: new GraphQLNonNull(GraphQLID) }
+            },
+            resolve(parent, args) {
+
+            }
         },
         addOption: {
             type: OptionType,
