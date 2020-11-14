@@ -27,23 +27,28 @@ const Options = ({ questionId }) => {
 
     return (
         <div>
-            <form>
+            <div>
                 {
                     pageLoading
                         ? <LoadingSpinner />
                         : showOptions
                             ? showOptions.options.length
-                                ? editOptions
-                                    ? <UpdateOption options={showOptions.options} questionId={questionId} />
-                                    : showOptions.options.map(option => (
-                                        <div key={option.id}>
-                                            <input type="radio" id={option.option} name="answer" value={option.option} /> <label>{option.option}</label>
-                                        </div>
-                                    ))
+                                ? showOptions.options.map(option => (
+                                    <div key={option.id} onDoubleClick={() => showOptionsEdit(!editOptions)}>
+                                        {
+                                            editOptions
+                                                ? <UpdateOption option={option} questionId={questionId} />
+                                                : (
+                                                    <form><input type="radio" id={option.option} name="answer" value={option.option} /> <label>{option.option}</label></form>
+                                                )
+                                        }
+
+                                    </div>
+                                ))
                                 : <em>No options given</em>
                             : <Error message={fetchError.message} />
                 }
-            </form>
+            </div>
             {
                 showOptions && !editOptions
                     ? (
