@@ -1,32 +1,46 @@
-import React, { useState } from "react";
-// import { useMutation } from "@apollo/client";
-// import { showOptionsEdit } from "../cache";
-// import { UPDATE_OPTION } from "../graphql/mutations";
-// import { SHOW_OPTIONS } from "../graphql/queries";
+import React, { useEffect, useState } from "react";
+import { useMutation } from "@apollo/client";
+import { showOptionsEdit } from "../cache";
+import { UPDATE_OPTION } from "../graphql/mutations";
+import { SHOW_OPTIONS } from "../graphql/queries";
 
-const UpdateOption = ({ options }) => {
+const UpdateOption = ({ option, questionId }) => {
+    const [updateOption] = useMutation(UPDATE_OPTION);
     const [updatedOption, setOption] = useState("");
     const [updatedIsCorrect, setIsCorrect] = useState(false);
 
 
     function handleSubmit(e) {
         e.preventDefault();
-        console.log(e);
+        updateOption({
+            variables: {
+                id: option.id,
+                questionId: questionId,
+                option: updatedOption,
+                isCorrect: updatedIsCorrect,
+            },
+            refetchQueries: [{ query: SHOW_OPTIONS, variables: { questionId } }],
+        });
+        showOptionsEdit(false); 
     }
-    
+
+    useEffect(() => {
+        setOption(option.option);
+        setIsCorrect(option.isCorrect);
+    }, [option.option, option.isCorrect]);
+
     return (
         <form onSubmit={handleSubmit}>
-            { options.map(option => (
-                <div key={option.id}>
-                    <input
-                        type="radio"
-                        id={option.option}
-                        onChange={e => setIsCorrect(!updatedIsCorrect)}
-                        value={option.option}
-                    />
-                    <input type="text" value={option.option} onChange={e => setOption(e.target.value)} />
-                </div>
-            ))}
+            <div key={option.id}>
+                <input
+                    type="checkbox"
+                    id={option.option}
+                    value={option.option}
+                    defaultChecked={option.isCorrect}
+                    onChange={() => setIsCorrect(!updatedIsCorrect)}
+                />
+                <input type="text" value={updatedOption} onChange={e => setOption(e.target.value)} />
+            </div>
             <button type="submit">Update</button>
         </form>
     );
