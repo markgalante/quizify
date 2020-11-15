@@ -1,7 +1,8 @@
 import React from "react";
-import { GET_QUIZ } from "../graphql/queries";
-import { useQuery, useReactiveVar } from "@apollo/client"
-import { useRouteMatch, Link, Switch, Route, BrowserRouter as Router } from "react-router-dom";
+import { GET_QUIZ, GET_QUIZZES } from "../graphql/queries";
+import { DELETE_QUIZ } from "../graphql/mutations";
+import { useQuery, useReactiveVar, useMutation } from "@apollo/client"
+import { useRouteMatch, Link, Switch, Route, BrowserRouter as Router, useHistory } from "react-router-dom";
 
 import LoadingSpinner from "./LoadingSpinner";
 import Error from "./Error";
@@ -11,7 +12,9 @@ import UpdateQuizName from "./UpdateQuizName";
 import { showQuizEdit } from "../cache";
 
 const Quiz = () => {
+    const [deleteQuiz] = useMutation(DELETE_QUIZ);
     const quizEdit = useReactiveVar(showQuizEdit);
+    const history = useHistory(); 
     let match = useRouteMatch();
     const { data, loading, error } = useQuery(GET_QUIZ, {
         variables: {
@@ -19,6 +22,14 @@ const Quiz = () => {
         }
     });
 
+    function handleDeleteQuiz() {
+        deleteQuiz({
+            variables: { id: match.params.id },
+            refetchQueries: [{ query: GET_QUIZZES }]
+        });
+        history.push("/");
+    }
+    
     return (
         <div>
             {
@@ -33,7 +44,9 @@ const Quiz = () => {
                                         ? (<UpdateQuizName title={data.quiz.title} id={match.params.id} />)
                                         : (
                                             <div>
-                                                <h1 onDoubleClick={() => showQuizEdit(true)}>{data.quiz.title} <span className="delete-button">X</span></h1>
+                                                <h1 onDoubleClick={() => showQuizEdit(true)}>
+                                                    {data.quiz.title} <span className="delete-button" onClick={handleDeleteQuiz}>X</span>
+                                                </h1>
                                             </div>
                                         )
                                 }
