@@ -18,7 +18,7 @@ const Questions = ({ questions }) => {
                             {
                                 editQuestion
                                     ? <UpdateQuestion question={question.question} questionId={question.id} editQuestion={editQuestion} />
-                                    : <h3 onDoubleClick={() => showQuestionEdit(true)}>{question.question}</h3>
+                                    : <h3 onDoubleClick={() => showQuestionEdit(true)}>{question.question} <span className="delete-button">X</span></h3>
                             }
                             <div className="options" onClick={() => showQuestionEdit(false)}>
                                 <Options options={question.options} questionId={question.id} path={location.pathname} />

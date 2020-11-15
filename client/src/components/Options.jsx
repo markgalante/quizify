@@ -39,7 +39,7 @@ const Options = ({ questionId }) => {
                                             editOptions
                                                 ? <UpdateOption option={option} questionId={questionId} />
                                                 : (
-                                                    <form><input type="radio" id={option.option} name="answer" value={option.option} /> <label>{option.option}</label></form>
+                                                    <form><input type="radio" id={option.option} name="answer" value={option.option} /> <label>{option.option}</label> <span className="delete-button">X</span></form>
                                                 )
                                         }
 

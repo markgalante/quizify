@@ -33,7 +33,7 @@ const Quiz = () => {
                                         ? (<UpdateQuizName title={data.quiz.title} id={match.params.id} />)
                                         : (
                                             <div>
-                                                <h1 onDoubleClick={() => showQuizEdit(true)}>{data.quiz.title}</h1>
+                                                <h1 onDoubleClick={() => showQuizEdit(true)}>{data.quiz.title} <span className="delete-button">X</span></h1>
                                             </div>
                                         )
                                 }

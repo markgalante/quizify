@@ -41,3 +41,7 @@ code {
     -webkit-transform: rotate(360deg);
   }
 }
+
+.delete-button{
+  cursor: pointer;
+}
