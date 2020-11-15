@@ -18,6 +18,15 @@ export const UPDATE_QUIZ = gql`
     }
 `;
 
+export const DELETE_QUIZ = gql`
+    mutation DeleteQuiz($id:ID!){
+        deleteQuiz(id:$id){
+            id
+            title
+        }
+    }
+`;
+
 export const ADD_QUESTION = gql`
     mutation AddQuestion($question:String!, $quizId: ID!){
         addQuestion(question:$question, quizId:$quizId){
@@ -32,6 +41,14 @@ export const UPDATE_QUESTION = gql`
         updateQuestion(id:$id, question:$question){
             id
             question
+        }
+    }
+`; 
+
+export const DELETE_QUESTION = gql`
+    mutation DeleteQuestion($questionId:ID!){
+        deleteQuestion(questionId:$questionId){
+            id
         }
     }
 `; 
@@ -55,3 +72,11 @@ export const UPDATE_OPTION = gql`
         }
     }
 `; 
+
+export const DELETE_OPTION = gql`
+    mutation DeleteOption($id:ID!){
+        deleteOption(id:$id){
+            id
+        } 
+    }
+`;
