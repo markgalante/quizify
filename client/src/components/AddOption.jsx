@@ -24,6 +24,7 @@ const AddOption = ({ options, questionId }) => {
             refetchQueries: [{ query: SHOW_OPTIONS, variables: {questionId}}],
         });
         setOption(''); 
+        setIsCorrect(false); 
     }
 
     return (
@@ -36,7 +37,7 @@ const AddOption = ({ options, questionId }) => {
                         <div>
                             {
                                 allowCorrectAnser
-                                    ? <input type="checkbox" onChange={() => setIsCorrect(!isCorrect)} />
+                                    ? <input type="checkbox" onChange={() => setIsCorrect(!isCorrect)}  checked={isCorrect}/>
                                     : <input type="checkbox" disabled />
                             }
                             <input type="text" onChange={e => setOption(e.target.value)} value={option || ""} />
