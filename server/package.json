@@ -15,6 +15,9 @@
     "graphql": "^15.3.0",
     "graphql-subscriptions": "^1.1.0",
     "mongoose": "^5.10.9",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^6.0.1",
     "subscriptions-transport-ws": "^0.9.18"
   }
 }
