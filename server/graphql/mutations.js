@@ -163,7 +163,8 @@ const Mutation = types => new GraphQLObjectType({
         addUser: {
             type: types.UserType,
             args: {
-                name: { type: new GraphQLNonNull(GraphQLString) },
+                email: { type: new GraphQLNonNull(GraphQLString) },
+                password: { type: new GraphQLNonNull(GraphQLString) }, 
             },
             resolve(parent, args) {
                 const user = new User({
