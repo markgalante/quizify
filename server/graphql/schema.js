@@ -4,12 +4,6 @@ const { PubSub } = require("graphql-subscriptions");
 
 const pubsub = new PubSub();
 
-//Import of Mongoose Schemas: 
-const Quiz = require("../models/quiz");
-const Question = require("../models/question");
-const Option = require("../models/option");
-const User = require("../models/user");
-
 const UserTypeInject = require("./user");
 const QuizTypeInject = require("./quiz"); 
 const QuestionTypeInject = require("./question"); 
@@ -25,21 +19,14 @@ types.OptionType = OptionTypeInject(types);
 types.RootQuery = RootQueryInject(types);  
 types.Mutation = MutationInject(types); 
 
-const UserType = types.UserType; 
 const QuizType = types.QuizType; 
-const QuestionType = types.QuestionType; 
-const OptionType = types.OptionType; 
+const QuestionType = types.QuestionType;
 const RootQuery = types.RootQuery; 
 const Mutation = types.Mutation; 
 
 const {
     GraphQLObjectType,
-    GraphQLList,
     GraphQLSchema,
-    GraphQLNonNull,
-    GraphQLID,
-    GraphQLString,
-    GraphQLBoolean
 } = graphql;
 
 const NEW_QUIZ_ADDED = "new_quiz_added";
