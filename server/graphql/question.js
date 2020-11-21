@@ -2,12 +2,6 @@ const graphql = require("graphql");
 
 const Option = require("../models/option");
 
-const OptionTypeInject = require("./option");
-
-const types = {}; 
-types.OptionType = OptionTypeInject(types); 
-const OptionType = types.OptionType; 
-
 const { GraphQLObjectType, GraphQLList, GraphQLString, GraphQLID } = graphql; 
 
 

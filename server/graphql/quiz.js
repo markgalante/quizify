@@ -3,9 +3,6 @@ const graphql = require("graphql");
 const Question = require("../models/question"); 
 const User = require("../models/user"); 
 
-const QuestionType = require("./question"); 
-const UserType = require("./user");
-
 const { GraphQLObjectType, GraphQLList, GraphQLID, GraphQLString } = graphql; 
 
 const QuizType = types => new GraphQLObjectType({

@@ -2,7 +2,7 @@ const graphql = require("graphql");
 
 const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLBoolean }  = graphql;
 
-const OptionType = types => new GraphQLObjectType({
+const OptionType = () => new GraphQLObjectType({
     name: "Option",
     fields: () => ({
         id: { type: GraphQLID },
