@@ -14,17 +14,20 @@ const UserTypeInject = require("./user");
 const QuizTypeInject = require("./quiz"); 
 const QuestionTypeInject = require("./question"); 
 const OptionTypeInject = require("./option");
+const RootQueryInject = require("./queries"); 
 
 const types = {}; 
 types.UserType = UserTypeInject(types); 
 types.QuizType = QuizTypeInject(types); 
 types.QuestionType = QuestionTypeInject(types); 
-types.OptionType = OptionTypeInject(types); 
+types.OptionType = OptionTypeInject(types);
+types.RootQuery = RootQueryInject(types);  
 
 const UserType = types.UserType; 
 const QuizType = types.QuizType; 
 const QuestionType = types.QuestionType; 
 const OptionType = types.OptionType; 
+const RootQuery = types.RootQuery; 
 
 const {
     GraphQLObjectType,
@@ -35,45 +38,6 @@ const {
     GraphQLString,
     GraphQLBoolean
 } = graphql;
-
-const RootQuery = new GraphQLObjectType({
-    name: "RootQueryType",
-    fields: {
-        quiz: {
-            type: QuizType,
-            args: { id: { type: GraphQLID } },
-            resolve(parent, args) {
-                return Quiz.findById(args.id);
-            },
-        },
-        quizes: {
-            type: new GraphQLList(QuizType),
-            resolve(parent, args) {
-                return Quiz.find();
-            }
-        },
-        user: {
-            type: UserType,
-            args: { id: { type: new GraphQLNonNull(GraphQLID) } },
-            resolve(parent, args) {
-                return User.findById(args.id);
-            }
-        },
-        users: {
-            type: new GraphQLList(UserType),
-            resolve() {
-                return User.find();
-            },
-        },
-        options: {
-            type: new GraphQLList(OptionType),
-            args: { questionId: { type: new GraphQLNonNull(GraphQLID) } },
-            resolve(parent, args) {
-                return Option.find({ questionId: args.questionId });
-            }
-        }
-    },
-});
 
 const NEW_QUIZ_ADDED = "new_quiz_added";
 
