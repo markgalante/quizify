@@ -10,6 +10,22 @@ const Question = require("../models/question");
 const Option = require("../models/option");
 const User = require("../models/user");
 
+const UserTypeInject = require("./user");
+const QuizTypeInject = require("./quiz"); 
+const QuestionTypeInject = require("./question"); 
+const OptionTypeInject = require("./option");
+
+const types = {}; 
+types.UserType = UserTypeInject(types); 
+types.QuizType = QuizTypeInject(types); 
+types.QuestionType = QuestionTypeInject(types); 
+types.OptionType = OptionTypeInject(types); 
+
+const UserType = types.UserType; 
+const QuizType = types.QuizType; 
+const QuestionType = types.QuestionType; 
+const OptionType = types.OptionType; 
+
 const {
     GraphQLObjectType,
     GraphQLList,
@@ -19,63 +35,6 @@ const {
     GraphQLString,
     GraphQLBoolean
 } = graphql;
-
-const UserType = new GraphQLObjectType({
-    name: "User",
-    fields: () => ({
-        name: { type: GraphQLString },
-        id: { type: GraphQLID },
-        quizes: {
-            type: new GraphQLList(QuizType),
-            resolve(parent, args) {
-                return Quiz.find({ creatorId: parent.id });
-            }
-        }
-    }),
-});
-
-const OptionType = new GraphQLObjectType({
-    name: "Option",
-    fields: () => ({
-        id: { type: GraphQLID },
-        option: { type: GraphQLString },
-        isCorrect: { type: GraphQLBoolean }
-    })
-});
-
-const QuestionType = new GraphQLObjectType({
-    name: "Question",
-    fields: () => ({
-        id: { type: GraphQLID },
-        question: { type: GraphQLString },
-        options: {
-            type: new GraphQLList(OptionType),
-            resolve(parent, args) {
-                return Option.find({ questionId: parent.id });
-            },
-        },
-    })
-});
-
-const QuizType = new GraphQLObjectType({
-    name: "Quiz",
-    fields: () => ({
-        id: { type: GraphQLID },
-        title: { type: GraphQLString },
-        questions: {
-            type: new GraphQLList(QuestionType),
-            resolve(parent, args) {
-                return Question.find({ quizId: parent.id });
-            }
-        },
-        creator: {
-            type: UserType,
-            resolve(parent, args) {
-                return User.findById(parent.creatorId);
-            }
-        }
-    })
-});
 
 const RootQuery = new GraphQLObjectType({
     name: "RootQueryType",
@@ -264,7 +223,7 @@ const Mutation = new GraphQLObjectType({
                 if (args.isCorrect) {
                     Option.findOne({ questionId: args.questionId, isCorrect: true })
                         .then(option => {
-                            return Option.findByIdAndUpdate(option.id, { isCorrect: false })
+                            return Option.findByIdAndUpdate(option._id, { isCorrect: false })
                         })
                         .catch(err => console.log({ err }));
                 }
