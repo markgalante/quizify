@@ -28,7 +28,6 @@ const Mutation = types => new GraphQLObjectType({
                     title: args.title,
                     creatorId: args.creatorId,
                 });
-                pubsub.publish(NEW_QUIZ_ADDED, { quizAdded: { title: newQuiz.title } });
                 console.log({ newQuiz });
                 return newQuiz.save();
             }
