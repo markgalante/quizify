@@ -14,8 +14,7 @@ const SignIn = () => {
         axios
             .post("/server/auth/login", userData)
             .then(res => console.log(res))
-            .catch(err => console.log(err))
-
+            .catch(err => console.log(err.response))
         console.log("promise has run"); 
     };
     return (
