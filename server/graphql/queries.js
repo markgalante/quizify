@@ -42,6 +42,14 @@ const RootQuery = types => new GraphQLObjectType({
                 return User.find();
             },
         },
+        currentUser: {
+            type: types.UserType, 
+            resolve(parent, args, req) {
+                const user = req.user; 
+                console.log(user); 
+                return User.findById(req.user._id); 
+            }
+        }, 
         options: {
             type: new GraphQLList(types.OptionType),
             args: { questionId: { type: new GraphQLNonNull(GraphQLID) } },
