@@ -2,6 +2,7 @@ import { useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { GET_QUIZZES } from "../graphql/queries";
 import LoadingSpinner from "./LoadingSpinner";
+import SignInSignUp from "./SignInSignUp"; 
 import Error from "./Error";
 import Quiz from "./Quiz";
 import {
@@ -49,6 +50,7 @@ const QuizList = () => {
 
                 <Switch>
                     <Route path="/:id"><Quiz /></Route>
+                    <Route path="/signinsignup"><SignInSignUp /></Route>
                 </Switch>
             </Router>
 
