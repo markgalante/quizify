@@ -42,6 +42,17 @@ passport.deserializeUser((id, done) => {
     User.findById(id, (err, user) => done(err, user));
 })
 
+app.post("/login",
+    passport.authenticate("local", {
+        successRedirect: "/",
+        failureRedirect: "/signin"
+    })
+);
+
+app.get("/test", (req, res)=>{
+    res.send("Hello")
+})
+
 //Subscriptions 
 const { createServer } = require("http");
 const { SubscriptionServer } = require("subscriptions-transport-ws");
