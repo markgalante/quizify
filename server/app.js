@@ -6,7 +6,6 @@ const cors = require("cors");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const session = require("express-session");
-const bodyParser = require("body-parser");
 
 const User = require("./models/user");
 
@@ -35,7 +34,6 @@ app.use(session({
     saveUninitialized: true,
     cookie: { secure: true }
 }));
-app.use(bodyParser.urlencoded({ extended: false }))
 app.use(passport.initialize());
 app.use(passport.session());
 
