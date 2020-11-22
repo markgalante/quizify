@@ -4,22 +4,28 @@ const { graphqlHTTP } = require("express-graphql");
 const schema = require("./graphql/schema");
 const cors = require("cors");
 const passport = require("passport");
-const { GraphQLLocalStrategy, buildContext } = require("graphql-passport");
+const LocalStrategy = require("passport-local").Strategy;
 const session = require("express-session");
+const bodyParser = require("body-parser");
 
 const User = require("./models/user");
 
 const port = 4000;
 
-passport.use(
-    new GraphQLLocalStrategy((email, password, done) => {
-        const users = User.getUsers();
-        const matchingUser = users.find(user => email === user.email && password === user.password);
-        const error = matchingUser ? null : new Error("no matching user");
-        done(error, matchingUser)
-    })
-);
-
+passport.use(new LocalStrategy(
+    {
+        passwordField: "email"
+    },
+    (email, password, done) => {
+        User.findOne({ email: email })
+            .then(user => {
+                if (!user) return done(null, false, { message: "Incorrect email or email doesn't exist" });
+                if (!user.validPassword(password)) {
+                    return done(null, false, { message: "Password incorrect" });
+                };
+            }).catch(err => done(err));
+    }
+));
 
 const app = express();
 app.use(cors());
@@ -29,8 +35,14 @@ app.use(session({
     saveUninitialized: true,
     cookie: { secure: true }
 }));
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(passport.initialize());
 app.use(passport.session());
+
+passport.serializeUser((user, done) => done(null, user.id));
+passport.deserializeUser((id, done) => {
+    User.findById(id, (err, user) => done(err, user));
+})
 
 //Subscriptions 
 const { createServer } = require("http");
