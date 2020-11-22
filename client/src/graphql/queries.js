@@ -52,3 +52,9 @@ export const SHOW_OPTIONS = gql`
         }
     }
 `; 
+
+// export const CURRENT_USER = gql`
+//     {
+        
+//     }
+// `; 
