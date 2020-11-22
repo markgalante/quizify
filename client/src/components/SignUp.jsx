@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { ADD_USER } from "../graphql/mutations"
+import { ADD_USER } from "../graphql/mutations"; 
+import { useHistory } from "react-router-dom"
 
 const SignUp = () => {
-    const [addUser, {data}] = useMutation(ADD_USER);
+    const [addUser] = useMutation(ADD_USER);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirm, setConfirm] = useState('');
+    const history = useHistory(); 
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -15,8 +17,8 @@ const SignUp = () => {
                 email,
                 password
             }
-        }); 
-        console.log({data}); 
+        });
+        history.push("/"); 
     }
 
     return (
