@@ -167,10 +167,15 @@ const Mutation = types => new GraphQLObjectType({
                 password: { type: new GraphQLNonNull(GraphQLString) }, 
             },
             resolve(parent, args) {
-                const user = new User({
-                    name: args.name
-                });
-                return user.save(); //5f9400bfa74aa73a3cee98ac
+                const user = {
+                    email: args.email
+                };
+                User.register(user, args.password, (err, user)=> {
+                    if(err) console.log("Error", err.message); 
+                    else{
+                        console.log(user); 
+                    }
+                })
             },
         },
     },
