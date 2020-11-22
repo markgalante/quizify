@@ -1,10 +1,25 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const SignIn = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    function handleSubmit(e) {
+        e.preventDefault(); 
+        const userData = {
+            email,
+            password
+        }
+        console.log({userData}); 
+        axios
+            .post("/server/auth/login", userData)
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
+
+        console.log("promise has run"); 
+    };
     return (
-        <form action="/login" method="POST">
+        <form onSubmit={handleSubmit}>
             <div>
                 <label>Email</label>
                 <input type="text" onChange={e => setEmail(e.target.value)} />
