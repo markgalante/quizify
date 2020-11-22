@@ -12,10 +12,7 @@ const User = require("./models/user");
 const port = 4000;
 
 const app = express();
-app.use(cors({
-    origin: "http://localhost:3000", 
-    methods: "GET, POST"
-}));
+app.use(cors());
 app.use(session({
     secret: "keyboard cat",
     resave: false,
