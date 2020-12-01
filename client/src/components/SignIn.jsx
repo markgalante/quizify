@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useHistory } from "react-router-dom"; 
 
 const SignIn = () => {
+    const history = useHistory(); 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     function handleSubmit(e) {
@@ -10,17 +12,18 @@ const SignIn = () => {
             email,
             password
         }
-        console.log({userData}); 
         axios
-            .post("/server/auth/login", userData)
-            .then(res => console.log(res))
-            .catch(err => console.log(err.response))
-        console.log("promise has run"); 
+            .post("/auth/login", userData, {withCredentials: true})
+            .then(res => {
+                history.push("/");
+                console.log("RESPONSE", res)
+            })
+            .catch(err => console.log("ERROR", err.response))
     };
     return (
         <form onSubmit={handleSubmit}>
             <div>
-                <label>Email</label>
+                <label>Emailaaaa</label>
                 <input type="text" onChange={e => setEmail(e.target.value)} />
             </div>
             <div>
