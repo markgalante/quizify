@@ -4,22 +4,28 @@ const { graphqlHTTP } = require("express-graphql");
 const schema = require("./graphql/schema");
 const cors = require("cors");
 const session = require("express-session");
-const auth = require("./auth/auth"); 
+const auth = require("./auth/auth");
 const passport = require("./auth/set-up");
-
-const User = require("./models/user");
+const bodyParser = require("body-parser");
 
 const port = 4000;
 
 const app = express();
 app.use(cors());
+
+//Body parser 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+//Express Set up. 
 app.use(session({
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true }
+    // cookie: { secure: true } // Removed for HTTP connection
 }));
-app.use("/", express.static("../client/build")); 
+
+//Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -30,8 +36,6 @@ const { execute, subscribe } = require("graphql");
 
 const subscriptionsEndpoint = `ws://localhost:${port}/subscriptions`;
 
-
-
 mongoose.connect("mongodb://localhost/quizify", {
     useNewUrlParser: true,
     useCreateIndex: true,
@@ -41,13 +45,12 @@ mongoose.connect("mongodb://localhost/quizify", {
 
 mongoose.connection.once("open", () => console.log("connected to database"));
 
-app.use("/server/auth", auth); 
+app.use("/auth", auth);
 
 app.use("/graphql", graphqlHTTP({
     schema,
     graphiql: true,
     subscriptionsEndpoint,
-    context: ({ req, res }) => buildContext({ req, res, User }),
 }));
 
 const webServer = createServer(app);
