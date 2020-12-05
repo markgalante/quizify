@@ -51,10 +51,13 @@ export const SHOW_OPTIONS = gql`
             id
         }
     }
-`; 
+`;
 
-// export const CURRENT_USER = gql`
-//     {
-        
-//     }
-// `; 
+export const CURRENT_USER = gql`
+    {
+        currentUser {
+            id
+            email
+        }
+    }
+`; 
