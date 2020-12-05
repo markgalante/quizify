@@ -12,7 +12,8 @@ import { getMainDefinition } from '@apollo/client/utilities';
 
 //for queries or mutations: 
 const httpLink = createHttpLink({
-  uri: "http://localhost:4000/graphql"
+  uri: "/graphql", 
+  includeExtensions: true
 })
 
 //initialise a web socket link for subscriptions
@@ -46,6 +47,9 @@ const client = new ApolloClient({
   // uri: splitLink, 
   link: splitLink,
   cache,
+  headers: {
+    user: "req.user"
+  }
 });
 
 ReactDOM.render(
