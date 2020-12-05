@@ -163,20 +163,26 @@ const Mutation = types => new GraphQLObjectType({
             type: types.UserType,
             args: {
                 email: { type: new GraphQLNonNull(GraphQLString) },
-                password: { type: new GraphQLNonNull(GraphQLString) }, 
+                password: { type: new GraphQLNonNull(GraphQLString) },
             },
             resolve(parent, args) {
                 const user = {
                     email: args.email
                 };
-                User.register(user, args.password, (err, user)=> {
-                    if(err) console.log("Error", err.message); 
-                    else{
-                        console.log(user); 
+                User.register(user, args.password, (err, user) => {
+                    if (err) console.log("Error", err.message);
+                    else {
+                        console.log(user);
                     }
                 })
             },
         },
+        updateUser: {
+            type: types.UserType,
+            resolve(parent) {
+                console.log(parent); 
+            }
+        }
     },
 });
 

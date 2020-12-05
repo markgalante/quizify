@@ -43,7 +43,7 @@ export const UPDATE_QUESTION = gql`
             question
         }
     }
-`; 
+`;
 
 export const DELETE_QUESTION = gql`
     mutation DeleteQuestion($questionId:ID!){
@@ -51,7 +51,7 @@ export const DELETE_QUESTION = gql`
             id
         }
     }
-`; 
+`;
 
 export const ADD_OPTION = gql`
     mutation AddOption($option:String!, $isCorrect: Boolean, $questionId: ID!){
@@ -61,7 +61,7 @@ export const ADD_OPTION = gql`
             isCorrect
         }
     }
-`; 
+`;
 
 export const UPDATE_OPTION = gql`
     mutation UpdateOption($option: String!, $isCorrect: Boolean, $id:ID!, $questionId: ID!){
@@ -71,7 +71,7 @@ export const UPDATE_OPTION = gql`
             isCorrect
         }
     }
-`; 
+`;
 
 export const DELETE_OPTION = gql`
     mutation DeleteOption($id:ID!){
@@ -88,3 +88,11 @@ export const ADD_USER = gql`
         }
     }
 `;
+
+export const UPDATE_USER = gql`
+    mutation {
+        updateUser{
+            id
+        }
+    }
+`; 
