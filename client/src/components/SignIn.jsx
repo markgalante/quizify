@@ -10,6 +10,7 @@ const SignIn = () => {
     const [updateUser] = useMutation(UPDATE_USER);
     const [email, setEmail] = useState("mark@gmail.com");
     const [password, setPassword] = useState("1234");
+    const [error, setError] = useState(false);
     function handleSubmit(e) {
         e.preventDefault();
         const userData = {
@@ -25,11 +26,19 @@ const SignIn = () => {
                 });
                 history.push("/");
             })
-            .catch(err => console.log("ERROR WITH LOGIN", err))
+            .catch(err => {
+                setError(true); 
+                console.log("ERROR WITH LOGIN", err)
+            })
     };
 
     return (
         <form onSubmit={handleSubmit}>
+            {
+                error 
+                ? <p>Incorrect username or password</p>
+                : null
+            }
             <div>
                 <label>Email</label>
                 <input type="text" onChange={e => setEmail(e.target.value)} value={email || ""} />

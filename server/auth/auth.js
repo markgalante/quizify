@@ -7,10 +7,10 @@ router.post("/login",
         passport.authenticate("local", (err, user, info) => {
             if (err) {
                 console.log("ERROR RUNNIGN LOGIN", err)
-                return res.status(400).json({ errors: err });
+                return res.status(400).json({ errors: err + "errorr" });
             }
             if (!user) {
-                console.log("NO USERS FOUND", { info }, req.body);
+                console.log("NO USERS FOUND", info, req.body);
                 return res.status(400).json({ errors: "No users found" });
             }
             req.logIn(user, (err) => {
