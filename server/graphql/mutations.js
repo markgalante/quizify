@@ -23,10 +23,14 @@ const Mutation = types => new GraphQLObjectType({
                 title: { type: new GraphQLNonNull(GraphQLString) },
                 creatorId: { type: new GraphQLNonNull(GraphQLID) }
             },
-            resolve(parent, args) {
+            resolve(parent, args, req) {
+                if (!req.user) {
+                    console.log("You need to be signed in for this");
+                    return "You need to be logged on to create a quiz";
+                }
                 const newQuiz = new Quiz({
                     title: args.title,
-                    creatorId: args.creatorId,
+                    creatorId: req.user._id,
                 });
                 console.log({ newQuiz });
                 return newQuiz.save();
@@ -180,7 +184,7 @@ const Mutation = types => new GraphQLObjectType({
         updateUser: {
             type: types.UserType,
             resolve(parent) {
-                console.log(parent); 
+                console.log(parent);
             }
         }
     },

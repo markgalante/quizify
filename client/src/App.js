@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Link, Switch, Route, useHistory } from "react-router-dom";
+import { BrowserRouter as Router, Link, Switch, Route, useHistory, Redirect } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import { CURRENT_USER } from "./graphql/queries";
 import { UPDATE_USER } from "./graphql/mutations";
@@ -42,20 +42,32 @@ function App() {
             Test
           </button>
           <nav>
-            <ul>
-              <li><Link to="/">Home</Link></li>
-              <li><Link to="/create">Create Quiz</Link></li>
-              {
-                !isLoggedIn
-                  ? <li><Link to="/signin">Sign In</Link></li>
-                  : <li><button onClick={logOut}>Sign Out</button></li>
-              }
-            </ul>
+            {
+              !isLoggedIn
+                ? (
+                  <ul>
+                    <li><Link to="/">Home</Link></li>
+                    <li><Link to="/signin">Sign In</Link></li>
+                  </ul>
+                )
+                : (<ul>
+                  <li><Link to="/">Home</Link></li>
+                  <li><Link to="/create">Create Quiz</Link></li>
+                  <li><button onClick={logOut}>Sign Out</button></li>
+                </ul>
+                )
+            }
           </nav>
         </div>
         <Switch>
           <Route exact path="/"><QuizList /></Route>
-          <Route path="/create"><CreateQuiz /> </Route>
+          <Route path="/create">
+            {
+              isLoggedIn
+                ? <CreateQuiz />
+                : <Redirect to="/" />
+            }
+          </Route>
           <Route path="/signin"><SignInSignUp /></Route>
         </Switch>
       </Router>
