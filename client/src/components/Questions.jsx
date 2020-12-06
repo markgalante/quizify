@@ -17,7 +17,7 @@ const Questions = ({ questions, creator }) => {
     const params = useParams();
 
     useEffect(() => {
-        if (userData) {
+        if (userData.currentUser) {
             if (userData.currentUser.id === creator) {
                 setisCreator(true);
             } else {
@@ -28,7 +28,7 @@ const Questions = ({ questions, creator }) => {
 
     function handleDeleteQuestion(questionId) {
         deleteQuestion({
-            variables: { questionId },
+            variables: { questionId, creator },
             refetchQueries: [{ query: QUESTION_LIST, variables: { id: params.id } }]
         });
     }
@@ -42,7 +42,7 @@ const Questions = ({ questions, creator }) => {
                                 isCreator
                                     ? (
                                         editQuestion
-                                            ? <UpdateQuestion question={question.question} questionId={question.id} editQuestion={editQuestion} />
+                                            ? <UpdateQuestion question={question.question} questionId={question.id} editQuestion={editQuestion} creator={creator} />
                                             : <h3 onDoubleClick={() => showQuestionEdit(true)}>
                                                 {question.question} <span className="delete-button" onClick={() => handleDeleteQuestion(question.id)}>X</span>
                                             </h3>
@@ -52,7 +52,7 @@ const Questions = ({ questions, creator }) => {
                             <div className="options" onClick={() => {
                                 if (isCreator) showQuestionEdit(false)
                             }}>
-                                <Options options={question.options} questionId={question.id} path={location.pathname} />
+                                <Options options={question.options} questionId={question.id} path={location.pathname} creator={creator} />
                             </div>
                         </div>
                     ))

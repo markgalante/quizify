@@ -54,8 +54,8 @@ export const DELETE_QUESTION = gql`
 `;
 
 export const ADD_OPTION = gql`
-    mutation AddOption($option:String!, $isCorrect: Boolean, $questionId: ID!){
-        addOption(option:$option, isCorrect:$isCorrect, questionId:$questionId){
+    mutation AddOption($option:String!, $isCorrect: Boolean, $questionId: ID!, $creator:ID!){
+        addOption(option:$option, isCorrect:$isCorrect, questionId:$questionId, creator:$creator){
             id
             option
             isCorrect
@@ -64,8 +64,8 @@ export const ADD_OPTION = gql`
 `;
 
 export const UPDATE_OPTION = gql`
-    mutation UpdateOption($option: String!, $isCorrect: Boolean, $id:ID!, $questionId: ID!){
-        updateOption(id:$id, questionId:$questionId, option:$option, isCorrect:$isCorrect){
+    mutation UpdateOption($option: String!, $isCorrect: Boolean, $id:ID!, $questionId: ID!, $creator: ID!){
+        updateOption(id:$id, questionId:$questionId, option:$option, isCorrect:$isCorrect, creator:$creator){
             id
             option
             isCorrect
@@ -74,8 +74,8 @@ export const UPDATE_OPTION = gql`
 `;
 
 export const DELETE_OPTION = gql`
-    mutation DeleteOption($id:ID!){
-        deleteOption(id:$id){
+    mutation DeleteOption($id:ID!, $creator:ID!){
+        deleteOption(id:$id, creator:$creator){
             id
         } 
     }

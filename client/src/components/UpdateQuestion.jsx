@@ -5,7 +5,7 @@ import { QUESTION_LIST } from "../graphql/queries";
 import { useParams } from "react-router-dom";
 import { showQuestionEdit } from "../cache";
 
-const UpdateQuestion = ({ question, questionId }) => {
+const UpdateQuestion = ({ question, questionId, creator }) => {
     const params = useParams();
     // const editQuestion = useReactiveVar(showQuestionEdit); 
     const [updateQuestion] = useMutation(UPDATE_QUESTION);
@@ -17,10 +17,11 @@ const UpdateQuestion = ({ question, questionId }) => {
             variables: {
                 id: questionId,
                 question: updatedQuestion,
+                creator
             },
             refetchQueries: [{ query: QUESTION_LIST, variables: { id: params.id } }]
         });
-        showQuestionEdit(false); 
+        showQuestionEdit(false);
         setQuestion("");
     };
 
