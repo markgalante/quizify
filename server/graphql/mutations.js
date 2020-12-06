@@ -110,7 +110,8 @@ const Mutation = types => new GraphQLObjectType({
                     console.log("You need to be logged in to do this.");
                     return null;
                 }
-                if (req.user._id !== args.creator) {
+                if (req.user._id != args.creator) {
+                    console.log(req.user._id, args.creator)
                     console.log("You are not authorised to do this.");
                     return null;
                 }
