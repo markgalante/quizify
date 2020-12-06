@@ -56,7 +56,7 @@ const Options = ({ questionId, creator }) => {
                                             isCreator
                                                 ? (
                                                     editOptions
-                                                        ? <UpdateOption option={option} questionId={questionId} />
+                                                        ? <UpdateOption option={option} questionId={questionId} creator={creator}/>
                                                         : (
                                                             <form>
                                                                 <input type="radio" id={option.option} name="answer" value={option.option} />

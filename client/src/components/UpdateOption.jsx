@@ -4,7 +4,7 @@ import { showOptionsEdit } from "../cache";
 import { UPDATE_OPTION } from "../graphql/mutations";
 import { SHOW_OPTIONS } from "../graphql/queries";
 
-const UpdateOption = ({ option, questionId }) => {
+const UpdateOption = ({ option, questionId, creator }) => {
     const [updateOption] = useMutation(UPDATE_OPTION);
     const [updatedOption, setOption] = useState("");
     const [updatedIsCorrect, setIsCorrect] = useState(false);
@@ -18,6 +18,7 @@ const UpdateOption = ({ option, questionId }) => {
                 questionId: questionId,
                 option: updatedOption,
                 isCorrect: updatedIsCorrect,
+                creator
             },
             refetchQueries: [{ query: SHOW_OPTIONS, variables: { questionId } }],
         });
