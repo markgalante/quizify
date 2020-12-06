@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CURRENT_USER, GET_QUIZ, GET_QUIZZES } from "../graphql/queries";
 import { DELETE_QUIZ } from "../graphql/mutations";
 import { useQuery, useReactiveVar, useMutation } from "@apollo/client"
-import { useRouteMatch, Link, Switch, Route, BrowserRouter as Router, useHistory } from "react-router-dom";
+import { useRouteMatch, Link, Switch, Route, BrowserRouter as Router, useHistory, Redirect } from "react-router-dom";
 
 import LoadingSpinner from "./LoadingSpinner";
 import Error from "./Error";
@@ -73,12 +73,25 @@ const Quiz = () => {
                                 </div>
 
                                 <Router>
-                                    <ul>
-                                        <li><Link to={`/${match.params.id}/addquestion`}>Add Question</Link></li>
-                                    </ul>
+                                    {
+                                        isCreator
+                                            ? (
+                                                <ul>
+                                                    <li><Link to={`/${match.params.id}/addquestion`}>Add Question</Link></li>
+                                                </ul>
+                                            )
+                                            : null
+                                    }
+
 
                                     <Switch>
-                                        <Route path={`/${match.params.id}/addquestion`}><AddQuestion id={match.params.id} /></Route>
+                                        <Route path={`/${match.params.id}/addquestion`}>
+                                            {
+                                                isCreator
+                                                    ? <AddQuestion id={match.params.id} creator={data.quiz.creator.id} />
+                                                    : <Redirect to={`/${match.params.id}`} />
+                                            }
+                                        </Route>
                                     </Switch>
                                 </Router>
 

@@ -28,8 +28,8 @@ export const DELETE_QUIZ = gql`
 `;
 
 export const ADD_QUESTION = gql`
-    mutation AddQuestion($question:String!, $quizId: ID!){
-        addQuestion(question:$question, quizId:$quizId){
+    mutation AddQuestion($question:String!, $quizId: ID!, $creator: ID!){
+        addQuestion(question:$question, quizId:$quizId, creator:$creator){
             id
             question
         }

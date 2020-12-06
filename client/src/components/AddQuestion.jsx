@@ -3,7 +3,7 @@ import { useMutation } from "@apollo/client";
 import { ADD_QUESTION } from "../graphql/mutations";
 import { QUESTION_LIST } from "../graphql/queries"
 
-const AddQuestion = ({ id }) => {
+const AddQuestion = ({ id, creator }) => {
     const [question, setQuestion] = useState('');
     const [addQuestion] = useMutation(ADD_QUESTION);
     function handleSubmit(e) {
@@ -11,7 +11,8 @@ const AddQuestion = ({ id }) => {
         addQuestion({
             variables: {
                 question,
-                quizId: id
+                quizId: id,
+                creator
             },
             refetchQueries: [{
                 query: QUESTION_LIST,

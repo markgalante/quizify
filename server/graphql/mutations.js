@@ -88,9 +88,18 @@ const Mutation = types => new GraphQLObjectType({
             type: types.QuestionType,
             args: {
                 question: { type: new GraphQLNonNull(GraphQLString) },
-                quizId: { type: GraphQLID },
+                quizId: { type: new GraphQLNonNull(GraphQLID) },
+                creator: { type: new GraphQLNonNull(GraphQLID) }
             },
-            resolve(parent, args) {
+            resolve(parent, args, req) {
+                if (!req.user) {
+                    console.log("You need to be logged in to do this.");
+                    return null;
+                }
+                if(req.user._id == args.creator) {
+                    console.log("You are not authorised to do this."); 
+                    return null; 
+                }
                 const question = new Question({
                     question: args.question,
                     quizId: args.quizId
