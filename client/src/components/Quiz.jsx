@@ -26,7 +26,10 @@ const Quiz = () => {
 
     function handleDeleteQuiz() {
         deleteQuiz({
-            variables: { id: match.params.id },
+            variables: {
+                id: match.params.id,
+                creator: data.quiz.creator.id
+            },
             refetchQueries: [{ query: GET_QUIZZES }]
         });
         history.push("/");

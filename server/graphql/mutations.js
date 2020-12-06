@@ -62,11 +62,16 @@ const Mutation = types => new GraphQLObjectType({
             type: types.QuizType,
             args: {
                 id: { type: new GraphQLNonNull(GraphQLID) },
+                creator: { type: new GraphQLNonNull(GraphQLID) }
             },
             resolve(parent, args, req) {
                 if (!req.user) {
                     console.log("you need to be logged on to do this");
                     return "You need to be logged on to do this."
+                }
+                if (req.user._id !== args.creator) {
+                    console.log("you do not have authorisation to do this");
+                    return null;
                 }
                 Quiz.findById(args.id)
                     .then(quiz => {
