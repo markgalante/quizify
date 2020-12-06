@@ -57,7 +57,10 @@ const Quiz = () => {
                                         ? (<UpdateQuizName title={data.quiz.title} id={match.params.id} />)
                                         : (
                                             <div>
-                                                <h1 onDoubleClick={() => showQuizEdit(true)}>
+                                                <h1 onDoubleClick={() => {
+                                                    if (isCreator) showQuizEdit(true)
+                                                }
+                                                }>
                                                     {data.quiz.title}
                                                     {
                                                         isCreator
@@ -69,7 +72,7 @@ const Quiz = () => {
                                         )
                                 }
                                 <div onClick={() => showQuizEdit(false)}>
-                                    <Questions questions={data.quiz.questions} quizId={match.params.id} />
+                                    <Questions questions={data.quiz.questions} quizId={match.params.id} creator={data.quiz.creator.id} />
                                 </div>
 
                                 <Router>

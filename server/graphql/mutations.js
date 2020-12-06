@@ -40,13 +40,22 @@ const Mutation = types => new GraphQLObjectType({
             type: types.QuizType,
             args: {
                 id: { type: new GraphQLNonNull(GraphQLID) },
-                title: { type: new GraphQLNonNull(GraphQLString) }
+                title: { type: new GraphQLNonNull(GraphQLString) },
+                creator: { type: new GraphQLNonNull(GraphQLID) }
             },
-            resolve(parent, args) {
-                const updatedQuiz = {
-                    title: args.title
+            resolve(parent, args, req) {
+                if (!req.user) {
+                    console.log("You need to be logged in to do this");
+                    return null;
                 }
-                return Quiz.findByIdAndUpdate(args.id, updatedQuiz);
+                if (req.user._id == args.creator) {
+                    const updatedQuiz = {
+                        title: args.title
+                    }
+                    return Quiz.findByIdAndUpdate(args.id, updatedQuiz);
+                }
+                console.log("You do not have authorisation to do this")
+                return null;
             },
         },
         deleteQuiz: {
@@ -96,9 +105,9 @@ const Mutation = types => new GraphQLObjectType({
                     console.log("You need to be logged in to do this.");
                     return null;
                 }
-                if(req.user._id == args.creator) {
-                    console.log("You are not authorised to do this."); 
-                    return null; 
+                if (req.user._id !== args.creator) {
+                    console.log("You are not authorised to do this.");
+                    return null;
                 }
                 const question = new Question({
                     question: args.question,
@@ -112,11 +121,13 @@ const Mutation = types => new GraphQLObjectType({
             args: {
                 id: { type: new GraphQLNonNull(GraphQLID) },
                 question: { type: new GraphQLNonNull(GraphQLString) },
+                creator: { type: new GraphQLNonNull(GraphQLID) }
             },
-            resolve(parent, args) {
-                const updatedQuestion = {
-                    question: args.question
-                };
+            resolve(parent, args, req) {
+                if (!req.user) {
+                    console.log("You need to do this");
+                    return null;
+                }
                 return Question.findByIdAndUpdate(args.id, updatedQuestion);
             },
         },

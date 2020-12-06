@@ -37,8 +37,8 @@ export const ADD_QUESTION = gql`
 `;
 
 export const UPDATE_QUESTION = gql`
-    mutation UpdateQuestion($id: ID!, $question: String!){
-        updateQuestion(id:$id, question:$question){
+    mutation UpdateQuestion($id: ID!, $question: String!, $creator:ID!){
+        updateQuestion(id:$id, question:$question, creator:$creator){
             id
             question
         }

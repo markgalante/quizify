@@ -4,7 +4,7 @@ import { GET_QUIZ, GET_QUIZZES } from "../graphql/queries";
 import { useMutation } from "@apollo/client";
 import { showQuizEdit } from "../cache"; 
 
-const UpdateQuizName = ({ title, id }) => {
+const UpdateQuizName = ({ title, id, creator }) => {
     const [updateQuiz] = useMutation(UPDATE_QUIZ);
     const [newTitle, setTitle] = useState(title);
     function handleSubmit(e) {
@@ -12,7 +12,8 @@ const UpdateQuizName = ({ title, id }) => {
         updateQuiz({
             variables: {
                 id,
-                title: newTitle
+                title: newTitle,
+                creator
             },
             refetchQueries: [
                 {
