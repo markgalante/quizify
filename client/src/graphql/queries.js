@@ -23,6 +23,9 @@ export const GET_QUIZ = gql`
                     isCorrect
                 }
             }
+            creator{
+                id
+            }
         }
     }
 `;

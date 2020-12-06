@@ -54,7 +54,11 @@ const Mutation = types => new GraphQLObjectType({
             args: {
                 id: { type: new GraphQLNonNull(GraphQLID) },
             },
-            resolve(parent, args) {
+            resolve(parent, args, req) {
+                if (!req.user) {
+                    console.log("you need to be logged on to do this"); 
+                    return "You need to be logged on to do this."
+                }
                 Quiz.findByIdAndDelete(args.id)
                     .then(quiz => {
                         console.log(`Deleted quiz ${quiz.title}`);
