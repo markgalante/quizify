@@ -1,18 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Options from "./Options";
 import { useLocation, useParams } from "react-router-dom";
 import { showQuestionEdit } from "../cache";
-import { useReactiveVar, useMutation } from "@apollo/client";
+import { useReactiveVar, useMutation, useQuery } from "@apollo/client";
 import { DELETE_QUESTION } from "../graphql/mutations";
-import { QUESTION_LIST } from "../graphql/queries";
+import { QUESTION_LIST, CURRENT_USER } from "../graphql/queries";
 
 import UpdateQuestion from "./UpdateQuestion";
 
-const Questions = ({ questions }) => {
+const Questions = ({ questions, creator }) => {
     const [deleteQuestion] = useMutation(DELETE_QUESTION);
     const editQuestion = useReactiveVar(showQuestionEdit);
+    const { data: userData } = useQuery(CURRENT_USER);
+    const [isCreator, setisCreator] = useState(null);
     const location = useLocation();
     const params = useParams();
+
+    useEffect(() => {
+        if (userData) {
+            if (userData.currentUser.id === creator) {
+                setisCreator(true);
+            } else {
+                setisCreator(false);
+            }
+        }
+    }, [userData, creator]);
 
     function handleDeleteQuestion(questionId) {
         deleteQuestion({
@@ -27,13 +39,19 @@ const Questions = ({ questions }) => {
                     questions.map(question => (
                         <div key={question.id}>
                             {
-                                editQuestion
-                                    ? <UpdateQuestion question={question.question} questionId={question.id} editQuestion={editQuestion} />
-                                    : <h3 onDoubleClick={() => showQuestionEdit(true)}>
-                                        {question.question} <span className="delete-button" onClick={() => handleDeleteQuestion(question.id)}>X</span>
-                                    </h3>
+                                isCreator
+                                    ? (
+                                        editQuestion
+                                            ? <UpdateQuestion question={question.question} questionId={question.id} editQuestion={editQuestion} />
+                                            : <h3 onDoubleClick={() => showQuestionEdit(true)}>
+                                                {question.question} <span className="delete-button" onClick={() => handleDeleteQuestion(question.id)}>X</span>
+                                            </h3>
+                                    )
+                                    : <h3>{question.question}</h3>
                             }
-                            <div className="options" onClick={() => showQuestionEdit(false)}>
+                            <div className="options" onClick={() => {
+                                if (isCreator) showQuestionEdit(false)
+                            }}>
                                 <Options options={question.options} questionId={question.id} path={location.pathname} />
                             </div>
                         </div>
