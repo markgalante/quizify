@@ -56,22 +56,32 @@ const Mutation = types => new GraphQLObjectType({
             },
             resolve(parent, args, req) {
                 if (!req.user) {
-                    console.log("you need to be logged on to do this"); 
+                    console.log("you need to be logged on to do this");
                     return "You need to be logged on to do this."
                 }
-                Quiz.findByIdAndDelete(args.id)
+                Quiz.findById(args.id)
                     .then(quiz => {
-                        console.log(`Deleted quiz ${quiz.title}`);
-                        Question.deleteMany({ quizId: args.id })
-                            .then(questions => {
-                                console.log(`Deleted questions ${questions}`);
-                                Option.deleteMany({ questionId: questions.id })
-                                    .then(opt => console.log(`Deleted options ${opt}`))
-                                    .catch(err => console.log(`Error deleting option due to ${err.message}`));
-                            })
-                            .catch(err => console.log(`Error deleting question due to ${err.message}`));
-                    })
-                    .catch(err => console.log(`Error deleting quiz ${err.message}`));
+                        if (quiz.creatorId === req.user.id) {
+                            quiz.deleteOne()
+                                .then(deletedQuiz => {
+                                    console.log("deleted quiz: ", deletedQuiz.title);
+                                    Question.find({ quizId: args.id })
+                                        .then(questions => {
+                                            for (let i = 0; i < questions.length; i++) {
+                                                questions[i].deleteOne()
+                                                    .then(question => {
+                                                        Option.deleteMany({ questionId: question._id })
+                                                            .then(opt => console.log(opt)).catch(err => console.log(err))
+                                                    });
+                                            };
+
+                                        });
+                                }).catch(err => console.log(`ERROR deleting Quiz ${err}`))
+                        } else {
+                            console.log("you do not have the authority to do this.");
+                            return null;
+                        }
+                    });
             }
         },
         addQuestion: {
