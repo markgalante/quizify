@@ -36,15 +36,13 @@ const Quiz = () => {
     };
     useEffect(() => {
         if (data && userData.currentUser) {
-            console.log("userData.currentUser.id === data.quiz.creator.id: ", userData.currentUser.id === data.quiz.creator.id)
             if (userData.currentUser.id === data.quiz.creator.id) {
                 setCreator(true);
-                console.log({ isCreator })
             } else {
                 setCreator(false);
             }
         }
-    }, [data, userData]);
+    }, [data, userData, isCreator]);
 
     return (
         <div>
