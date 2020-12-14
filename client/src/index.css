@@ -45,3 +45,7 @@ code {
 .delete-button{
   cursor: pointer;
 }
+
+.curser-pointer{
+  cursor: pointer;
+}
