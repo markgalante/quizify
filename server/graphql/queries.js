@@ -4,6 +4,7 @@ const graphql = require("graphql");
 const Quiz = require("../models/quiz");
 const Option = require("../models/option");
 const User = require("../models/user");
+const Question = require("../models/question");
 
 
 const {
@@ -27,6 +28,13 @@ const RootQuery = types => new GraphQLObjectType({
             type: new GraphQLList(types.QuizType),
             resolve(parent, args) {
                 return Quiz.find();
+            }
+        },
+        questions: {
+            type: new GraphQLList(types.QuestionType),
+            args: { id: { type: new GraphQLNonNull(GraphQLID) } },
+            resolve(parent, args) {
+                return Question.findById(args.id); 
             }
         },
         user: {
@@ -55,13 +63,13 @@ const RootQuery = types => new GraphQLObjectType({
                 return User.findById(user.id);
             }
         },
-        options: {
-            type: new GraphQLList(types.OptionType),
-            args: { questionId: { type: new GraphQLNonNull(GraphQLID) } },
-            resolve(parent, args) {
-                return Option.find({ questionId: args.questionId });
-            }
-        }
+        // options: {
+        //     type: new GraphQLList(types.OptionType),
+        //     args: { questionId: { type: new GraphQLNonNull(GraphQLID) } },
+        //     resolve(parent, args) {
+        //         return Option.find({ questionId: args.questionId });
+        //     }
+        // }
     },
 });
 

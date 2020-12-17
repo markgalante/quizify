@@ -1,12 +1,11 @@
-const graphql = require("graphql"); 
+const graphql = require("graphql");
 
-const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLBoolean }  = graphql;
+const { GraphQLObjectType, GraphQLString, GraphQLBoolean, GraphQLNonNull } = graphql;
 
 const OptionType = () => new GraphQLObjectType({
     name: "Option",
     fields: () => ({
-        id: { type: GraphQLID },
-        option: { type: GraphQLString },
+        option: { type: new GraphQLNonNull(GraphQLString) },
         isCorrect: { type: GraphQLBoolean }
     })
 });

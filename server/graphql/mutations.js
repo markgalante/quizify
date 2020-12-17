@@ -11,8 +11,18 @@ const {
     GraphQLNonNull,
     GraphQLID,
     GraphQLString,
-    GraphQLBoolean
+    GraphQLBoolean,
+    GraphQLInputObjectType,
+    GraphQLList,
 } = graphql;
+
+const InputOptionsType = new GraphQLInputObjectType({
+    name: 'InputOptions',
+    fields: () => ({
+        option: { type: new GraphQLNonNull(GraphQLString) },
+        isCorrect: { type: new GraphQLNonNull(GraphQLBoolean) }
+    })
+});
 
 const Mutation = types => new GraphQLObjectType({
     name: "Mutation",
@@ -103,7 +113,8 @@ const Mutation = types => new GraphQLObjectType({
             args: {
                 question: { type: new GraphQLNonNull(GraphQLString) },
                 quizId: { type: new GraphQLNonNull(GraphQLID) },
-                creator: { type: new GraphQLNonNull(GraphQLID) }
+                creator: { type: new GraphQLNonNull(GraphQLID) },
+                options: { type: new GraphQLList(InputOptionsType) }
             },
             resolve(parent, args, req) {
                 if (!req.user) {
@@ -117,7 +128,9 @@ const Mutation = types => new GraphQLObjectType({
                 }
                 const question = new Question({
                     question: args.question,
-                    quizId: args.quizId
+                    quizId: args.quizId,
+                    options: args.options,
+                    creator: { id: args.creator },
                 });
                 return question.save();
             },
@@ -172,86 +185,86 @@ const Mutation = types => new GraphQLObjectType({
                     .catch(err => console.log(`Error deleting question due to ${err.message}`))
             }
         },
-        addOption: {
-            type: types.OptionType,
-            args: {
-                option: { type: new GraphQLNonNull(GraphQLString) },
-                isCorrect: { type: GraphQLBoolean },
-                questionId: { type: GraphQLNonNull(GraphQLID) },
-                creator: { type: GraphQLNonNull(GraphQLID) }
-            },
-            resolve(parent, args, req) {
-                if (!req.user) {
-                    console.log("You need to be logged in to do this.");
-                    return null;
-                }
-                if (req.user._id != args.creator) {
-                    console.log(req.user._id, args.creator)
-                    console.log("You are not authorised to do this.");
-                    return null;
-                }
-                const option = new Option({
-                    option: args.option,
-                    isCorrect: args.isCorrect,
-                    questionId: args.questionId,
-                });
-                return option.save();
-            }
-        },
-        updateOption: {
-            type: types.OptionType,
-            args: {
-                id: { type: GraphQLID },
-                questionId: { type: GraphQLID },
-                option: { type: GraphQLString },
-                isCorrect: { type: GraphQLBoolean },
-                creator: { type: new GraphQLNonNull(GraphQLID) }
-            },
-            resolve(parent, args, req) {
-                if (!req.user) {
-                    console.log("You need to be logged in to do this.");
-                    return null;
-                }
-                if (req.user._id != args.creator) {
-                    console.log(req.user._id, args.creator)
-                    console.log("You are not authorised to do this.");
-                    return null;
-                }
-                updatedOption = {
-                    option: args.option,
-                    isCorrect: args.isCorrect
-                }
-                if (args.isCorrect) {
-                    Option.findOne({ questionId: args.questionId, isCorrect: true })
-                        .then(option => {
-                            return Option.findByIdAndUpdate(option._id, { isCorrect: false })
-                        })
-                        .catch(err => console.log({ err }));
-                }
-                return Option.findByIdAndUpdate(args.id, updatedOption);
-            },
-        },
-        deleteOption: {
-            type: types.OptionType,
-            args: {
-                id: { type: new GraphQLNonNull(GraphQLID) },
-                creator: { type: new GraphQLNonNull(GraphQLID) }
-            },
-            resolve(parent, args, req) {
-                if (!req.user) {
-                    console.log("You need to be logged in to do this.");
-                    return null;
-                }
-                if (req.user._id != args.creator) {
-                    console.log(req.user._id, args.creator)
-                    console.log("You are not authorised to do this.");
-                    return null;
-                }
-                Option.findByIdAndDelete(args.id)
-                    .then(opt => console.log(`Successfully deleted option: ${opt.option} ID: ${opt.id}`))
-                    .catch(err => console.log(`Error deleting option due to ${err.message}`));
-            }
-        },
+        // addOption: {
+        //     type: types.OptionType,
+        //     args: {
+        //         option: { type: new GraphQLNonNull(GraphQLString) },
+        //         isCorrect: { type: GraphQLBoolean },
+        //         questionId: { type: GraphQLNonNull(GraphQLID) },
+        //         creator: { type: GraphQLNonNull(GraphQLID) }
+        //     },
+        //     resolve(parent, args, req) {
+        //         if (!req.user) {
+        //             console.log("You need to be logged in to do this.");
+        //             return null;
+        //         }
+        //         if (req.user._id != args.creator) {
+        //             console.log(req.user._id, args.creator)
+        //             console.log("You are not authorised to do this.");
+        //             return null;
+        //         }
+        //         const option = new Option({
+        //             option: args.option,
+        //             isCorrect: args.isCorrect,
+        //             questionId: args.questionId,
+        //         });
+        //         return option.save();
+        //     }
+        // },
+        // updateOption: {
+        //     type: types.OptionType,
+        //     args: {
+        //         id: { type: GraphQLID },
+        //         questionId: { type: GraphQLID },
+        //         option: { type: GraphQLString },
+        //         isCorrect: { type: GraphQLBoolean },
+        //         creator: { type: new GraphQLNonNull(GraphQLID) }
+        //     },
+        //     resolve(parent, args, req) {
+        //         if (!req.user) {
+        //             console.log("You need to be logged in to do this.");
+        //             return null;
+        //         }
+        //         if (req.user._id != args.creator) {
+        //             console.log(req.user._id, args.creator)
+        //             console.log("You are not authorised to do this.");
+        //             return null;
+        //         }
+        //         updatedOption = {
+        //             option: args.option,
+        //             isCorrect: args.isCorrect
+        //         }
+        //         if (args.isCorrect) {
+        //             Option.findOne({ questionId: args.questionId, isCorrect: true })
+        //                 .then(option => {
+        //                     return Option.findByIdAndUpdate(option._id, { isCorrect: false })
+        //                 })
+        //                 .catch(err => console.log({ err }));
+        //         }
+        //         return Option.findByIdAndUpdate(args.id, updatedOption);
+        //     },
+        // },
+        // deleteOption: {
+        //     type: types.OptionType,
+        //     args: {
+        //         id: { type: new GraphQLNonNull(GraphQLID) },
+        //         creator: { type: new GraphQLNonNull(GraphQLID) }
+        //     },
+        //     resolve(parent, args, req) {
+        //         if (!req.user) {
+        //             console.log("You need to be logged in to do this.");
+        //             return null;
+        //         }
+        //         if (req.user._id != args.creator) {
+        //             console.log(req.user._id, args.creator)
+        //             console.log("You are not authorised to do this.");
+        //             return null;
+        //         }
+        //         Option.findByIdAndDelete(args.id)
+        //             .then(opt => console.log(`Successfully deleted option: ${opt.option} ID: ${opt.id}`))
+        //             .catch(err => console.log(`Error deleting option due to ${err.message}`));
+        //     }
+        // },
         addUser: {
             type: types.UserType,
             args: {
