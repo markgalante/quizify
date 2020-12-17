@@ -1,8 +1,8 @@
-const graphql = require("graphql"); 
+const graphql = require("graphql");
 
 const Option = require("../models/option");
 
-const { GraphQLObjectType, GraphQLList, GraphQLString, GraphQLID } = graphql; 
+const { GraphQLObjectType, GraphQLList, GraphQLString, GraphQLID, GraphQLBoolean, GraphQLInputObjectType } = graphql;
 
 
 const QuestionType = types => new GraphQLObjectType({
@@ -12,9 +12,6 @@ const QuestionType = types => new GraphQLObjectType({
         question: { type: GraphQLString },
         options: {
             type: new GraphQLList(types.OptionType),
-            resolve(parent, args) {
-                return Option.find({ questionId: parent.id });
-            },
         },
     })
 });
