@@ -32,16 +32,16 @@ const RootQuery = types => new GraphQLObjectType({
         },
         questions: {
             type: new GraphQLList(types.QuestionType),
-            args: { id: { type: new GraphQLNonNull(GraphQLID) } },
+            args: { quizId: { type: new GraphQLNonNull(GraphQLID) } },
             resolve(parent, args) {
-                return Question.findById(args.id); 
+                return Question.find({ quizId: args.quizId });
             }
         },
         user: {
             type: types.UserType,
             args: { id: { type: new GraphQLNonNull(GraphQLID) } },
             resolve(parent, args) {
-                return User.findById(args.id);
+                return User.find(args.id);
             }
         },
         users: {
