@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { UPDATE_QUIZ } from "../graphql/mutations";
-import { GET_QUIZ, GET_QUIZZES } from "../graphql/queries";
+import { QUIZ, GET_QUIZZES } from "../graphql/queries";
 import { useMutation } from "@apollo/client";
 import { showQuizEdit } from "../cache"; 
 
@@ -17,7 +17,7 @@ const UpdateQuizName = ({ title, id, creator }) => {
             },
             refetchQueries: [
                 {
-                    query: GET_QUIZ,
+                    query: QUIZ,
                     variables: { id }
                 },
                 { query: GET_QUIZZES }

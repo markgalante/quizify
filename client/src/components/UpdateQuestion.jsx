@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { UPDATE_QUESTION } from "../graphql/mutations";
-import { QUESTION_LIST } from "../graphql/queries";
+import { QUIZ } from "../graphql/queries";
 import { useParams } from "react-router-dom";
 import { showQuestionEdit } from "../cache";
 
@@ -19,7 +19,7 @@ const UpdateQuestion = ({ question, questionId, creator }) => {
                 question: updatedQuestion,
                 creator
             },
-            refetchQueries: [{ query: QUESTION_LIST, variables: { id: params.id } }]
+            refetchQueries: [{ query: QUIZ, variables: { id: params.id } }]
         });
         showQuestionEdit(false);
         setQuestion("");
