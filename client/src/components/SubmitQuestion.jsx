@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
 import { useMutation } from "@apollo/client";
@@ -7,7 +7,16 @@ import { QUIZ } from "../graphql/queries";
 
 const SubmitQuestion = (props) => {
     const [addQuestion] = useMutation(ADD_QUESTION);
+    const [disabled, setDisabled] = useState(true);
     const history = useHistory();
+
+    useEffect(() => {
+        for (let i = 0; i < props.options.length; i++) {
+            if (props.options[i].isCorrect) setDisabled(false);
+        }
+        if (!props.options.length) setDisabled(true);
+    }, [props.options, disabled, setDisabled]);
+
     function submitQuestion() {
         addQuestion({
             variables: {
@@ -18,11 +27,17 @@ const SubmitQuestion = (props) => {
             },
             refetchQueries: [{ query: QUIZ, variables: { id: props.id } }]
         });
-        history.push(`/${props.id}`); 
+        history.push(`/${props.id}`);
     };
 
     return (
-        <button onClick={submitQuestion}>Submit Question</button>
+        <>
+            {
+                disabled
+                    ? <button disabled>Choose Correct Option</button>
+                    : <button onClick={submitQuestion}>Submit Question</button>
+            }
+        </>
     );
 };
 
