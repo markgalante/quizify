@@ -1,78 +1,114 @@
-import React, { useState } from "react";
-import { useMutation } from "@apollo/client";
-import { ADD_QUESTION } from "../graphql/mutations";
-import { QUIZ } from "../graphql/queries"
+import React from "react";
+import SubmitQuestion from "./SubmitQuestion";
 
-const AddQuestion = ({ id, creator }) => {
-    const [question, setQuestion] = useState('');
-    const [option, setOption] = useState("");
-    const [options, setOptions] = useState([]);
-    const [addQuestion] = useMutation(ADD_QUESTION);
-    function handleSubmit(e) {
-        e.preventDefault();
-        // addQuestion({
-        //     variables: {
-        //         question,
-        //         quizId: id,
-        //         creator
-        //     },
-        //     refetchQueries: [{
-        //         query: QUIZ,
-        //         variables: { id: id },
-        //     }]
-        // });
-        setQuestion('');
+class AddQuestion extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            question: "",
+            option: "",
+            options: [],
+            setOptionEdit: false,
+        }
     };
 
-    return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="question">Question</label>
-                    <input id="question" onChange={e => setQuestion(e.target.value)} value={question} required />
-                </div>
-                <div>
-                    <label htmlFor="options">Option</label>
-                    <input id="options" type="text" onChange={e => setOption(e.target.value)} value={"" || option} />
-                    <button onClick={e => {
-                        e.preventDefault();
-                        setOptions([...options, option]);
-                        setOption("");
-                    }}>Add Option</button>
-                    {options.map((opt, index) => (
-                        <div key={index}>
-                            <input type="radio" name="answer" />
-                            <input type="text" defaultValue={opt || ""} onChange={e => {
-                                options[index] = e.target.value
-                                setOptions(options)
-                            }} />
-                            <span
-                                className="curser-pointer"
-                                onClick={() => {
-                                    const updatedOptions = options.filter(opt => opt !== options[index])
-                                    setOptions(updatedOptions);
-                                }}
-                            >Delete</span>
-                        </div>
-                    ))}
-                </div>
+    setQuestion(e) {
+        this.setState({
+            question: e.target.value
+        })
+    };
 
-                <button type="submit">Add Question</button>
-            </form>
-        </div>
-    )
+    setOption(e) {
+        e.preventDefault();
+        this.setState({
+            option: e.target.value,
+        });
+    };
+
+
+
+    setOptions(e) {
+        e.preventDefault();
+        this.setState({
+            options: [...this.state.options, { option: this.state.option, isCorrect: false }],
+            option: ""
+        })
+    }
+
+    editOption(e, index) {
+        e.preventDefault();
+        const options = [...this.state.options];
+        const option = { ...options[index] };
+        option.option = e.target.value;
+        options[index] = option;
+        this.setState({ options })
+    }
+
+    setIsCorrect(index) {
+        const options = [...this.state.options];
+        for (let i = 0; i < options.length; i++) {
+            if (i === index) {
+                options[i].isCorrect = true;
+            } else {
+                options[i].isCorrect = false;
+            }
+        }
+        this.setState({ options });
+    }
+
+    deleteOption(index) {
+        const { options } = this.state;
+        const updatedOptions = options.filter(opt => options[index].option !== opt.option);
+        this.setState({
+            options: updatedOptions
+        });
+    }
+
+    submitQuestion(e) {
+        e.preventDefault();
+    }
+
+    render() {
+        const { question, option, options, setOptionEdit } = this.state;
+        return (
+            <div>
+                <form onSubmit={(e) => this.submitQuestion(e)}>
+                    <div>
+                        <label htmlFor="question">Question</label>
+                        <input id="question" onChange={(e) => this.setQuestion(e)} value={question} required />
+                    </div>
+                    <div>
+                        <label htmlFor="options">Option</label>
+                        <input id="options" type="text" onChange={e => this.setOption(e)} value={"" || option} />
+                        <button onClick={e => this.setOptions(e)}>Add Option</button>
+                        {options.map((opt, index) => (
+                            <div key={index} onDoubleClick={() => this.setState({ setOptionEdit: !setOptionEdit })}>
+                                <input type="radio" name="answer" onChange={() => this.setIsCorrect(index)} />
+                                {
+                                    setOptionEdit
+                                        ? <input type="text" defaultValue={opt.option || ""} onChange={(e) => this.editOption(e, index)} />
+                                        : <label>{opt.option} </label>
+                                }
+                                {
+                                    setOptionEdit
+                                        ? null
+                                        : (
+                                            <span
+                                                className="curser-pointer"
+                                                onClick={() => this.deleteOption(index)}
+                                            > Delete</span>
+                                        )
+                                }
+
+                            </div>
+                        ))}
+                    </div>
+
+                    <SubmitQuestion question={question} options={options} creator={this.props.creator} id={this.props.id} />
+                </form>
+            </div>
+        )
+    }
 };
 
-export default AddQuestion; 
-
-//TO DO: 
-/**
- * 1 - Create object to send to mongoose.
- * 2 - Redefine Schema in Mongo 
- * 3 - Redefine Schema in graphql-express 
- * 4 - Redefine mutations in server
- * 5 - Redefine mutations in client 
- * 6 - Redefine queries in server 
- * 7 - Redefine queries in client 
- * 8 - Re-do front-end 
- */
+export default AddQuestion;
