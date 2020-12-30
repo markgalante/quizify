@@ -126,13 +126,19 @@ const Mutation = types => new GraphQLObjectType({
                     console.log("You are not authorised to do this.");
                     return null;
                 }
-                const question = new Question({
-                    question: args.question,
-                    quizId: args.quizId,
-                    options: args.options,
-                    creator: { id: args.creator },
-                });
-                return question.save();
+                for (let i = 0; i < args.options.length; i++) {
+                    if (args.options[i].isCorrect) {
+                        const question = new Question({
+                            question: args.question,
+                            quizId: args.quizId,
+                            options: args.options,
+                            creator: { id: args.creator },
+                        });
+                        return question.save();
+                    }
+                }
+                console.log("INVALID QUESTION: This question requires a correct option");
+                return null;
             },
         },
         updateQuestion: {
@@ -178,9 +184,6 @@ const Mutation = types => new GraphQLObjectType({
                 Question.findByIdAndDelete(args.questionId)
                     .then(quest => {
                         console.log(`Deleted question ${quest.question}`);
-                        Option.deleteMany({ questionId: args.id })
-                            .then(opt => console.log(`Deleted options ${opt}`))
-                            .catch(err => console.log(`Error deleting options ${err.message}`));
                     })
                     .catch(err => console.log(`Error deleting question due to ${err.message}`))
             }
