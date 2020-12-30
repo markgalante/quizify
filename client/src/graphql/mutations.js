@@ -19,8 +19,8 @@ export const UPDATE_QUIZ = gql`
 `;
 
 export const DELETE_QUIZ = gql`
-    mutation DeleteQuiz($id:ID!){
-        deleteQuiz(id:$id){
+    mutation DeleteQuiz($id:ID!, $creator:ID!){
+        deleteQuiz(id:$id, creator:$creator){
             id
             title
         }

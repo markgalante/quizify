@@ -79,8 +79,10 @@ const Mutation = types => new GraphQLObjectType({
                     console.log("you need to be logged on to do this");
                     return "You need to be logged on to do this."
                 }
-                if (req.user._id !== args.creator) {
-                    console.log("you do not have authorisation to do this");
+                if (req.user._id != args.creator) {
+                    console.log("req.user._id: ", `--${req.user._id}--${typeof req.user._id}`);
+                    console.log("args.creator: ", `--${args.creator}--${typeof args.creator}`);
+                    console.log("you do not have authorisation to do this  req.user._id !== args.creator");
                     return null;
                 }
                 Quiz.findById(args.id)
@@ -88,17 +90,11 @@ const Mutation = types => new GraphQLObjectType({
                         if (quiz.creatorId === req.user.id) {
                             quiz.deleteOne()
                                 .then(deletedQuiz => {
-                                    console.log("deleted quiz: ", deletedQuiz.title);
                                     Question.find({ quizId: args.id })
                                         .then(questions => {
                                             for (let i = 0; i < questions.length; i++) {
                                                 questions[i].deleteOne()
-                                                    .then(question => {
-                                                        Option.deleteMany({ questionId: question._id })
-                                                            .then(opt => console.log(opt)).catch(err => console.log(err))
-                                                    });
                                             };
-
                                         });
                                 }).catch(err => console.log(`ERROR deleting Quiz ${err}`))
                         } else {
@@ -188,86 +184,6 @@ const Mutation = types => new GraphQLObjectType({
                     .catch(err => console.log(`Error deleting question due to ${err.message}`))
             }
         },
-        // addOption: {
-        //     type: types.OptionType,
-        //     args: {
-        //         option: { type: new GraphQLNonNull(GraphQLString) },
-        //         isCorrect: { type: GraphQLBoolean },
-        //         questionId: { type: GraphQLNonNull(GraphQLID) },
-        //         creator: { type: GraphQLNonNull(GraphQLID) }
-        //     },
-        //     resolve(parent, args, req) {
-        //         if (!req.user) {
-        //             console.log("You need to be logged in to do this.");
-        //             return null;
-        //         }
-        //         if (req.user._id != args.creator) {
-        //             console.log(req.user._id, args.creator)
-        //             console.log("You are not authorised to do this.");
-        //             return null;
-        //         }
-        //         const option = new Option({
-        //             option: args.option,
-        //             isCorrect: args.isCorrect,
-        //             questionId: args.questionId,
-        //         });
-        //         return option.save();
-        //     }
-        // },
-        // updateOption: {
-        //     type: types.OptionType,
-        //     args: {
-        //         id: { type: GraphQLID },
-        //         questionId: { type: GraphQLID },
-        //         option: { type: GraphQLString },
-        //         isCorrect: { type: GraphQLBoolean },
-        //         creator: { type: new GraphQLNonNull(GraphQLID) }
-        //     },
-        //     resolve(parent, args, req) {
-        //         if (!req.user) {
-        //             console.log("You need to be logged in to do this.");
-        //             return null;
-        //         }
-        //         if (req.user._id != args.creator) {
-        //             console.log(req.user._id, args.creator)
-        //             console.log("You are not authorised to do this.");
-        //             return null;
-        //         }
-        //         updatedOption = {
-        //             option: args.option,
-        //             isCorrect: args.isCorrect
-        //         }
-        //         if (args.isCorrect) {
-        //             Option.findOne({ questionId: args.questionId, isCorrect: true })
-        //                 .then(option => {
-        //                     return Option.findByIdAndUpdate(option._id, { isCorrect: false })
-        //                 })
-        //                 .catch(err => console.log({ err }));
-        //         }
-        //         return Option.findByIdAndUpdate(args.id, updatedOption);
-        //     },
-        // },
-        // deleteOption: {
-        //     type: types.OptionType,
-        //     args: {
-        //         id: { type: new GraphQLNonNull(GraphQLID) },
-        //         creator: { type: new GraphQLNonNull(GraphQLID) }
-        //     },
-        //     resolve(parent, args, req) {
-        //         if (!req.user) {
-        //             console.log("You need to be logged in to do this.");
-        //             return null;
-        //         }
-        //         if (req.user._id != args.creator) {
-        //             console.log(req.user._id, args.creator)
-        //             console.log("You are not authorised to do this.");
-        //             return null;
-        //         }
-        //         Option.findByIdAndDelete(args.id)
-        //             .then(opt => console.log(`Successfully deleted option: ${opt.option} ID: ${opt.id}`))
-        //             .catch(err => console.log(`Error deleting option due to ${err.message}`));
-        //     }
-        // },
         addUser: {
             type: types.UserType,
             args: {
