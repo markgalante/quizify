@@ -19,6 +19,7 @@ export const QUIZ = gql`
                 id
             }
             questions{
+                id
                 question
                 options{
                     option
