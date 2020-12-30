@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Options from "./Options";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { showQuestionEdit } from "../cache";
 import { useReactiveVar, useMutation, useQuery } from "@apollo/client";
 import { DELETE_QUESTION } from "../graphql/mutations";
@@ -13,9 +13,7 @@ const Questions = ({ questions, creator }) => {
     const editQuestion = useReactiveVar(showQuestionEdit);
     const { data: userData } = useQuery(CURRENT_USER);
     const [isCreator, setisCreator] = useState(null);
-    const location = useLocation();
     const params = useParams();
-    console.log({questions, creator, location, params})
 
     useEffect(() => {
         if (userData.currentUser) {
