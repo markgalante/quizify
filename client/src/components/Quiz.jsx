@@ -54,16 +54,15 @@ const Quiz = () => {
                         ? <Error message={error.message} />
                         : (<div>
                             { quizEdit
-                                ? (<UpdateQuizName title={data.quiz.title} id={match.params.id} />)
+                                ? (<UpdateQuizName title={data.quiz.title} id={match.params.id} creator={userData.currentUser.id} />)
                                 : (<div>
-                                    <h1 onDoubleClick={() => {
-                                        if (isCreator) showQuizEdit(true)
-                                    }
-                                    }>
+                                    <h1>
                                         {data.quiz.title}
                                         {
                                             isCreator
-                                                ? <span className="delete-button" onClick={handleDeleteQuiz}> X</span>
+                                                ? (<>
+                                                    <span onClick={() => showQuizEdit(true)} className="curser-pointer" > &#9998;</span>
+                                                    <span className="delete-button" onClick={handleDeleteQuiz}> &#9747;</span></>)
                                                 : null
                                         }
                                     </h1>
