@@ -32,7 +32,7 @@ const Questions = ({ questions, creator }) => {
         });
     }
     return (
-        <div>
+        <form>
             {
                 questions.length ?
                     questions.map((question, index) => (
@@ -42,7 +42,7 @@ const Questions = ({ questions, creator }) => {
                                     ? (editQuestion
                                         ? <UpdateQuestion question={question.question} questionId={question.id} editQuestion={editQuestion} creator={creator} />
                                         : <h3 onDoubleClick={() => showQuestionEdit(true)}>
-                                            {question.question} <span className="delete-button" onClick={() => handleDeleteQuestion(question.id)}>X</span>
+                                            {index + 1}. {question.question} <span className="delete-button" onClick={() => handleDeleteQuestion(question.id)}>X</span>
                                         </h3>)
                                     : <h3>{question.question}</h3>
                             }
@@ -55,7 +55,7 @@ const Questions = ({ questions, creator }) => {
                     ))
                     : <em>No questions asked</em>
             }
-        </div>
+        </form>
     )
 };
 
