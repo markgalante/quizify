@@ -1,36 +1,74 @@
 import React, { useState, useEffect } from "react";
-import { useMutation } from "@apollo/client";
+import LoadingSpinner from "./LoadingSpinner";
+import PopulateQuiz from "./PopulateQuiz";
+import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_QUIZ } from "../graphql/mutations";
-import { GET_QUIZZES } from "../graphql/queries";
+import { GET_QUIZZES, CURRENT_USER, QUIZ } from "../graphql/queries";
+import Error from "./Error";
 
 const CreateQuiz = () => {
     const [title, setTitle] = useState('');
-    const [createQuiz, { data, error }] = useMutation(CREATE_QUIZ);
+    const [quizId, setQuizId] = useState(null);
+
+    const [createQuiz, { loading: mutationLoading, error: mutationError }] = useMutation(CREATE_QUIZ, {
+        onCompleted: data => { setQuizId(data.createQuiz.id) },
+        onError: error => console.log(`Error getting data back ${error}`)
+    });
+    const { data: userData } = useQuery(CURRENT_USER);
+    const { data: quizData, loading: quizLoading } = useQuery(QUIZ, { variables: { id: quizId } });
+
+    useEffect(() => {
+        console.log(quizId);
+        console.log({ quizData });
+    }, [quizId, quizData]);
 
     function handleSubmit(e) {
         e.preventDefault();
         createQuiz({
             variables: {
                 title,
-                creatorId: "5f9400bfa74aa73a3cee98ac",
+                creatorId: userData.currentUser.id,
             },
-            refetchQueries: [{ query: GET_QUIZZES }]
+            refetchQueries: [{ query: GET_QUIZZES }],
         });
-        if (error) console.log(error)
-        console.log({ data, error });
+        setTitle('');
     }
 
-    useEffect(()=>{
-        setTitle(''); 
+    useEffect(() => {
+        setTitle('');
     }, []);
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <input type="text" onChange={e => setTitle(e.target.value)} value={title} required />
-                <button type="submit">Create Quiz</button>
-            </form>
-        </div>
+        <>
+            {
+                !quizId
+                    ? (
+                        <form onSubmit={handleSubmit}>
+                            <input type="text" onChange={e => setTitle(e.target.value)} value={title} required />
+                            <button type="submit">Create Quiz</button>
+                        </form>
+                    )
+                    : null
+            }
+
+            {
+                mutationError
+                    ? <Error message={mutationError.message} />
+                    : null
+            }
+            {
+                mutationLoading
+                    ? <LoadingSpinner />
+                    : null
+            }
+            {
+                quizLoading
+                    ? <LoadingSpinner />
+                    : quizData
+                        ? <PopulateQuiz quizData={quizData} />
+                        : null
+            }
+        </>
     );
 };
 
