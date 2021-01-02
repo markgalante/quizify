@@ -43,7 +43,8 @@ const Mutation = types => new GraphQLObjectType({
                     creatorId: req.user._id,
                 });
                 console.log({ newQuiz });
-                return newQuiz.save();
+                newQuiz.save();
+                return newQuiz
             }
         },
         updateQuiz: {
