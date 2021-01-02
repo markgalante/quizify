@@ -66,6 +66,12 @@ class AddQuestion extends React.Component {
 
     submitQuestion(e) {
         e.preventDefault();
+        this.setState({
+            question: "",
+            option: "",
+            options: [],
+            setOptionEdit: false,
+        });
     }
 
     render() {
