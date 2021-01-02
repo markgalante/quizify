@@ -10,10 +10,9 @@ export const CREATE_QUIZ = gql`
 `;
 
 export const UPDATE_QUIZ = gql`
-    mutation UpdateQuiz($id: ID!, $title: String!){
-        updateQuiz(id:$id, title:$title){
+    mutation UpdateQuiz($id: ID!, $title: String!, $creator: ID!){
+        updateQuiz(id:$id, title:$title, creator:$creator){
             id
-            title
         }
     }
 `;
