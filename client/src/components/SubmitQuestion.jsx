@@ -27,7 +27,7 @@ const SubmitQuestion = (props) => {
             },
             refetchQueries: [{ query: QUIZ, variables: { id: props.id } }]
         });
-        history.push(`/${props.id}`);
+        // history.push(`/${props.id}`);
     };
 
     return (
