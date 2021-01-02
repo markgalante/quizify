@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import { UPDATE_QUIZ } from "../graphql/mutations";
-import { QUIZ, GET_QUIZZES } from "../graphql/queries";
+import { QUIZ } from "../graphql/queries";
 import { useMutation } from "@apollo/client";
 import { showQuizEdit } from "../cache"; 
 
 const UpdateQuizName = ({ title, id, creator }) => {
-    const [updateQuiz] = useMutation(UPDATE_QUIZ);
+    const [updateQuiz] = useMutation(UPDATE_QUIZ, {
+        onError: err => console.log({err})
+    });
     const [newTitle, setTitle] = useState(title);
+
     function handleSubmit(e) {
         e.preventDefault();
+        console.log({creator, id, title})
         updateQuiz({
             variables: {
                 id,
@@ -19,8 +23,7 @@ const UpdateQuizName = ({ title, id, creator }) => {
                 {
                     query: QUIZ,
                     variables: { id }
-                },
-                { query: GET_QUIZZES }
+                }
             ], 
         });
         showQuizEdit(false); 
