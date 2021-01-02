@@ -63,7 +63,7 @@ const Quiz = () => {
                                         {data.quiz.title}
                                         {
                                             isCreator
-                                                ? <span className="delete-button" onClick={handleDeleteQuiz}>X</span>
+                                                ? <span className="delete-button" onClick={handleDeleteQuiz}> X</span>
                                                 : null
                                         }
                                     </h1>
