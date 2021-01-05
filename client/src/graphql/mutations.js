@@ -36,10 +36,9 @@ export const ADD_QUESTION = gql`
 `;
 
 export const UPDATE_QUESTION = gql`
-    mutation UpdateQuestion($id: ID!, $question: String!, $creator:ID!){
-        updateQuestion(id:$id, question:$question, creator:$creator){
+    mutation UpdateQuestion($id: ID!, $question: String!, $options: [InputOptions], $creator:ID!){
+        updateQuestion(id:$id, question:$question, options:$options, creator:$creator){
             id
-            question
         }
     }
 `;
