@@ -17,10 +17,8 @@ const CreateQuiz = () => {
     const { data: userData } = useQuery(CURRENT_USER);
     const { data: quizData, loading: quizLoading } = useQuery(QUIZ, { variables: { id: quizId } });
 
-    useEffect(() => {
-        console.log(quizId);
-        console.log({ quizData });
-    }, [quizId, quizData]);
+    // useEffect(() => {
+    // }, [quizId, quizData]);
 
     function handleSubmit(e) {
         e.preventDefault();
