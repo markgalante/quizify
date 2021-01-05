@@ -101,8 +101,9 @@ class AddQuestion extends React.Component {
                                         : (
                                             <span
                                                 className="curser-pointer"
+                                                title={`Delete option: ${opt.option}`}
                                                 onClick={() => this.deleteOption(index)}
-                                            > Delete</span>
+                                            > &#9747;</span>
                                         )
                                 }
 
