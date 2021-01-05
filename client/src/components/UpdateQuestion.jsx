@@ -1,35 +1,73 @@
-import React, { useState } from "react";
-import { useMutation } from "@apollo/client";
-import { UPDATE_QUESTION } from "../graphql/mutations";
-import { QUIZ } from "../graphql/queries";
-import { useParams } from "react-router-dom";
-import { showQuestionEdit } from "../cache";
+import React from "react";
+import { useReactiveVar } from "@apollo/client";
+import { showQuestionEdit } from "../cache"
+// import { UPDATE_QUESTION } from "../graphql/mutations";
+// import { QUIZ } from "../graphql/queries";
+// import { useParams } from "react-router-dom";
+// import { showQuestionEdit } from "../cache";
 
-const UpdateQuestion = ({ question, questionId, creator }) => {
-    const params = useParams();
-    // const editQuestion = useReactiveVar(showQuestionEdit); 
-    const [updateQuestion] = useMutation(UPDATE_QUESTION);
-    const [updatedQuestion, setQuestion] = useState(question);
+class UpdateQuestion extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            question: props.question.question,
+            option: "",
+            options: props.question.options,
+            setOptionEdit: false,
+        }
+    }
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        updateQuestion({
-            variables: {
-                id: questionId,
-                question: updatedQuestion,
-                creator
-            },
-            refetchQueries: [{ query: QUIZ, variables: { id: params.id } }]
+    setQuestion(e) {
+        this.setState({
+            question: e.target.value
         });
-        showQuestionEdit(false);
-        setQuestion("");
-    };
+    }
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <input type="text" value={updatedQuestion || ""} onChange={e => setQuestion(e.target.value)} />
-        </form>
-    );
-};
+    editOption(e, index) {
+        e.preventDefault();
+        const options = [...this.state.options];
+        const option = { ...options[index] };
+        option.option = e.target.value;
+        options[index] = option;
+        this.setState({ options })
+    }
+
+    setIsCorrect(index) {
+        const options = [...this.state.options];
+        console.log(options);
+        for (let i = 0; i < options.length; i++) {
+            const option = { ...options[i] }
+            if (i === index) {
+                option.isCorrect = true;
+                options[i] = option;
+            } else if (options[i].isCorrect) {
+                option.isCorrect = false;
+                options[i] = option;
+            }
+        }
+        this.setState({ options });
+    }
+
+    render() {
+        console.log(this.props);
+        return (
+            <form onSubmit={e => {
+                e.preventDefault();
+                showQuestionEdit(false)
+            }}>
+                <label>Question: </label>
+                <input value={this.state.question} onChange={e => { this.setQuestion(e) }} />
+                {
+                    this.state.options.map((opt, index) => (
+                        <div key={index}>
+                            <input type="radio" name="answer" onChange={() => this.setIsCorrect(index)} defaultChecked={opt.isCorrect} />
+                            <input type="text" defaultValue={opt.option} onChange={(e) => this.editOption(e, index)} />
+                        </div>
+                    ))
+                }
+            </form>
+        )
+    }
+}
 
 export default UpdateQuestion; 
