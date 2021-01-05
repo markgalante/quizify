@@ -12,7 +12,6 @@ const UpdateQuizName = ({ title, id, creator }) => {
 
     function handleSubmit(e) {
         e.preventDefault();
-        console.log({creator, id, title})
         updateQuiz({
             variables: {
                 id,
