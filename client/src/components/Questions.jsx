@@ -8,7 +8,7 @@ import { QUIZ, CURRENT_USER } from "../graphql/queries";
 
 import UpdateQuestion from "./UpdateQuestion";
 
-const Questions = ({ questions, creator }) => {
+const Questions = ({ questions, creator, quizId }) => {
     const [deleteQuestion] = useMutation(DELETE_QUESTION);
     const editQuestion = useReactiveVar(showQuestionEdit);
     const { data: userData } = useQuery(CURRENT_USER);
@@ -23,12 +23,17 @@ const Questions = ({ questions, creator }) => {
                 setisCreator(false);
             }
         }
+        console.log()
     }, [userData, creator]);
 
     function handleDeleteQuestion(questionId) {
+        console.log(questionId, userData.currentUser.id)
         deleteQuestion({
-            variables: { questionId, creator },
-            refetchQueries: [{ query: QUIZ, variables: { id: params.id } }]
+            variables: {
+                questionId,
+                creator: userData.currentUser.id,
+            },
+            refetchQueries: [{ query: QUIZ, variables: { id: quizId } }]
         });
     }
     return (
@@ -40,17 +45,25 @@ const Questions = ({ questions, creator }) => {
                             {
                                 isCreator
                                     ? (editQuestion
-                                        ? <UpdateQuestion question={question.question} questionId={question.id} editQuestion={editQuestion} creator={creator} />
-                                        : <h3 onDoubleClick={() => showQuestionEdit(true)}>
-                                            {index + 1}. {question.question} <span className="delete-button" onClick={() => handleDeleteQuestion(question.id)}>X</span>
-                                        </h3>)
+                                        ? <UpdateQuestion question={question} editQuestion={editQuestion} creator={creator} />
+                                        : (
+                                            <div>
+                                                <h3>
+                                                    {index + 1}. {question.question}
+                                                    <span className="curser-pointer" title="Edit Question" onClick={() => showQuestionEdit(true)}> &#9998;</span>
+                                                    <span className="delete-button" title="Delete Question" onClick={() => handleDeleteQuestion(question.id)}> &#9747;</span>
+                                                </h3>
+
+                                                <div className="options" onClick={() => {
+                                                    if (isCreator) showQuestionEdit(false)
+                                                }}>
+                                                    <Options options={question.options} creator={creator} questionIndex={index} editQuestion={editQuestion} />
+                                                </div>
+                                            </div>
+                                        ))
                                     : <h3>{question.question}</h3>
                             }
-                            <div className="options" onClick={() => {
-                                if (isCreator) showQuestionEdit(false)
-                            }}>
-                                <Options options={question.options} creator={creator} questionIndex={index} />
-                            </div>
+
                         </div>
                     ))
                     : <em>No questions asked</em>
