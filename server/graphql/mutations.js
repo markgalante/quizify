@@ -142,8 +142,9 @@ const Mutation = types => new GraphQLObjectType({
             type: types.QuestionType,
             args: {
                 id: { type: new GraphQLNonNull(GraphQLID) },
+                creator: { type: new GraphQLNonNull(GraphQLID) },
                 question: { type: new GraphQLNonNull(GraphQLString) },
-                creator: { type: new GraphQLNonNull(GraphQLID) }
+                options: { type: new GraphQLList(InputOptionsType) }
             },
             resolve(parent, args, req) {
                 if (!req.user) {
@@ -155,11 +156,17 @@ const Mutation = types => new GraphQLObjectType({
                     console.log("You are not authorised to do this.");
                     return null;
                 }
-                if (!req.user) {
-                    console.log("You need to do this");
-                    return null;
+
+                for (let i = 0; i < args.options.length; i++) {
+                    if (args.options[i].isCorrect) {
+                        const question = {
+                            question: args.question,
+                            options: args.options,
+                        };
+                        return Question.findByIdAndUpdate(args.id, question).then(question => console.log({question}))
+                        .catch(err => console.log({err}));
+                    }
                 }
-                return Question.findByIdAndUpdate(args.id, updatedQuestion);
             },
         },
         deleteQuestion: {
