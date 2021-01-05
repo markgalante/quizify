@@ -141,12 +141,13 @@ const Mutation = types => new GraphQLObjectType({
         updateQuestion: {
             type: types.QuestionType,
             args: {
-                id: { type: new GraphQLNonNull(GraphQLID) },
+                questionId: { type: new GraphQLNonNull(GraphQLID) },
                 creator: { type: new GraphQLNonNull(GraphQLID) },
                 question: { type: new GraphQLNonNull(GraphQLString) },
                 options: { type: new GraphQLList(InputOptionsType) }
             },
             resolve(parent, args, req) {
+                console.log({args}); 
                 if (!req.user) {
                     console.log("You need to be logged in to do this.");
                     return null;
@@ -156,14 +157,13 @@ const Mutation = types => new GraphQLObjectType({
                     console.log("You are not authorised to do this.");
                     return null;
                 }
-
                 for (let i = 0; i < args.options.length; i++) {
                     if (args.options[i].isCorrect) {
-                        const question = {
+                        const updatedQuestion = {
                             question: args.question,
                             options: args.options,
                         };
-                        return Question.findByIdAndUpdate(args.id, question).then(question => console.log({question}))
+                        return Question.findByIdAndUpdate(args.questionId, updatedQuestion).then(q => console.log({q}))
                         .catch(err => console.log({err}));
                     }
                 }
