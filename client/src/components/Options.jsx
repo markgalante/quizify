@@ -1,7 +1,7 @@
 import React from "react";
 
-const Options = ({ options, creator, questionIndex }) => {
-    console.log({ options, creator });
+const Options = ({ options, creator, questionIndex, editQuestion }) => {
+    console.log({ editQuestion, creator });
 
     return (
         <div>
