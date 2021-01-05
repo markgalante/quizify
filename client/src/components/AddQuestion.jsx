@@ -111,7 +111,7 @@ class AddQuestion extends React.Component {
                         ))}
                     </div>
 
-                    <SubmitQuestion question={question} options={options} creator={this.props.creator} id={this.props.id} />
+                    <SubmitQuestion question={question} options={options} creator={this.props.creator} quizId={this.props.id} task="AddQuestion" />
                 </form>
             </div>
         )
