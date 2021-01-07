@@ -105,6 +105,25 @@ const Mutation = types => new GraphQLObjectType({
                     });
             }
         },
+        submitQuiz: {
+            type: types.QuizType,
+            args: {
+                quizId: { type: new GraphQLNonNull(GraphQLID) },
+                creator: { type: new GraphQLNonNull(GraphQLID) },
+            },
+            resolve(parent, args, req) {
+                if (!req.user) {
+                    console.log("You need to be logged in to do this");
+                    return;
+                }
+                if (req.user._id != args.creator) {
+                    console.log(`req.user._id: ${req.user._id}, != args.creator${args.creator}`)
+                    console.log("You are not authorised to do this");
+                    return;
+                }
+                Quiz.findByIdAndUpdate(args.quizId, { submitted: true })
+            }
+        },
         addQuestion: {
             type: types.QuestionType,
             args: {
@@ -147,7 +166,7 @@ const Mutation = types => new GraphQLObjectType({
                 options: { type: new GraphQLList(InputOptionsType) }
             },
             resolve(parent, args, req) {
-                console.log({args}); 
+                console.log({ args });
                 if (!req.user) {
                     console.log("You need to be logged in to do this.");
                     return null;
@@ -163,8 +182,8 @@ const Mutation = types => new GraphQLObjectType({
                             question: args.question,
                             options: args.options,
                         };
-                        return Question.findByIdAndUpdate(args.questionId, updatedQuestion).then(q => console.log({q}))
-                        .catch(err => console.log({err}));
+                        return Question.findByIdAndUpdate(args.questionId, updatedQuestion).then(q => console.log({ q }))
+                            .catch(err => console.log({ err }));
                     }
                 }
             },

@@ -1,9 +1,9 @@
-const graphql = require("graphql"); 
+const graphql = require("graphql");
 
-const Question = require("../models/question"); 
-const User = require("../models/user"); 
+const Question = require("../models/question");
+const User = require("../models/user");
 
-const { GraphQLObjectType, GraphQLList, GraphQLID, GraphQLString } = graphql; 
+const { GraphQLObjectType, GraphQLList, GraphQLID, GraphQLString, GraphQLBoolean } = graphql;
 
 const QuizType = types => new GraphQLObjectType({
     name: "Quiz",
@@ -21,7 +21,8 @@ const QuizType = types => new GraphQLObjectType({
             resolve(parent, args) {
                 return User.findById(parent.creatorId);
             }
-        }
+        },
+        submitted: { type: GraphQLBoolean }
     })
 });
 
