@@ -30,6 +30,27 @@ export const QUIZ = gql`
     }
 `;
 
+export const GET_QUESTIONS = gql`
+    query($id: ID!){
+        quiz(id:$id){
+            id
+            title
+            creator{
+                id
+            }
+            questions{
+                id
+                question
+                options{
+                    option
+                    isCorrect
+                }
+            }
+        }
+    }
+`;
+
+
 export const SHOW_OPTIONS = gql`
     query($questionId: ID!){
         options(questionId:$questionId){
