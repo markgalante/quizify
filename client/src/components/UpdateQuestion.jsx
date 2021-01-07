@@ -14,7 +14,6 @@ class UpdateQuestion extends React.Component {
     }
 
     componentDidMount(){
-        console.log("this.props.question.options", this.props.question.options); 
         const options = [...this.state.options]; 
         for(let i = 0; i < this.props.question.options.length; i++){
             const option = {};
