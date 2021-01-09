@@ -3,7 +3,16 @@ const graphql = require("graphql");
 const Question = require("../models/question");
 const User = require("../models/user");
 
-const { GraphQLObjectType, GraphQLList, GraphQLID, GraphQLString, GraphQLBoolean } = graphql;
+const { GraphQLObjectType, GraphQLList, GraphQLID, GraphQLString, GraphQLInt, GraphQLBoolean } = graphql;
+
+const CompletedQuizType = new GraphQLObjectType({
+    name: "CompletedQuiz",
+    fields: () => ({
+        id: { type: GraphQLID },
+        score: { type: GraphQLInt },
+        totalQuestions: { type: GraphQLInt },
+    })
+});
 
 const QuizType = types => new GraphQLObjectType({
     name: "Quiz",
@@ -22,7 +31,8 @@ const QuizType = types => new GraphQLObjectType({
                 return User.findById(parent.creatorId);
             }
         },
-        submitted: { type: GraphQLBoolean }
+        submitted: { type: GraphQLBoolean },
+        completedBy: { type: new GraphQLList(CompletedQuizType) },
     })
 });
 

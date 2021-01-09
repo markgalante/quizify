@@ -5,6 +5,16 @@ const quizSchema = new Schema({
     title: String,
     creatorId: String,
     submitted: { type: Boolean, default: false },
+    completedBy: [
+        {
+            _id: {
+                type: Schema.Types.ObjectId,
+                ref: "User"
+            },
+            score: Number,
+            totalQuestions: Number
+        }
+    ]
 });
 
 module.exports = mongoose.model("Quiz", quizSchema); 

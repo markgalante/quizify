@@ -4,7 +4,17 @@ const passportLocalMongoose = require("passport-local-mongoose");
 
 const userSchema = new Schema({
     email: String,
-    password: {type: String, select: false}
+    password: {type: String, select: false}, 
+    completedQuizzes: [
+        {
+            _id:{
+                type: Schema.Types.ObjectId, 
+                ref: "Quiz"
+            }, 
+            score: Number,
+            totalQuestions: Number
+        }
+    ]
 });
 
 userSchema.plugin(passportLocalMongoose, { usernameField: "email" }); 

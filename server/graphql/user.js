@@ -9,7 +9,17 @@ const {
     GraphQLList,
     GraphQLID,
     GraphQLString,
+    GraphQLInt
 } = graphql;
+
+const CompletedQuizzesType = new GraphQLObjectType({
+    name: "CompletedQuizzes",
+    fields: () => ({
+        id: { type: GraphQLID },
+        score: { type: GraphQLInt },
+        totalQuestions: { type: GraphQLInt }
+    })
+});
 
 const UserType = types => new GraphQLObjectType({
     name: "User",
@@ -21,7 +31,8 @@ const UserType = types => new GraphQLObjectType({
             resolve(parent) {
                 return Quiz.find({ creatorId: parent.id });
             }
-        }
+        },
+        completedQuizes: { type: new GraphQLList(CompletedQuizzesType) }
     }),
 });
 
