@@ -121,7 +121,7 @@ const Mutation = types => new GraphQLObjectType({
                     console.log("You are not authorised to do this");
                     return;
                 }
-                Quiz.findByIdAndUpdate(args.quizId, { submitted: true })
+                Quiz.findByIdAndUpdate(args.quizId, { submitted: true }).then(()=>console.log("SUCCESS")).catch(err => console.log({err}))
             }
         },
         addQuestion: {
