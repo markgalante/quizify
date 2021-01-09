@@ -11,7 +11,7 @@ import AddQuestion from "./AddQuestion";
 import UpdateQuizName from "./UpdateQuizName";
 import { showQuizEdit } from "../cache";
 
-const Quiz = () => {
+const UserQuiz = () => {
     const [deleteQuiz] = useMutation(DELETE_QUIZ);
     const quizEdit = useReactiveVar(showQuizEdit);
     const history = useHistory();
@@ -98,4 +98,4 @@ const Quiz = () => {
     );
 };
 
-export default Quiz; 
+export default UserQuiz; 
