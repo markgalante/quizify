@@ -9,9 +9,10 @@ import axios from "axios";
 import QuizList from "./components/QuizList";
 import CreateQuiz from "./components/CreateQuiz";
 import SignInSignUp from "./components/SignInSignUp";
+import UserProfile from "./components/UserProfile";
 
 function App() {
-  const { data, loading, error } = useQuery(CURRENT_USER, { fetchPolicy: "cache-and-network" });
+  const { data, error } = useQuery(CURRENT_USER, { fetchPolicy: "cache-and-network" });
   const [updateUser] = useMutation(UPDATE_USER);
   const [isLoggedIn, setUser] = useState(null);
   const history = useHistory();
@@ -38,9 +39,6 @@ function App() {
     <div className="App">
       <Router>
         <div>
-          <button onClick={() => console.log({ loading, data, error })}>
-            Test
-          </button>
           <nav>
             {
               !isLoggedIn
@@ -53,6 +51,7 @@ function App() {
                 : (<ul>
                   <li><Link to="/">Home</Link></li>
                   <li><Link to="/create">Create Quiz</Link></li>
+                  <li><Link to="/profile" >My Profile</Link></li>
                   <li><button onClick={logOut}>Sign Out</button></li>
                 </ul>
                 )
@@ -66,6 +65,13 @@ function App() {
               isLoggedIn
                 ? <CreateQuiz />
                 : <Redirect to="/" />
+            }
+          </Route>
+          <Route path="/profile">
+            {
+              isLoggedIn
+              ? <UserProfile /> 
+              : <Redirect to="/" /> 
             }
           </Route>
           <Route path="/signin"><SignInSignUp /></Route>
