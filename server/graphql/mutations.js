@@ -17,12 +17,19 @@ const {
 } = graphql;
 
 const InputOptionsType = new GraphQLInputObjectType({
-    name: 'InputOptions',
+    name: "InputOptions",
     fields: () => ({
         option: { type: new GraphQLNonNull(GraphQLString) },
         isCorrect: { type: new GraphQLNonNull(GraphQLBoolean) }
     })
 });
+
+const InputAnswersType = new GraphQLInputObjectType({
+    name: "InputAnswers",
+    fields: () => ({
+        option: { type: new GraphQLNonNull(GraphQLString) }
+    }),
+})
 
 const Mutation = types => new GraphQLObjectType({
     name: "Mutation",
@@ -121,7 +128,7 @@ const Mutation = types => new GraphQLObjectType({
                     console.log("You are not authorised to do this");
                     return;
                 }
-                Quiz.findByIdAndUpdate(args.quizId, { submitted: true }).then(()=>console.log("SUCCESS")).catch(err => console.log({err}))
+                Quiz.findByIdAndUpdate(args.quizId, { submitted: true }).then(() => console.log("SUCCESS")).catch(err => console.log({ err }))
             }
         },
         addQuestion: {
@@ -233,6 +240,48 @@ const Mutation = types => new GraphQLObjectType({
             type: types.UserType,
             resolve(parent) {
                 console.log(parent);
+            }
+        },
+        submitAnswers: {
+            type: types.QuizType,
+            args: {
+                options: { type: new GraphQLList(new GraphQLNonNull(InputAnswersType)) },
+                quizId: { type: new GraphQLNonNull(GraphQLID) },
+            },
+            resolve(parent, args, req) {
+                let score = 0;
+                let totalQuestions = 0;
+                Question.find({ quizId: args.quizId })
+                    .then(question => {
+                        totalQuestions = question.length;
+                        for (let i = 0; i < args.options.length; i++) {
+                            for (let x = 0; x < question[i].options.length; x++) {
+                                if (question[i].options[x].option === args.options[i].option) {
+                                    if (question[i].options[x].isCorrect) {
+                                        score++;
+                                    }
+                                }
+                            }
+                        }
+                        const quizPayload = {
+                            _id: req.user._id,
+                            score: score,
+                            totalQuestions: totalQuestions
+                        }
+                        Quiz.findByIdAndUpdate(args.quizId, { $push: { completedBy: quizPayload } })
+                            .then(() => console.log("SUCCESS"))
+                            .catch(err => console.log("ERROR UPDATING QUIZ", err))
+
+                        const userPayload = {
+                            _id: args.quizId,
+                            score,
+                            totalQuestions
+                        }
+                        User.findByIdAndUpdate(req.user._id, { $push: { completedQuizzes: userPayload } })
+                            .then(() => console.log("UPDATED USER"))
+                            .catch(err => console.log("ERROR UPDATING USER", err))
+                    })
+                    .catch(err => console.log(err))
             }
         }
     },

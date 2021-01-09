@@ -65,4 +65,12 @@ export const UPDATE_USER = gql`
             id
         }
     }
-`; 
+`;
+
+export const SUBMIT_ANSWERS = gql`
+    mutation SubmitAnswers($options:[InputAnswers!], $quizId:ID!){
+        submitAnswers(options:$options, quizId:$quizId){
+            id
+        }
+    }
+`;
