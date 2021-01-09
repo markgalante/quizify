@@ -6,8 +6,7 @@ export const reducer = (state = initialState, action) => {
     switch (action.type) {
         case "ADD_ANSWER":
             if (action.payload) {
-                console.log(state);
-                state[action.payload.index] = { option: action.payload.option }
+                state.answer[action.payload.index] = { option: action.payload.option }
             }
             return state;
         default:
