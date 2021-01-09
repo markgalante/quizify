@@ -35,7 +35,7 @@ const SubmittedQuiz = () => {
                     ? (
                         <div>
                             <h1>{quiz.title}</h1>
-                            <SubmittedQuestions questions={quiz.questions} />
+                            <SubmittedQuestions questions={quiz.questions} quizId={quiz.id} />
                         </div>
                     )
                     : null
