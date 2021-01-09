@@ -50,6 +50,23 @@ export const GET_QUESTIONS = gql`
     }
 `;
 
+export const SUBMITTED_QUIZZES = gql`
+    {
+        submittedQuizzes {
+            id
+            title
+    }
+}
+`; 
+
+export const USER_QUIZZES = gql`
+    {
+        myQuizzes {
+            id
+            title
+    }
+}
+`;
 
 export const SHOW_OPTIONS = gql`
     query($questionId: ID!){
