@@ -2,8 +2,6 @@ const graphql = require("graphql");
 
 const Quiz = require("../models/quiz");
 
-const QuizType = require("./quiz");
-
 const {
     GraphQLObjectType,
     GraphQLList,
@@ -12,10 +10,15 @@ const {
     GraphQLInt
 } = graphql;
 
-const CompletedQuizzesType = new GraphQLObjectType({
+const CompletedQuizzesType = types => new GraphQLObjectType({
     name: "CompletedQuizzes",
     fields: () => ({
-        id: { type: GraphQLID },
+        quiz: {
+            type: types.QuizType,
+            async resolve(parent) {
+                return await Quiz.findById(parent.quiz)
+            }
+        },
         score: { type: GraphQLInt },
         totalQuestions: { type: GraphQLInt }
     })
@@ -32,7 +35,7 @@ const UserType = types => new GraphQLObjectType({
                 return Quiz.find({ creatorId: parent.id });
             }
         },
-        completedQuizes: { type: new GraphQLList(CompletedQuizzesType) }
+        completedQuizzes: { type: new GraphQLList(CompletedQuizzesType(types)) }
     }),
 });
 
