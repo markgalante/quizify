@@ -43,7 +43,7 @@ const RootQuery = types => new GraphQLObjectType({
                     console.log("you need to be logged on for this");
                     return;
                 }
-                console.log(req.user._id); 
+                console.log(req.user._id);
                 return Quiz.find({ creatorId: req.user._id });
             }
         },
@@ -58,8 +58,8 @@ const RootQuery = types => new GraphQLObjectType({
             type: types.UserType,
             args: { id: { type: new GraphQLNonNull(GraphQLID) } },
             resolve(parent, args) {
-                return User.find(args.id);
-            }
+                return User.findById(args.id);
+            },
         },
         users: {
             type: new GraphQLList(types.UserType),
@@ -80,13 +80,6 @@ const RootQuery = types => new GraphQLObjectType({
                 return User.findById(user.id);
             }
         },
-        // options: {
-        //     type: new GraphQLList(types.OptionType),
-        //     args: { questionId: { type: new GraphQLNonNull(GraphQLID) } },
-        //     resolve(parent, args) {
-        //         return Option.find({ questionId: args.questionId });
-        //     }
-        // }
     },
 });
 
