@@ -5,10 +5,15 @@ const User = require("../models/user");
 
 const { GraphQLObjectType, GraphQLList, GraphQLID, GraphQLString, GraphQLInt, GraphQLBoolean } = graphql;
 
-const CompletedQuizType = new GraphQLObjectType({
+const CompletedQuizType = types => new GraphQLObjectType({
     name: "CompletedQuiz",
     fields: () => ({
-        id: { type: GraphQLID },
+        user: {
+            type: types.UserType,
+            resolve(parent) {
+                return User.findById(parent.user)
+            }
+        },
         score: { type: GraphQLInt },
         totalQuestions: { type: GraphQLInt },
     })
@@ -32,7 +37,7 @@ const QuizType = types => new GraphQLObjectType({
             }
         },
         submitted: { type: GraphQLBoolean },
-        completedBy: { type: new GraphQLList(CompletedQuizType) },
+        completedBy: { type: new GraphQLList(CompletedQuizType(types)) },
     })
 });
 

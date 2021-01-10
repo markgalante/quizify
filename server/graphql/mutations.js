@@ -264,7 +264,7 @@ const Mutation = types => new GraphQLObjectType({
                             }
                         }
                         const quizPayload = {
-                            _id: req.user._id,
+                            user: req.user._id,
                             score: score,
                             totalQuestions: totalQuestions
                         }
@@ -273,7 +273,7 @@ const Mutation = types => new GraphQLObjectType({
                             .catch(err => console.log("ERROR UPDATING QUIZ", err))
 
                         const userPayload = {
-                            _id: args.quizId,
+                            quiz: args.quizId,
                             score,
                             totalQuestions
                         }

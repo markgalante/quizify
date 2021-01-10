@@ -7,7 +7,7 @@ const quizSchema = new Schema({
     submitted: { type: Boolean, default: false },
     completedBy: [
         {
-            _id: {
+            user: {
                 type: Schema.Types.ObjectId,
                 ref: "User"
             },
