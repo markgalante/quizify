@@ -278,7 +278,7 @@ const Mutation = types => new GraphQLObjectType({
                             totalQuestions
                         }
                         User.findByIdAndUpdate(req.user._id, { $push: { completedQuizzes: userPayload } })
-                            .then(() => console.log("UPDATED USER"))
+                            .then(user => console.log("UPDATED USER", user))
                             .catch(err => console.log("ERROR UPDATING USER", err))
                     })
                     .catch(err => console.log(err))
