@@ -14,6 +14,7 @@ export const QUIZ = gql`
         quiz(id: $id) {
             id
             title
+            submitted
             creator{
                 email
                 id
