@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CURRENT_USER, GET_QUIZZES, QUIZ } from "../graphql/queries";
-import { DELETE_QUIZ } from "../graphql/mutations";
+import { DELETE_QUIZ, SUBMIT_QUIZ } from "../graphql/mutations";
 import { useQuery, useReactiveVar, useMutation } from "@apollo/client"
 import { useRouteMatch, Link, Switch, Route, BrowserRouter as Router, useHistory, Redirect } from "react-router-dom";
 
@@ -13,16 +13,33 @@ import { showQuizEdit } from "../cache";
 
 const UserQuiz = () => {
     const [deleteQuiz] = useMutation(DELETE_QUIZ);
+    const [submitQuiz] = useMutation(SUBMIT_QUIZ);
     const quizEdit = useReactiveVar(showQuizEdit);
     const history = useHistory();
     let match = useRouteMatch();
     const [isCreator, setCreator] = useState(false);
+    const [userId, setUserId] = useState(null);
+    const [submitted, setSubmitted] = useState(true);
     const { data, loading, error } = useQuery(QUIZ, {
         variables: {
             id: match.params.id,
         }
     });
     const { data: userData } = useQuery(CURRENT_USER);
+
+    useEffect(() => {
+        if (data && userData.currentUser) {
+            if (userData.currentUser.id === data.quiz.creator.id) {
+                setCreator(true);
+                setUserId(userData.currentUser.id)
+            } else {
+                setCreator(false);
+            }
+        }
+        if (data) {
+            setSubmitted(data.quiz.submitted);
+        }
+    }, [data, userData, isCreator]);
 
     function handleDeleteQuiz() {
         deleteQuiz({
@@ -35,15 +52,18 @@ const UserQuiz = () => {
         history.push("/");
     };
 
-    useEffect(() => {
-        if (data && userData.currentUser) {
-            if (userData.currentUser.id === data.quiz.creator.id) {
-                setCreator(true);
-            } else {
-                setCreator(false);
-            }
-        }
-    }, [data, userData, isCreator]);
+    function handleSubmitQuiz() {
+        submitQuiz({
+            variables: {
+                quizId: match.params.id,
+                creator: userId
+            },
+            refetchQueries: [{ query: GET_QUIZZES }]
+        });
+        history.push("/");
+    }
+
+
 
     return (
         <div>
@@ -73,7 +93,7 @@ const UserQuiz = () => {
                             </div>
 
                             <Router>
-                                {isCreator
+                                {isCreator && !submitted
                                     ? (<ul>
                                         <li><Link to={`/${match.params.id}/addquestion`}>Add Question</Link></li>
                                     </ul>)
@@ -91,6 +111,11 @@ const UserQuiz = () => {
                                     </Route>
                                 </Switch>
                             </Router>
+                            {
+                                !submitted
+                                    ? <button onClick={handleSubmitQuiz}>Submit Quiz</button>
+                                    : null
+                            }
 
                         </div>)
             }
