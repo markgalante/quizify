@@ -8,7 +8,7 @@ import { QUIZ, CURRENT_USER } from "../graphql/queries";
 import UpdateQuestion from "./UpdateQuestion";
 import LoadingSpinner from "./LoadingSpinner";
 
-const Questions = ({ questions, creator, quizId }) => {
+const Questions = ({ creator, quizId, submitted }) => {
     const [deleteQuestion] = useMutation(DELETE_QUESTION);
     const editQuestion = useReactiveVar(showQuestionEdit);
     const { data: userData } = useQuery(CURRENT_USER);
@@ -55,8 +55,11 @@ const Questions = ({ questions, creator, quizId }) => {
                                                 <div>
                                                     <h3>
                                                         {index + 1}. {question.question}
-                                                        <span className="curser-pointer" title="Edit Question" onClick={() => showQuestionEdit(true)}> &#9998;</span>
-                                                        <span className="delete-button" title="Delete Question" onClick={() => handleDeleteQuestion(question.id)}> &#9747;</span>
+                                                        {!submitted
+                                                            ? (<><span className="curser-pointer" title="Edit Question" onClick={() => showQuestionEdit(true)}> &#9998;</span>
+                                                                <span className="delete-button" title="Delete Question" onClick={() => handleDeleteQuestion(question.id)}> &#9747;</span>
+                                                            </>)
+                                                            : null}
                                                     </h3>
 
                                                     <div className="options" onClick={() => {

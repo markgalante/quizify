@@ -81,15 +81,18 @@ const UserQuiz = () => {
                                         {
                                             isCreator
                                                 ? (<>
-                                                    <span onClick={() => showQuizEdit(true)} className="curser-pointer" > &#9998;</span>
-                                                    <span className="delete-button" onClick={handleDeleteQuiz}> &#9747;</span></>)
+                                                    {!submitted
+                                                        ? <span onClick={() => showQuizEdit(true)} className="curser-pointer" > &#9998;</span>
+                                                        : null}
+                                                    <span className="delete-button" onClick={handleDeleteQuiz}> &#9747;</span>
+                                                </>)
                                                 : null
                                         }
                                     </h1>
                                 </div>)
                             }
                             <div onClick={() => showQuizEdit(false)}>
-                                <Questions questions={data.quiz.questions} quizId={match.params.id} creator={data.quiz.creator.id} />
+                                <Questions quizId={match.params.id} creator={data.quiz.creator.id} submitted={data.quiz.submitted} />
                             </div>
 
                             <Router>
