@@ -74,3 +74,11 @@ export const SUBMIT_ANSWERS = gql`
         }
     }
 `;
+
+export const SUBMIT_QUIZ = gql`
+    mutation SubmitQuiz($quizId:ID!, $creator:ID!){
+        submitQuiz(quizId:$quizId, creator:$creator){
+            id
+        }
+    } 
+`;
