@@ -20,6 +20,7 @@ function App() {
   useEffect(() => {
     if (data) setUser(data.currentUser);
     if (error) console.log({ error });
+    console.log({ isLoggedIn });
   }, [data, error]);
 
   function logOut() {
@@ -38,26 +39,24 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <div>
-          <nav>
-            {
-              !isLoggedIn
-                ? (
-                  <ul>
-                    <li><Link to="/">Home</Link></li>
-                    <li><Link to="/signin">Sign In</Link></li>
-                  </ul>
-                )
-                : (<ul>
+        <nav className="main-nav-bar">
+          {
+            !isLoggedIn
+              ? (
+                <ul className="nav-list">
                   <li><Link to="/">Home</Link></li>
-                  <li><Link to="/create">Create Quiz</Link></li>
-                  <li><Link to="/profile" >My Profile</Link></li>
-                  <li><button onClick={logOut}>Sign Out</button></li>
+                  <li><Link to="/signin">Sign In</Link></li>
                 </ul>
-                )
-            }
-          </nav>
-        </div>
+              )
+              : (<ul className="nav-list">
+                <li><button><Link to="/">Home</Link></button> </li>
+                <li><Link to="/create">Create Quiz</Link></li>
+                <li><Link to={`/${isLoggedIn.id}`} >My Profile</Link></li>
+                <li><button onClick={logOut}>Sign Out</button></li>
+              </ul>
+              )
+          }
+        </nav>
         <Switch>
           <Route exact path="/"><QuizList /></Route>
           <Route path="/create">
@@ -66,15 +65,15 @@ function App() {
                 ? <CreateQuiz />
                 : <Redirect to="/" />
             }
-          </Route>
-          <Route path="/profile">
+          </Route><Route path="/signin"><SignInSignUp /></Route>
+          <Route path="/:profile">
             {
               isLoggedIn
-              ? <UserProfile /> 
-              : <Redirect to="/" /> 
+                ? <UserProfile />
+                : <Redirect to="/" />
             }
           </Route>
-          <Route path="/signin"><SignInSignUp /></Route>
+
         </Switch>
       </Router>
     </div>

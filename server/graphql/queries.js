@@ -36,6 +36,16 @@ const RootQuery = types => new GraphQLObjectType({
                 return Quiz.find({ submitted: true })
             }
         },
+        userCompletedQuizzes: {
+            type: types.UserType,
+            args: {
+                userId: { type: GraphQLID },
+            },
+            resolve(parent, args, req) {
+                console.log("Done")
+                return User.findById(args.userId);
+            },
+        },
         myQuizzes: {
             type: new GraphQLList(types.QuizType),
             resolve(parent, args, req) {

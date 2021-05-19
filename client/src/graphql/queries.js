@@ -58,7 +58,7 @@ export const SUBMITTED_QUIZZES = gql`
             title
     }
 }
-`; 
+`;
 
 export const USER_QUIZZES = gql`
     {
@@ -84,6 +84,21 @@ export const CURRENT_USER = gql`
         currentUser {
             id
             email
+        }
+    }
+`;
+
+export const COMPLETED_QUIZZES = gql`
+    query($userId: ID){
+        userCompletedQuizzes(userId: $userId) {
+            completedQuizzes {
+                quiz {
+                    id
+                    title
+                }
+                score
+                totalQuestions
+            }
         }
     }
 `; 
