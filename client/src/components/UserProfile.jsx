@@ -32,26 +32,21 @@ const UserProfile = () => {
     return (
         <div>
             <Router>
-
-
                 {user
                     ? <h2>{user.email}</h2>
                     : <LoadingSpinner />
                 }
 
-                {
-                    quizLoading
-                        ? <LoadingSpinner />
-                        : quizError
-                            ? <p>Error</p>
-                            : quizzes
-                                ? (
-                                    <Route>
-                                        {
-                                            quizzes.map(quiz => <li key={quiz.id}><Link to={`/profile/${quiz.id}`}>{quiz.title}</Link></li>)
-                                        }
-                                    </Route>)
-                                : <Error />
+                {quizLoading
+                    ? <LoadingSpinner />
+                    : quizError
+                        ? <p>Error</p>
+                        : quizzes
+                            ? (<Route>
+                                {quizzes.map(quiz =>
+                                    <li key={quiz.id}><Link to={`/profile/${quiz.id}`}>{quiz.title}</Link></li>)}
+                            </Route>)
+                            : <Error />
                 }
                 <Switch>
                     <Route path="/profile/:id"><UserQuiz /></Route>
@@ -61,4 +56,4 @@ const UserProfile = () => {
     )
 };
 
-export default UserProfile; 
+export default UserProfile;
