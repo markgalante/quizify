@@ -21,27 +21,22 @@ const SubmittedQuiz = () => {
     useEffect(() => {
         if (quizData) setQuiz(quizData.quiz);
     }, [quizData, quiz, setQuiz])
+
     return (
         <>
-            {
-                quizLoading
-                    ? <LoadingSpinner />
-                    : quizError
-                        ? <Error />
-                        : null
-            }
-            {
-                quiz
-                    ? (
-                        <div>
-                            <h1>{quiz.title}</h1>
-                            <SubmittedQuestions questions={quiz.questions} quizId={quiz.id} />
-                        </div>
-                    )
-                    : null
-            }
+            {quizLoading
+                ? <LoadingSpinner />
+                : quizError
+                    ? <Error />
+                    : null}
+            {quiz
+                ? (<div>
+                    <h1>{quiz.title}</h1>
+                    <SubmittedQuestions questions={quiz.questions} quizId={quiz.id} />
+                </div>)
+                : null}
         </>
     );
 };
 
-export default SubmittedQuiz; 
+export default SubmittedQuiz;
