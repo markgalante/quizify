@@ -34,7 +34,7 @@ const RootQuery = types => new GraphQLObjectType({
             type: new GraphQLList(types.QuizType),
             resolve(parent, args, req) {
                 if (!req.user) return;
-                return Quiz.find({ submitted: true, $nor:[{'completedBy.user': req.user._id}] })
+                return Quiz.find({ submitted: true, $nor: [{ 'completedBy.user': req.user._id }, { creatorId: req.user._id }] })
             }
         },
         userCompletedQuizzes: {
