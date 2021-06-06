@@ -73,3 +73,7 @@ code {
   text-decoration: none;
   color: rgb(25, 25, 25);
 }
+
+.nav-link {
+  cursor: pointer;
+}
