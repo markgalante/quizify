@@ -26,14 +26,15 @@ const RootQuery = types => new GraphQLObjectType({
         },
         quizes: {
             type: new GraphQLList(types.QuizType),
-            resolve(parent, args) {
+            resolve(parent, args, req) {
                 return Quiz.find();
             }
         },
         submittedQuizzes: {
             type: new GraphQLList(types.QuizType),
-            resolve(parent, args) {
-                return Quiz.find({ submitted: true })
+            resolve(parent, args, req) {
+                if (!req.user) return;
+                return Quiz.find({ submitted: true, $nor:[{'completedBy.user': req.user._id}] })
             }
         },
         userCompletedQuizzes: {
@@ -93,4 +94,4 @@ const RootQuery = types => new GraphQLObjectType({
     },
 });
 
-module.exports = RootQuery; 
+module.exports = RootQuery;
