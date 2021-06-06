@@ -12,14 +12,21 @@ import UpdateQuizName from "./UpdateQuizName";
 import { showQuizEdit } from "../cache";
 
 const UserQuiz = () => {
-    const [deleteQuiz] = useMutation(DELETE_QUIZ);
-    const [submitQuiz] = useMutation(SUBMIT_QUIZ);
     const quizEdit = useReactiveVar(showQuizEdit);
     const history = useHistory();
     let match = useRouteMatch();
+
+    //MUTATIONS: 
+    const [deleteQuiz] = useMutation(DELETE_QUIZ);
+    const [submitQuiz] = useMutation(SUBMIT_QUIZ);
+
+
+    //STATE MANAGEMENT: 
     const [isCreator, setCreator] = useState(false);
     const [userId, setUserId] = useState(null);
     const [submitted, setSubmitted] = useState(true);
+
+    //QUERIES: 
     const { data, loading, error } = useQuery(QUIZ, {
         variables: {
             id: match.params.id,
@@ -63,67 +70,51 @@ const UserQuiz = () => {
         history.push("/");
     }
 
-
-
     return (
         <div>
-            {
-                loading
-                    ? <LoadingSpinner />
-                    : error
-                        ? <Error message={error.message} />
-                        : (<div>
-                            { quizEdit
-                                ? (<UpdateQuizName title={data.quiz.title} id={match.params.id} creator={userData.currentUser.id} />)
-                                : (<div>
-                                    <h1>
-                                        {data.quiz.title}
-                                        {
-                                            isCreator
-                                                ? (<>
-                                                    {!submitted
-                                                        ? <span onClick={() => showQuizEdit(true)} className="curser-pointer" > &#9998;</span>
-                                                        : null}
-                                                    <span className="delete-button" onClick={handleDeleteQuiz}> &#9747;</span>
-                                                </>)
-                                                : null
-                                        }
-                                    </h1>
-                                </div>)
-                            }
-                            <div onClick={() => showQuizEdit(false)}>
-                                <Questions quizId={match.params.id} creator={data.quiz.creator.id} submitted={data.quiz.submitted} />
-                            </div>
-
-                            <Router>
-                                {isCreator && !submitted
-                                    ? (<ul>
-                                        <li><Link to={`/${match.params.id}/addquestion`}>Add Question</Link></li>
-                                    </ul>)
-                                    : null
-                                }
-
-
-                                <Switch>
-                                    <Route path={`/${match.params.id}/addquestion`}>
-                                        {
-                                            isCreator
-                                                ? <AddQuestion id={match.params.id} creator={data.quiz.creator.id} />
-                                                : <Redirect to={`/${match.params.id}`} />
-                                        }
-                                    </Route>
-                                </Switch>
-                            </Router>
-                            {
-                                !submitted
-                                    ? <button onClick={handleSubmitQuiz}>Submit Quiz</button>
-                                    : null
-                            }
-
-                        </div>)
-            }
+            {loading
+                ? <LoadingSpinner />
+                : error
+                    ? <Error message={error.message} />
+                    : data ? (<div>
+                        { quizEdit
+                            ? (<UpdateQuizName title={data.quiz.title} id={match.params.id} creator={userData.currentUser.id} />)
+                            : (<div>
+                                <h1>
+                                    {data.quiz.title}
+                                    {isCreator
+                                        ? (<>
+                                            {!submitted
+                                                ? <span onClick={() => showQuizEdit(true)} className="curser-pointer" > &#9998;</span>
+                                                : null}
+                                            <span className="delete-button" onClick={handleDeleteQuiz}> &#9747;</span>
+                                        </>)
+                                        : null}
+                                </h1>
+                            </div>)}
+                        <div onClick={() => showQuizEdit(false)}>
+                            <Questions quizId={match.params.id} creator={data.quiz.creator.id} submitted={data.quiz.submitted} />
+                        </div>
+                        <Router>
+                            {isCreator && !submitted
+                                ? (<ul>
+                                    <li><Link to={`/${match.params.id}/addquestion`}>Add Question</Link></li>
+                                </ul>)
+                                : null}
+                            <Switch>
+                                <Route path={`/${match.params.id}/addquestion`}>
+                                    {isCreator
+                                        ? <AddQuestion id={match.params.id} creator={data.quiz.creator.id} />
+                                        : <Redirect to={`/${match.params.id}`} />}
+                                </Route>
+                            </Switch>
+                        </Router>
+                        {!submitted
+                            ? <button onClick={handleSubmitQuiz}>Submit Quiz</button>
+                            : null}
+                    </div>) : null}
         </div>
     );
 };
 
-export default UserQuiz; 
+export default UserQuiz;
