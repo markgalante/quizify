@@ -43,7 +43,6 @@ const RootQuery = types => new GraphQLObjectType({
                 userId: { type: GraphQLID },
             },
             resolve(parent, args, req) {
-                console.log("Done")
                 return User.findById(args.userId);
             },
         },
@@ -51,10 +50,8 @@ const RootQuery = types => new GraphQLObjectType({
             type: new GraphQLList(types.QuizType),
             resolve(parent, args, req) {
                 if (!req.user) {
-                    console.log("you need to be logged on for this");
                     return;
                 }
-                console.log(req.user._id);
                 return Quiz.find({ creatorId: req.user._id });
             }
         },
@@ -85,8 +82,6 @@ const RootQuery = types => new GraphQLObjectType({
                 if (!user) {
                     console.log("req.user is undefined");
                     return undefined
-                } else {
-                    console.log("user", user)
                 }
                 return User.findById(user.id);
             }
