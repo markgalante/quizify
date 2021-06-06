@@ -27,6 +27,7 @@ const UserProfile = () => {
         if (quizData) getQuizzes(quizData.myQuizzes);
         if (userData) getUser(userData.currentUser);
         if (completedQuizData) setCompleted(completedQuizData);
+        console.log({ params })
     }, [quizData, userData, quizzes, user]);
 
     return (
@@ -44,12 +45,12 @@ const UserProfile = () => {
                         : quizzes
                             ? (<Route>
                                 {quizzes.map(quiz =>
-                                    <li key={quiz.id}><Link to={`/profile/${quiz.id}`}>{quiz.title}</Link></li>)}
+                                    <li key={quiz.id} className="nav-link"><Link to={`/profile/user-quiz/${quiz.id}`}>{quiz.title}</Link></li>)}
                             </Route>)
                             : <Error />
                 }
                 <Switch>
-                    <Route path="/profile/:id"><UserQuiz /></Route>
+                    <Route path="/profile/user-quiz/:id"><UserQuiz /></Route>
                 </Switch>
             </Router>
         </div>
