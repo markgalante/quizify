@@ -33,7 +33,7 @@ const QuizList = () => {
                         <div>
                             <ul>
                                 {quizzes.map(quiz => (
-                                    <li key={quiz.id} className="nav-link"><Link to={`/quiz/${quiz.id}`}>{quiz.title}</Link></li>
+                                    <li key={quiz.id} className="quiz-list"><Link to={`/quiz/${quiz.id}`}>{quiz.title}</Link></li>
                                 ))}
                             </ul>
                         </div>
