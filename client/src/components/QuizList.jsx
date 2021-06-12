@@ -3,11 +3,8 @@ import React, { useEffect, useState } from "react";
 import { SUBMITTED_QUIZZES } from "../graphql/queries";
 import LoadingSpinner from "./LoadingSpinner";
 import Error from "./Error";
-import {
-    Link,
-    useHistory
-} from "react-router-dom";
-import useSearchQuery from "../custom_hooks/useSearchQuery"
+import { useHistory } from "react-router-dom";
+import QuizCard from "./QuizCard";
 
 const QuizList = () => {
     //Using useQuery above useState only causes useEffect to run once. 
@@ -30,16 +27,18 @@ const QuizList = () => {
                     ? <Error message={error.message} />
                     :
                     quizzes ?
-                        <div>
-                            <ul>
+                        <div className="quiz-list" >
+                            <ul className="quiz-list-element">
                                 {quizzes.map(quiz => (
-                                    <li key={quiz.id} className="quiz-list"><Link to={`/quiz/${quiz.id}`}>{quiz.title}</Link></li>
+                                    <div>
+                                        <QuizCard key={quiz.id} quizId={quiz.id} quizTitle={quiz.title} />
+                                    </div>
                                 ))}
                             </ul>
                         </div>
                         : null}
         </div>
-    )
+    );
 };
 
 export default QuizList;

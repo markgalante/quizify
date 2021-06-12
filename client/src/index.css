@@ -76,7 +76,16 @@ code {
   font-weight: 600;
 }
 
-.quiz-list a{
+.quiz-list{
+  width: 85%;
+  margin: auto;
+}
+
+.quiz-list-element{
+  list-style-type: none;
+}
+
+.quiz-list-item a{
   text-decoration: none;
 }
 
@@ -130,4 +139,21 @@ code {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.quiz-div{
+  border: 1px solid #ef9273;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #facdbef4;
+  transition: 0.3s;
+  padding-left: 10px; 
+};
+
+.quiz-div:hover{
+  background-color: #eab5a4;
+}
+
+.quiz-title{
+  font-weight: 600;
 }
