@@ -27,33 +27,41 @@ const SignIn = () => {
                 history.push("/");
             })
             .catch(err => {
-                setError(true); 
+                setError(true);
                 console.log("ERROR WITH LOGIN", err)
             })
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            {
-                error 
-                ? <p>Incorrect username or password</p>
-                : null
-            }
-            <div>
-                <label>Email</label>
-                <input type="text" onChange={e => setEmail(e.target.value)} value={email || ""} />
-            </div>
-            <div>
-                <label>Password</label>
-                <input type="password" onChange={e => setPassword(e.target.value)} value={password || ""} autoComplete="true" />
-            </div>
+        <div>
+            <h2>Sign In</h2>
+            <form onSubmit={handleSubmit} className="form" id="sign-in">
+                {
+                    error
+                        ? <p>Incorrect username or password</p>
+                        : null
+                }
+                <div className="form-item">
+                    <label>Email</label>
+                    <input type="text" onChange={e => setEmail(e.target.value)} value={email || ""} className="form-text-input" />
+                </div>
+                <div className="form-item">
+                    <label>Password</label>
+                    <input type="password" onChange={e => setPassword(e.target.value)} value={password || ""} autoComplete="true" className="form-text-input" />
+                </div>
 
-            <button
-                type="submit"
-                disabled={!email || !password}
-            >Submit</button>
-        </form>
+                <div className="form-button-div">
+                    <button
+                        type="submit"
+                        form="sign-in"
+                        disabled={!email || !password}
+                        className="auth-submit-button"
+                    >Submit</button>
+                </div>
+            </form>
+        </div>
+
     );
 };
 
-export default SignIn; 
+export default SignIn;
