@@ -1,0 +1,13 @@
+.user-profile-wrapper {
+    border         : 2px solid #ef9273;
+    border-radius  : 10px;
+    width          : 80%;
+    margin         : auto;
+    min-width      : 350px;
+    display        : flex;
+    justify-content: space-around;
+}
+
+.test {
+    width: 45%;
+}
