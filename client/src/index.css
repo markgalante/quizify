@@ -46,6 +46,10 @@ code {
   }
 }
 
+.header-text{
+  text-align: center;
+}
+
 .delete-button{
   cursor: pointer;
 }
@@ -83,6 +87,7 @@ code {
 
 .quiz-list-element{
   list-style-type: none;
+  padding-left: 0;
 }
 
 .quiz-list-item a{
