@@ -29,11 +29,7 @@ const QuizList = () => {
                     quizzes ?
                         <div className="quiz-list" >
                             <ul className="quiz-list-element">
-                                {quizzes.map(quiz => (
-                                    <div>
-                                        <QuizCard key={quiz.id} quizId={quiz.id} quizTitle={quiz.title} />
-                                    </div>
-                                ))}
+                                <QuizCard quizList={quizzes} />
                             </ul>
                         </div>
                         : null}
