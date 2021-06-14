@@ -52,7 +52,16 @@ const RootQuery = types => new GraphQLObjectType({
                 if (!req.user) {
                     return;
                 }
-                return Quiz.find({ creatorId: req.user._id });
+                return Quiz.find({ creatorId: req.user._id, submitted: true });
+            }
+        },
+        myUnsubmittedQuizzes: {
+            type: new GraphQLList(types.QuizType),
+            resolve(parent, args, req) {
+                if (!req.user) {
+                    return;
+                }
+                return Quiz.find({ creatorId: req.user._id, submitted: false });
             }
         },
         questions: {
