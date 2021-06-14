@@ -7,8 +7,8 @@ body {
     sans-serif;
   -webkit-font-smoothing : antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: 'Montserrat', sans-serif;
-  background-color: #fef9f8;
+  font-family            : 'Montserrat', sans-serif;
+  background-color       : #fef9f8;
 }
 
 code {
@@ -17,148 +17,152 @@ code {
 }
 
 #loading-spinner {
-    border           : solid 16px #0042a4;
-    border-radius    : 50%;
-    width            : 50px;
-    height           : 50px;
-    border-top       : 16px solid #3775cf;
-    border-right     : 16px solid #619bee;
-    border-bottom    : 16px solid #96bff9;
-    border-left      : 16px solid #c9e0ff;
-    -webkit-animation: spin 2.5s linear infinite;
-    animation        : spin 2.5s linear infinite;
+  border           : solid 16px #0042a4;
+  border-radius    : 50%;
+  width            : 50px;
+  height           : 50px;
+  border-top       : 16px solid #3775cf;
+  border-right     : 16px solid #619bee;
+  border-bottom    : 16px solid #96bff9;
+  border-left      : 16px solid #c9e0ff;
+  -webkit-animation: spin 2.5s linear infinite;
+  animation        : spin 2.5s linear infinite;
 }
 
 @keyframes spin {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
 }
+
 @-webkit-keyframes spin {
   0% {
     -webkit-transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
   }
 }
 
-.header-text{
+.header-text {
   text-align: center;
 }
 
-.delete-button{
+.delete-button {
   cursor: pointer;
 }
 
-.curser-pointer{
+.curser-pointer {
   cursor: pointer;
 }
 
-.main-nav-bar{
+.main-nav-bar {
   background-color: #ef9273;
 }
 
-.nav-list{
+.nav-list {
   list-style-type: none;
-  display: flex;
-  width: 50%;
-  margin: auto; 
-  padding: 0;
+  display        : flex;
+  justify-content: space-evenly;
+  width          : 50%;
+  margin         : auto;
+  padding        : 0;
 }
 
 .nav-list li {
-  margin: 10px 15px; 
+  margin: 10px 15px;
 }
 
 .nav-link a {
   text-decoration: none;
-  color: #fef9f8;
-  font-weight: 600;
+  color          : #fef9f8;
+  font-weight    : 600;
 }
 
-.quiz-list{
-  width: 85%;
+.quiz-list {
+  width : 85%;
   margin: auto;
 }
 
-.quiz-list-element{
+.quiz-list-element {
   list-style-type: none;
-  padding-left: 0;
+  padding-left   : 0;
 }
 
-.quiz-list-item a{
+.quiz-list-item a {
   text-decoration: none;
 }
 
-.nav-link a:hover{
-  color:#fddeee;
+.nav-link a:hover {
+  color: #fddeee;
 }
 
 .nav-link {
   cursor: pointer;
 }
 
-.auth-form{
-  width: 70%;
-  min-width: 350px; 
-  margin: auto;
+.auth-form {
+  width    : 70%;
+  min-width: 350px;
+  margin   : auto;
+  position : relative;
+}
+
+.form {
+  margin  : 2em 0;
   position: relative;
 }
 
-.form{
-  margin: 2em 0;
-  position: relative;
-}
-
-.form-button-div{
-  display: flex;
+.form-button-div {
+  display    : flex;
   align-items: center;
 }
 
-.auth-submit-button{
-  width: 50%;
-  margin: auto;
-  border: none;
+.auth-submit-button {
+  width           : 50%;
+  margin          : auto;
+  border          : none;
   background-color: #ef9273;
-  color: #fef9f8;
-  font-weight: 600;
-  font-size: 1em;
-  border-radius: 4px;
-  height: 3em;
-  cursor: pointer;
+  color           : #fef9f8;
+  font-weight     : 600;
+  font-size       : 1em;
+  border-radius   : 4px;
+  height          : 3em;
+  cursor          : pointer;
 }
 
-.form-text-input{
-  width: 75%;
-  height: 2em;
+.form-text-input {
+  width        : 75%;
+  height       : 2em;
   border-radius: 5px;
 }
 
-.form-item{
-  margin: 1em 0;
-  height: 2em;
-  display: flex;
-  align-items: center;
+.form-item {
+  margin         : 1em 0;
+  height         : 2em;
+  display        : flex;
+  align-items    : center;
   justify-content: space-between;
 }
 
-.quiz-div{
-  border: 1px solid #ef9273;
-  border-radius: 10px;
-  cursor: pointer;
+.quiz-div {
+  border          : 1px solid #ef9273;
+  border-radius   : 10px;
+  cursor          : pointer;
   background-color: #facdbef4;
-  transition: 0.3s;
-  padding-left: 10px; 
-};
+  transition      : 0.3s;
+  padding-left    : 10px;
+}
 
-.quiz-div:hover{
+.quiz-div:hover {
   background-color: #eab5a4;
 }
 
-.quiz-title{
+.quiz-title {
   font-weight: 600;
 }
