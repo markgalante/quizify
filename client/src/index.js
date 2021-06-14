@@ -1,18 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import "./styles/text.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
 
 import { ApolloClient, InMemoryCache, ApolloProvider, split, createHttpLink } from "@apollo/client";
 import { WebSocketLink } from "@apollo/client/link/ws"
 import { BrowserRouter } from "react-router-dom"
-import { getMainDefinition } from '@apollo/client/utilities';
+import { getMainDefinition } from "@apollo/client/utilities";
 // import quiz from '../../server/models/quiz';
 
 //for queries or mutations: 
 const httpLink = createHttpLink({
-  uri: "/graphql", 
+  uri: "/graphql",
   includeExtensions: true
 })
 
@@ -20,7 +21,7 @@ const httpLink = createHttpLink({
 const wsLink = new WebSocketLink({
   uri: "ws://localhost:4000/subscriptions",
   options: {
-    reconnect: true, 
+    reconnect: true,
     // connectionParams: {
     //   authToken: user.authToken
     // }
