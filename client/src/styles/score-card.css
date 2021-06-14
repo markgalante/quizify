@@ -1,0 +1,12 @@
+.score-card {
+    border       : 1px solid #ef9273;
+    border-radius: 10px;
+    margin       : 1px;
+    padding-left : 10px;
+    cursor       : pointer;
+    transition   : .4s;
+}
+
+.score-card:hover {
+    background-color: #facdbef4;
+}

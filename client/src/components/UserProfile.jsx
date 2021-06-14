@@ -10,6 +10,7 @@ import { USER_QUIZZES, CURRENT_USER, COMPLETED_QUIZZES } from "../graphql/querie
 import LoadingSpinner from "./LoadingSpinner";
 import UserQuiz from "./UserQuiz";
 import Error from "./Error";
+import ScoreCard from "./ScoreCard"; 
 import QuizCard from "./QuizCard";
 import "../styles/user-profile.css";
 
@@ -19,6 +20,8 @@ const UserProfile = () => {
     const { data: userData } = useQuery(CURRENT_USER);
     const { data: completedQuizData, loading: completedQuizLoading, error: completedQuizError } = useQuery(COMPLETED_QUIZZES,
         { variables: { userId: params.profile }, fetchPolicy: "no-cache" });
+
+    //STATE
     const [quizzes, getQuizzes] = useState(null);
     const [user, getUser] = useState(null);
     const [completed, setCompleted] = useState(null);
@@ -27,9 +30,9 @@ const UserProfile = () => {
     useEffect(() => {
         if (quizData) getQuizzes(quizData.myQuizzes);
         if (userData) getUser(userData.currentUser);
-        if (completedQuizData) setCompleted(completedQuizData);
-        console.log({ params })
-    }, [quizData, userData, quizzes, user]);
+        if (completedQuizData) setCompleted(completedQuizData.userCompletedQuizzes.completedQuizzes);
+        console.log(completed);
+    }, [quizData, userData, quizzes, user, completedQuizData, completed]);
 
     return (
         <div>
@@ -45,10 +48,15 @@ const UserProfile = () => {
                     <h3>Completed Quizzes</h3>
                     {completed ?
                         (<ul className="quiz-list-element">
-                            <li>Hi</li>
+                            <ScoreCard /> 
                         </ul>)
                         : <p>Nothing...yet</p>}
                 </div>
+            </div>
+            <div className="user-profile-wrapper">
+                {user ?
+                    user.id === params.profile ? <p>This is the user</p> : null
+                    : null}
             </div>
         </div>
     );
