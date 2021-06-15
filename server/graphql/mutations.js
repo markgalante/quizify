@@ -251,6 +251,15 @@ const Mutation = types => new GraphQLObjectType({
             resolve(parent, args, req) {
                 let score = 0;
                 let totalQuestions = 0;
+                Quiz.findById(args.quizId).then(quiz => {
+                    for (let i = 0; i < quiz.completedBy.length; i++) {
+                        if (req.user._id.equals(quiz.completedBy[i].user)) {
+                            console.log("You've done this quiz already!");
+                            return;
+                        };
+                    };
+                });
+                return;
                 Question.find({ quizId: args.quizId })
                     .then(question => {
                         totalQuestions = question.length;
@@ -287,4 +296,4 @@ const Mutation = types => new GraphQLObjectType({
     },
 });
 
-module.exports = Mutation; 
+module.exports = Mutation;
