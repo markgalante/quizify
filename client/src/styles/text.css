@@ -5,3 +5,7 @@
 .italics {
     text-decoration: wavy;
 }
+
+.centre-text {
+    text-align: center;
+}
