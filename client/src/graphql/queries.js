@@ -88,6 +88,16 @@ export const CURRENT_USER = gql`
     }
 `;
 
+export const USER = gql`
+        query($id:ID!){
+            user(id:$id){
+                id
+                email
+                username
+            }
+        }
+`;
+
 export const COMPLETED_QUIZZES = gql`
     query($userId: ID){
         userCompletedQuizzes(userId: $userId) {
@@ -101,4 +111,4 @@ export const COMPLETED_QUIZZES = gql`
             }
         }
     }
-`; 
+`;
