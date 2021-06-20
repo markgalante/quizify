@@ -25,14 +25,16 @@ const QuizList = () => {
                 ? (<LoadingSpinner />)
                 : fetchError
                     ? <Error message={error.message} />
-                    :
-                    quizzes ?
-                        <div className="quiz-list" >
-                            <ul className="quiz-list-element">
-                                <QuizCard quizList={quizzes} />
-                            </ul>
-                        </div>
-                        : null}
+                    : quizzes ?
+                        quizzes.length ?
+                            <div className="quiz-list" >
+                                <ul className="quiz-list-element">
+                                    <QuizCard quizList={quizzes} />
+                                </ul>
+                            </div>
+                            : <div className="quiz-list centre-text">
+                                <p>No quizzes available...yet</p>
+                            </div> : null}
         </div>
     );
 };
