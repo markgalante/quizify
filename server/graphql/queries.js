@@ -30,7 +30,7 @@ const RootQuery = types => new GraphQLObjectType({
                 return Quiz.find();
             }
         },
-        submittedQuizzes: {
+        submittedQuizzes: { //lists submitted quizzes that were not completed or created by logged in user. 
             type: new GraphQLList(types.QuizType),
             resolve(parent, args, req) {
                 if (!req.user) return;
@@ -46,7 +46,7 @@ const RootQuery = types => new GraphQLObjectType({
                 return User.findById(args.userId);
             },
         },
-        myQuizzes: {
+        myQuizzes: { //Quizzes created by user
             type: new GraphQLList(types.QuizType),
             resolve(parent, args, req) {
                 if (!req.user) {
