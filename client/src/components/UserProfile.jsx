@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from "react";
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    useParams
-} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { USER_QUIZZES, CURRENT_USER, COMPLETED_QUIZZES } from "../graphql/queries";
+import { USER_QUIZZES, COMPLETED_QUIZZES, USER } from "../graphql/queries";
+
+//COMPONENTS 
 import LoadingSpinner from "./LoadingSpinner";
 import UserQuiz from "./UserQuiz";
 import Error from "./Error";
-import ScoreCard from "./ScoreCard"; 
+import ScoreCard from "./ScoreCard";
 import QuizCard from "./QuizCard";
+
+//STYLES
 import "../styles/user-profile.css";
 
 const UserProfile = () => {
     const params = useParams();
-    const { data: quizData, loading: quizLoading, error: quizError } = useQuery(USER_QUIZZES);
-    const { data: userData } = useQuery(CURRENT_USER);
-    const { data: completedQuizData, loading: completedQuizLoading, error: completedQuizError } = useQuery(COMPLETED_QUIZZES,
+    const { data: quizData } = useQuery(USER_QUIZZES);
+    const { data: userData } = useQuery(USER, { variables: { id: params.profile } });
+    const { data: completedQuizData } = useQuery(COMPLETED_QUIZZES,
         { variables: { userId: params.profile }, fetchPolicy: "no-cache" });
 
     //STATE
@@ -29,9 +28,8 @@ const UserProfile = () => {
 
     useEffect(() => {
         if (quizData) getQuizzes(quizData.myQuizzes);
-        if (userData) getUser(userData.currentUser);
+        if (userData) getUser(userData.user);
         if (completedQuizData) setCompleted(completedQuizData.userCompletedQuizzes.completedQuizzes);
-        console.log(completed);
     }, [quizData, userData, quizzes, user, completedQuizData, completed]);
 
     return (
@@ -48,7 +46,7 @@ const UserProfile = () => {
                     <h3>Completed Quizzes</h3>
                     {completed ?
                         (<ul className="quiz-list-element">
-                            <ScoreCard /> 
+                            <ScoreCard quizzes={completed} />
                         </ul>)
                         : <p>Nothing...yet</p>}
                 </div>
