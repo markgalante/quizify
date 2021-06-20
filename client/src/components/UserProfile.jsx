@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { USER_QUIZZES, COMPLETED_QUIZZES, USER } from "../graphql/queries";
+import { USER_QUIZZES, COMPLETED_QUIZZES, USER, CURRENT_USER } from "../graphql/queries";
 
 //COMPONENTS 
 import LoadingSpinner from "./LoadingSpinner";
@@ -16,21 +16,36 @@ import "../styles/user-profile.css";
 const UserProfile = () => {
     const params = useParams();
     const { data: quizData } = useQuery(USER_QUIZZES);
-    const { data: userData } = useQuery(USER, { variables: { id: params.profile } });
-    const { data: completedQuizData } = useQuery(COMPLETED_QUIZZES,
+    const { data: userData, error: userFetchError } = useQuery(USER, { variables: { id: params.profile } });
+    const { data: currentUser } = useQuery(CURRENT_USER);
+    const { data: completedQuizData, error: completedQuizFetchError } = useQuery(COMPLETED_QUIZZES,
         { variables: { userId: params.profile }, fetchPolicy: "no-cache" });
 
     //STATE
     const [quizzes, getQuizzes] = useState(null);
     const [user, getUser] = useState(null);
+    const [current_user, getCurrentUser] = useState(null);
     const [completed, setCompleted] = useState(null);
 
 
     useEffect(() => {
+        console.log({ userData })
         if (quizData) getQuizzes(quizData.myQuizzes);
         if (userData) getUser(userData.user);
-        if (completedQuizData) setCompleted(completedQuizData.userCompletedQuizzes.completedQuizzes);
+        if (completedQuizData) {
+            if (completedQuizData.userCompletedQuizzes) setCompleted(completedQuizData.userCompletedQuizzes.completedQuizzes)
+        };
+        if (currentUser) getCurrentUser(currentUser.currentUser);
+        console.log({ current_user });
     }, [quizData, userData, quizzes, user, completedQuizData, completed]);
+
+    if (!user) {
+        return (
+            <div>
+                <Error message="This user doesn't exist!" />
+            </div>
+        );
+    };
 
     return (
         <div>
@@ -53,7 +68,7 @@ const UserProfile = () => {
             </div>
             <div className="user-profile-wrapper">
                 {user ?
-                    user.id === params.profile ? <p>This is the user</p> : null
+                    current_user.id === params.profile ? <p>This is the user</p> : null
                     : null}
             </div>
         </div>
