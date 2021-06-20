@@ -38,11 +38,7 @@ function App() {
               ? <Redirect to="/" />
               : <SignInSignUp />}
           </Route>
-          <Route path="/profile/:profile">
-            {isLoggedIn
-              ? <UserProfile />
-              : <Redirect to="/" />}
-          </Route>
+          <Route path="/profile/:profile"><UserProfile /></Route>
           <Route path="/quiz/:id" exact={false}>
             {isLoggedIn
               ? <SubmittedQuiz />
@@ -52,5 +48,5 @@ function App() {
       </Router>
     </div>
   );
-}; 
+};
 export default App;
