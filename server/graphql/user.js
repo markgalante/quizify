@@ -29,6 +29,7 @@ const UserType = types => new GraphQLObjectType({
     fields: () => ({
         email: { type: GraphQLString },
         id: { type: GraphQLID },
+        username: { type: GraphQLString },
         quizes: {
             type: new GraphQLList(types.QuizType),
             resolve(parent) {
@@ -39,4 +40,4 @@ const UserType = types => new GraphQLObjectType({
     }),
 });
 
-module.exports = UserType; 
+module.exports = UserType;
