@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import "./styles/text.css";
+import "./styles/messages.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
