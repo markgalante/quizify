@@ -5,7 +5,6 @@ import { USER_QUIZZES, COMPLETED_QUIZZES, USER, CURRENT_USER } from "../graphql/
 
 //COMPONENTS 
 import LoadingSpinner from "./LoadingSpinner";
-import UserQuiz from "./UserQuiz";
 import Error from "./Error";
 import ScoreCard from "./ScoreCard";
 import QuizCard from "./QuizCard";
@@ -16,7 +15,7 @@ import "../styles/user-profile.css";
 const UserProfile = () => {
     const params = useParams();
     const { data: quizData } = useQuery(USER_QUIZZES);
-    const { data: userData, error: userFetchError } = useQuery(USER, { variables: { id: params.profile } });
+    const { data: userData, error: userFetchError, loading: userFetchLoading } = useQuery(USER, { variables: { id: params.profile } });
     const { data: currentUser } = useQuery(CURRENT_USER);
     const { data: completedQuizData, error: completedQuizFetchError } = useQuery(COMPLETED_QUIZZES,
         { variables: { userId: params.profile }, fetchPolicy: "no-cache" });
@@ -36,16 +35,10 @@ const UserProfile = () => {
             if (completedQuizData.userCompletedQuizzes) setCompleted(completedQuizData.userCompletedQuizzes.completedQuizzes)
         };
         if (currentUser) getCurrentUser(currentUser.currentUser);
-        console.log({ current_user });
+        console.log({ current_user, userFetchError });
     }, [quizData, userData, quizzes, user, completedQuizData, completed]);
 
-    if (!user) {
-        return (
-            <div>
-                <Error message="This user doesn't exist!" />
-            </div>
-        );
-    };
+    if (!user && !userFetchLoading) return <Error message="This user doesn't exist!" />;
 
     return (
         <div>
@@ -67,7 +60,7 @@ const UserProfile = () => {
                 </div>
             </div>
             <div className="user-profile-wrapper">
-                {user ?
+                {current_user ?
                     current_user.id === params.profile ? <p>This is the user</p> : null
                     : null}
             </div>
