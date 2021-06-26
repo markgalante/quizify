@@ -252,45 +252,56 @@ const Mutation = types => new GraphQLObjectType({
                 let score = 0;
                 let totalQuestions = 0;
                 Quiz.findById(args.quizId).then(quiz => {
-                    for (let i = 0; i < quiz.completedBy.length; i++) {
-                        if (req.user._id.equals(quiz.completedBy[i].user)) {
-                            console.log("You've done this quiz already!");
-                            return;
+                    if (req.user._id.equals(quiz.creatorId)) { //Determines if you made the quiz. 
+                        throw new Error();
+                    }
+                    if (req.user.completedQuizzes.length <= quiz.completedBy.length) {
+                        for (let i = 0; i < req.user.completedQuizzes.length; i++) {
+                            if (req.user.completedQuizzes[i].quiz.equals(args.quizId)) {
+                                console.log("You've done this quiz already.");
+                                return;
+                            };
                         };
-                    };
-                });
-                return;
-                Question.find({ quizId: args.quizId })
-                    .then(question => {
-                        totalQuestions = question.length;
-                        for (let i = 0; i < args.options.length; i++) {
-                            for (let x = 0; x < question[i].options.length; x++) {
-                                if (question[i].options[x].option === args.options[i].option) {
-                                    if (question[i].options[x].isCorrect) {
-                                        score++;
+                    } else {
+                        for (let i = 0; i < quiz.completedBy.length; i++) {
+                            if (req.user._id.equals(quiz.completedBy[i].user)) { //Determines if you've done this quiz.
+                                console.log("You've done this quiz already!");
+                                return;
+                            };
+                        };
+                    }
+                    Question.find({ quizId: args.quizId })
+                        .then(question => {
+                            totalQuestions = question.length;
+                            for (let i = 0; i < args.options.length; i++) {
+                                for (let x = 0; x < question[i].options.length; x++) {
+                                    if (question[i].options[x].option === args.options[i].option) {
+                                        if (question[i].options[x].isCorrect) {
+                                            score++;
+                                        }
                                     }
                                 }
                             }
-                        }
-                        const quizPayload = {
-                            user: req.user._id,
-                            score: score,
-                            totalQuestions: totalQuestions
-                        }
-                        Quiz.findByIdAndUpdate(args.quizId, { $push: { completedBy: quizPayload } })
-                            .then(() => console.log("SUCCESS"))
-                            .catch(err => console.log("ERROR UPDATING QUIZ", err))
+                            const quizPayload = {
+                                user: req.user._id,
+                                score: score,
+                                totalQuestions: totalQuestions
+                            }
+                            Quiz.findByIdAndUpdate(args.quizId, { $push: { completedBy: quizPayload } })
+                                .then(() => console.log("SUCCESS"))
+                                .catch(err => console.log("ERROR UPDATING QUIZ", err))
 
-                        const userPayload = {
-                            quiz: args.quizId,
-                            score,
-                            totalQuestions
-                        }
-                        User.findByIdAndUpdate(req.user._id, { $push: { completedQuizzes: userPayload } })
-                            .then(user => console.log("UPDATED USER", user))
-                            .catch(err => console.log("ERROR UPDATING USER", err))
-                    })
-                    .catch(err => console.log(err))
+                            const userPayload = {
+                                quiz: args.quizId,
+                                score,
+                                totalQuestions
+                            }
+                            User.findByIdAndUpdate(req.user._id, { $push: { completedQuizzes: userPayload } })
+                                .then(user => console.log("UPDATED USER", user))
+                                .catch(err => console.log("ERROR UPDATING USER", err))
+                        })
+                        .catch(err => console.log(err))
+                }).catch(err => new Error("You cannot perform this function", err));
             }
         }
     },
