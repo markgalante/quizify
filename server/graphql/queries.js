@@ -6,7 +6,6 @@ const Option = require("../models/option");
 const User = require("../models/user");
 const Question = require("../models/question");
 
-
 const {
     GraphQLObjectType,
     GraphQLList,
@@ -59,7 +58,7 @@ const RootQuery = types => new GraphQLObjectType({
             type: new GraphQLList(types.QuizType),
             resolve(parent, args, req) {
                 if (!req.user) {
-                    return;
+                    throw new Error("You need to be logged in to view this");
                 }
                 return Quiz.find({ creatorId: req.user._id, submitted: false });
             }
@@ -75,7 +74,12 @@ const RootQuery = types => new GraphQLObjectType({
             type: types.UserType,
             args: { id: { type: new GraphQLNonNull(GraphQLID) } },
             resolve(parent, args) {
-                return User.findById(args.id);
+                return User.findById(args.id).then(user => {
+                    if (!user) throw new Error();
+                    return user;
+                }).catch(err => {
+                    throw new Error("This user does not exist");
+                })
             },
         },
         users: {
