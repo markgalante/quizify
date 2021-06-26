@@ -20,7 +20,13 @@ const RootQuery = types => new GraphQLObjectType({
             type: types.QuizType,
             args: { id: { type: GraphQLID } },
             resolve(parent, args) {
-                return Quiz.findById(args.id);
+                return Quiz.findById(args.id)
+                    .then(quiz => {
+                        if (!quiz) throw new Error();
+                        return quiz;
+                    }).catch(() => {
+                        throw new Error("This quiz does not exist");
+                    });
             },
         },
         quizes: {
@@ -33,7 +39,7 @@ const RootQuery = types => new GraphQLObjectType({
             type: new GraphQLList(types.QuizType),
             resolve(parent, args, req) {
                 if (!req.user) return;
-                return Quiz.find({ submitted: true, $nor: [{ 'completedBy.user': req.user._id }, { creatorId: req.user._id }] })
+                return Quiz.find({ submitted: true, $nor: [{ 'completedBy.user': req.user._id }, { creatorId: req.user._id }] });
             }
         },
         userCompletedQuizzes: {

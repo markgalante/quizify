@@ -27,7 +27,7 @@ const SubmittedQuiz = () => {
             {quizLoading
                 ? <LoadingSpinner />
                 : quizError
-                    ? <Error />
+                    ? <Error message={quizError.message} />
                     : null}
             {quiz
                 ? (<div>
