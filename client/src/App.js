@@ -40,9 +40,7 @@ function App() {
           </Route>
           <Route path="/profile/:profile"><UserProfile /></Route>
           <Route path="/quiz/:id" exact={false}>
-            {isLoggedIn
-              ? <SubmittedQuiz />
-              : <Redirect to="/" />}
+            <SubmittedQuiz />
           </Route>
         </Switch>
       </Router>
