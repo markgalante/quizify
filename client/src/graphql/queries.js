@@ -26,6 +26,7 @@ export const QUIZ = gql`
                     option
                     isCorrect
                 }
+                quizCreator
             }
         }
     }
