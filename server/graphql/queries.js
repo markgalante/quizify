@@ -107,16 +107,17 @@ const RootQuery = types => new GraphQLObjectType({
                 const user = req.user
                 if (!user) {
                     console.log("req.user is undefined");
-                    throw new Error("No user logged in");
+                } else {
+                    return User.findById(user.id)
+                        .then(user => {
+                            if (!user) throw new Error();
+                            return user;
+                        })
+                        .catch(() => {
+                            throw new Error("No user found");
+                        });
                 }
-                return User.findById(user.id)
-                    .then(user => {
-                        if (!user) throw new Error();
-                        return user;
-                    })
-                    .catch(() => {
-                        throw new Error("No user found");
-                    });
+
             }
         },
     },
