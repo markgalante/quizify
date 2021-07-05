@@ -51,6 +51,23 @@ export const GET_QUESTIONS = gql`
     }
 `;
 
+export const UNSUBMITTED_QUIZZES = gql`
+    {
+        myUnsubmittedQuizzes {
+            id
+            title
+            questions {
+                id
+                question
+                options {
+                    option
+                    isCorrect
+                }
+            }
+        }
+    }
+`;
+
 export const SUBMITTED_QUIZZES = gql`
     {
         submittedQuizzes {
