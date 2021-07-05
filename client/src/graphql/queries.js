@@ -24,7 +24,6 @@ export const QUIZ = gql`
                 question
                 options{
                     option
-                    isCorrect
                 }
                 quizCreator
             }
