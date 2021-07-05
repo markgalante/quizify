@@ -73,7 +73,10 @@ const RootQuery = types => new GraphQLObjectType({
                 if (!req.user) {
                     throw new Error("You need to be logged in to view this");
                 }
-                return Quiz.find({ creatorId: req.user._id, submitted: false });
+                return Quiz.find({ creatorId: req.user._id, submitted: false })
+                    .catch(err => {
+                        console.log("myUnsubmittedQuizzes err = ", { err })
+                    });
             }
         },
         questions: {
