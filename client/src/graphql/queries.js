@@ -31,6 +31,29 @@ export const QUIZ = gql`
     }
 `;
 
+export const QUIZ_OF_USER = gql`
+    query($id: ID!){
+        quizOfUser(id: $id) {
+            id
+            title
+            submitted
+            creator{
+                email
+                id
+            }
+            questions{
+                id
+                question
+                options{
+                    option
+                    isCorrect
+                }
+                quizCreator
+            }
+        }
+    }
+`;
+
 export const GET_QUESTIONS = gql`
     query($id: ID!){
         quiz(id:$id){

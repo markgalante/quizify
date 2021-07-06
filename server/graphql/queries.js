@@ -29,6 +29,20 @@ const RootQuery = types => new GraphQLObjectType({
                     });
             },
         },
+        quizOfUser: {
+            type: types.QuizType,
+            args: { id: { type: GraphQLID } },
+            async resolve(parent, args, req) {
+                try {
+                    const quiz = await Quiz.findById(args.id);
+                    if (!quiz) throw new Error("Quiz does not exist");
+                    if (req.user._id.equals(quiz.creatorId)) return quiz;
+                    else throw new Error("You do not have authority to view this")
+                } catch (error) {
+                    throw new Error("Something went wrong!", { error });
+                }
+            },
+        },
         quizes: {
             type: new GraphQLList(types.QuizType),
             resolve(parent, args, req) {
@@ -120,7 +134,6 @@ const RootQuery = types => new GraphQLObjectType({
                             throw new Error("No user found");
                         });
                 }
-
             }
         },
     },
