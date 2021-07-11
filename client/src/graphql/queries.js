@@ -91,6 +91,15 @@ export const UNSUBMITTED_QUIZZES = gql`
     }
 `;
 
+export const UNSUBMITTED_QUIZZES_LIST = gql`
+    {
+        myUnsubmittedQuizzes {
+            id
+            title
+        }
+    }
+`;
+
 export const SUBMITTED_QUIZZES = gql`
     {
         submittedQuizzes {
