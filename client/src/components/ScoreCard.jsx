@@ -5,13 +5,13 @@ import "../styles/text.css";
 const ScoreCard = ({ quizzes }) => {
     return (
         <div>
-            {quizzes.map(quiz => (
-                <div className="score-card">
+            {quizzes.map((quiz, key) => (
+                <li className="score-card" key={key}>
                     <p>
                         <span className="bold">{quiz.quiz.title} </span>
                         <span className="italics">{quiz.score}/{quiz.totalQuestions}</span>
                     </p>
-                </div>))}
+                </li>))}
         </div>
     );
 };
