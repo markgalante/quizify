@@ -8,7 +8,7 @@ import { useRouteMatch } from "react-router-dom";
 
 //GraphQL
 import { useQuery } from "@apollo/client";
-import { QUIZ } from "../graphql/queries";
+import { QUIZ, QUIZ_OF_USER } from "../graphql/queries";
 
 //Components 
 import LoadingSpinner from "./LoadingSpinner";
@@ -18,16 +18,18 @@ import SubmittedQuestions from "./SubmittedQuestions";
 const SubmittedQuiz = () => {
     const match = useRouteMatch();
     const { data: quizData, loading: quizLoading, error: quizError } = useQuery(QUIZ, { variables: { id: match.params.id } });
+    const { data: quizOfUserData, loading: quizOfUserLoading, error: quizOfUserError } = useQuery(QUIZ_OF_USER, { variables: { id: match.params.id } });
     const [quiz, setQuiz] = useState(null);
 
 
     useEffect(() => {
         if (quizData) setQuiz(quizData.quiz);
-    }, [quizData, quiz, setQuiz])
+        if (quizOfUserData) setQuiz(quizOfUserData.quizOfUser);
+    }, [quizData, quizOfUserData, quiz, setQuiz])
 
     return (
         <>
-            {quizLoading
+            {quizLoading || quizOfUserLoading
                 ? <LoadingSpinner />
                 : quizError
                     ? <Error message={quizError.message} />

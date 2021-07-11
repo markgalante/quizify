@@ -37,15 +37,14 @@ const SubmittedQuestions = ({ questions, quizId, creator }) => {
             {questions.map((question, index) => (
                 <div key={index}>
                     <h3>{index + 1}. {question.question}</h3>
-                    <SubmittedOptions options={question.options} question={question.id} questionIndex={index} />
+                    <SubmittedOptions options={question.options} question={question.id} questionIndex={index} isCreator={question.quizCreator} />
                 </div>
             ))}
             {currentUserData.currentUser
                 ? currentUserData.currentUser.id === creator
                     ? null
-                    : <input type="submit" value="Submit Answers" className="submit-answers-button" />
+                    : <input type="submit" value="Submit Answers" className="submit-answers-button auth-submit-button" />
                 : null}
-
         </form>
     )
 };

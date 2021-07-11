@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { initialState, reducer } from "./submitQuiz/SubmitQuizReducer";
 
-const SubmittedOptions = ({ options, question, questionIndex }) => {
+const SubmittedOptions = ({ options, question, questionIndex, isCreator }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const [answer, setAnswer] = useState(null);
 
@@ -22,7 +22,7 @@ const SubmittedOptions = ({ options, question, questionIndex }) => {
             {
                 options.map((option, index) => (
                     <div key={index}>
-                        <input type="radio" value={option.option} name={question} onChange={() => selectAnswer(option, index)} />
+                        <input type="radio" value={option.option} name={question} onChange={() => selectAnswer(option, index)} checked={isCreator && option.isCorrect} />
                         <label>{option.option}</label>
                     </div>
                 ))
@@ -31,4 +31,4 @@ const SubmittedOptions = ({ options, question, questionIndex }) => {
     )
 };
 
-export default SubmittedOptions; 
+export default SubmittedOptions;
