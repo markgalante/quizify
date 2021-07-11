@@ -8,6 +8,7 @@ import LoadingSpinner from "./LoadingSpinner";
 import Error from "./Error";
 import ScoreCard from "./ScoreCard";
 import QuizCard from "./QuizCard";
+import UnsubmittedQuizList from "./UnsubmittedQuizList";
 
 //STYLES
 import "../styles/user-profile.css";
@@ -28,7 +29,6 @@ const UserProfile = () => {
 
 
     useEffect(() => {
-        console.log({ userData })
         if (quizData) getQuizzes(quizData.myQuizzes);
         if (userData) getUser(userData.user);
         if (completedQuizData) {
@@ -61,7 +61,7 @@ const UserProfile = () => {
             </div>
             <div className="user-profile-wrapper">
                 {current_user ?
-                    current_user.id === params.profile ? <p>This is the user</p> : null
+                    current_user.id === params.profile ? <UnsubmittedQuizList /> : null
                     : null}
             </div>
         </div>
