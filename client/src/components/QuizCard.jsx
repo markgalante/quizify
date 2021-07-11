@@ -6,7 +6,7 @@ const QuizCard = ({ quizList }) => {
     return (
         <li className="quiz-list-item">
             {quizList.map(quiz => (
-                <div className="quiz-div" onClick={() => { history.push(`/quiz/${quiz.id}`) }}>
+                <div className="quiz-div" key={quiz.id} onClick={() => { history.push(`/quiz/${quiz.id}`) }}>
                     <p><span className="quiz-title">{quiz.title}</span> - <span>Author</span></p>
                 </div>))}
         </li>
