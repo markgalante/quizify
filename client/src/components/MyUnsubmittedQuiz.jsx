@@ -5,9 +5,13 @@ import { QUIZ_OF_USER, CURRENT_USER } from "../graphql/queries";
 //React-Router
 import { useRouteMatch } from "react-router-dom";
 
+//Components 
 import LoadingSpinner from "./LoadingSpinner";
 import Questions from "./unsubmitted-quiz/Questions";
-import QuizTitle from "./unsubmitted-quiz/QuizTitle"
+import QuizTitle from "./unsubmitted-quiz/QuizTitle"; 
+
+//Style: 
+import "../styles/quiz.css"; 
 
 const MyUnsubmittedQuiz = () => {
     const match = useRouteMatch();
@@ -38,7 +42,7 @@ const MyUnsubmittedQuiz = () => {
                 return <p>Error</p>
             } else {
                 return (
-                    <div>
+                    <div className="quiz-container">
                         <QuizTitle title={title} creator={creator} />
                         <Questions questions={questions} creator={creator} quizId={quizId} />
                     </div>);

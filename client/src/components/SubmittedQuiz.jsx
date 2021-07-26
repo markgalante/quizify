@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 //Stylesheet:
-import "../styles/submitted-quiz-style.css";
+import "../styles/quiz.css";
 
 //React-Router
 import { useRouteMatch } from "react-router-dom";
@@ -35,7 +35,7 @@ const SubmittedQuiz = () => {
                     ? <Error message={quizError.message} />
                     : null}
             {quiz
-                ? (<div className="submitted-quiz-container">
+                ? (<div className="quiz-container">
                     <h1>{quiz.title}</h1>
                     <p>{quiz.creator.email}</p>
                     <SubmittedQuestions questions={quiz.questions} quizId={quiz.id} creator={quiz.creator.id} />
