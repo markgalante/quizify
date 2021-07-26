@@ -4,9 +4,9 @@ import { useReactiveVar, useMutation } from "@apollo/client";
 import { DELETE_QUIZ } from "../graphql/mutations"
 import { GET_QUIZZES } from "../graphql/queries";
 import { showQuizEdit } from "../cache";
-import Questions from "./Questions";
+import MyUnsubmittedQuiz from "./MyUnsubmittedQuiz";
 import AddQuestion from "./AddQuestion";
-import UpdateQuizName from "./UpdateQuizName";
+import UpdateQuizName from "./update-quiz/UpdateQuizName";
 
 const PopulateQuiz = ({ quizData }) => {
     const [deleteQuiz] = useMutation(DELETE_QUIZ);
@@ -41,7 +41,7 @@ const PopulateQuiz = ({ quizData }) => {
                     id={quizData.quiz.id}
                     creator={quizData.quiz.creator.id}
                 />
-                <Questions
+                <MyUnsubmittedQuiz
                     questions={quizData.quiz.questions}
                     quizId={quizData.quiz.id}
                     creator={quizData.quiz.creator.id}
