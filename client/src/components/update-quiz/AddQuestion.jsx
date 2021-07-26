@@ -1,5 +1,5 @@
 import React from "react";
-import SubmitQuestion from "./SubmitQuestion";
+import SubmitQuestion from "../SubmitQuestion";
 
 class AddQuestion extends React.Component {
     constructor(props) {

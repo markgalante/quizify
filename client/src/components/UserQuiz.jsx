@@ -7,7 +7,7 @@ import { useRouteMatch, Link, Switch, Route, BrowserRouter as Router, useHistory
 import LoadingSpinner from "./LoadingSpinner";
 import Error from "./Error";
 import Questions from "./Questions";
-import AddQuestion from "./AddQuestion";
+import AddQuestion from "./update-quiz/AddQuestion";
 import UpdateQuizName from "./update-quiz/UpdateQuizName";
 import { showQuizEdit } from "../cache";
 

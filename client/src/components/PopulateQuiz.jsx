@@ -5,7 +5,7 @@ import { DELETE_QUIZ } from "../graphql/mutations"
 import { GET_QUIZZES } from "../graphql/queries";
 import { showQuizEdit } from "../cache";
 import MyUnsubmittedQuiz from "./MyUnsubmittedQuiz";
-import AddQuestion from "./AddQuestion";
+import AddQuestion from "./update-quiz/AddQuestion";
 import UpdateQuizName from "./update-quiz/UpdateQuizName";
 
 const PopulateQuiz = ({ quizData }) => {
