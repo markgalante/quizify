@@ -93,6 +93,20 @@ const RootQuery = types => new GraphQLObjectType({
                     });
             }
         },
+        myUnsubmittedQuiz: {
+            type: types.QuizType,
+            args: { id: { type: GraphQLNonNull(GraphQLID) } },
+            async resolve(parent, args, req) {
+                if (!req.user) throw new Error("You need to be logged in to view this");
+                try {
+                    const quiz = await Quiz.findById(args.id);
+                    if (quiz.submitted) throw new Error("You cannot edit this quiz. It has already been submitted.");
+                    else return quiz;
+                } catch (error) {
+                    throw new Error(error)
+                }
+            }
+        },
         questions: {
             type: new GraphQLList(types.QuestionType),
             args: { quizId: { type: new GraphQLNonNull(GraphQLID) } },
