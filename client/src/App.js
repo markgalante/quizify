@@ -10,6 +10,7 @@ import SignInSignUp from "./components/SignInSignUp";
 import UserProfile from "./components/UserProfile";
 import SubmittedQuiz from './components/SubmittedQuiz';
 import NavBar from "./components/NavBar";
+import MyUnsubmittedQuiz from "./components/MyUnsubmittedQuiz";
 
 function App() {
   const { data, error } = useQuery(CURRENT_USER, { fetchPolicy: "cache-and-network" });
@@ -41,6 +42,9 @@ function App() {
           <Route path="/profile/:profile"><UserProfile /></Route>
           <Route path="/quiz/:id" exact={false}>
             <SubmittedQuiz />
+          </Route>
+          <Route path="/my-quiz/:id">
+            <MyUnsubmittedQuiz />
           </Route>
         </Switch>
       </Router>
