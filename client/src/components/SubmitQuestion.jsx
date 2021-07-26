@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-
+import { useRouteMatch } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { ADD_QUESTION, UPDATE_QUESTION } from "../graphql/mutations";
-import { QUIZ } from "../graphql/queries";
+import { QUIZ_OF_USER } from "../graphql/queries";
 
 const SubmitQuestion = (props) => {
+    const match = useRouteMatch();
     const [updateQuestion] = useMutation(UPDATE_QUESTION, {
         onCompleted: () => console.log("Completed updateQuestion mutation"),
         onError: err => console.log({ err }),
@@ -21,17 +22,16 @@ const SubmitQuestion = (props) => {
     }, [props.options, disabled, setDisabled]);
 
     function handleSubmit() {
-
         if (props.task === "EditQuestion") {
             updateQuestion({
                 variables: {
                     question: props.question,
                     questionId: props.questionId,
                     options: props.options,
-                    creator: props.creator
+                    creator: props.creator.id
                 },
-                refetchQueries: [{query: QUIZ, variables: {id: props.quizId}}]
-            }); 
+                refetchQueries: [{ query: QUIZ_OF_USER, variables: { id: match.params.id } }]
+            });
         }
         if (props.task === "AddQuestion") {
             addQuestion({
@@ -41,20 +41,19 @@ const SubmitQuestion = (props) => {
                     creator: props.creator,
                     options: props.options,
                 },
-                refetchQueries: [{ query: QUIZ, variables: { id: props.quizId } }]
-            });   
+                refetchQueries: [{ query: QUIZ_OF_USER, variables: { id: props.quizId } }]
+            });
         }
+        props.setEditQuestion(false);
     };
 
     return (
         <>
-            {
-                disabled
-                    ? <button disabled>Choose Correct Option</button>
-                    : <button onClick={handleSubmit}>Submit Question</button>
-            }
+            {disabled
+                ? <button disabled>Choose Correct Option</button>
+                : <button onClick={handleSubmit}>Submit Question</button>}
         </>
     );
 };
 
-export default SubmitQuestion; 
+export default SubmitQuestion;
