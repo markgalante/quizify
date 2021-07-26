@@ -8,7 +8,7 @@ import LoadingSpinner from "./LoadingSpinner";
 import Error from "./Error";
 import Questions from "./Questions";
 import AddQuestion from "./AddQuestion";
-import UpdateQuizName from "./UpdateQuizName";
+import UpdateQuizName from "./update-quiz/UpdateQuizName";
 import { showQuizEdit } from "../cache";
 
 const UserQuiz = () => {
@@ -77,7 +77,7 @@ const UserQuiz = () => {
                 : error
                     ? <Error message={error.message} />
                     : data ? (<div>
-                        { quizEdit
+                        {quizEdit
                             ? (<UpdateQuizName title={data.quiz.title} id={match.params.id} creator={userData.currentUser.id} />)
                             : (<div>
                                 <h1>
