@@ -1,8 +1,18 @@
 .quiz-container {
+    position: relative;
     width : 80%;
     margin: 2em auto;
 }
 
 .submit-answers-button {
     margin: 2em auto;
+}; 
+
+.add-question-container{
+    margin: 10px 0;
+    border: 1px solid red; 
+}
+
+.add-question-container{
+    margin: 5vh 0;
 }

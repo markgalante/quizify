@@ -8,10 +8,11 @@ import { useRouteMatch } from "react-router-dom";
 //Components 
 import LoadingSpinner from "./LoadingSpinner";
 import Questions from "./unsubmitted-quiz/Questions";
-import QuizTitle from "./unsubmitted-quiz/QuizTitle"; 
+import QuizTitle from "./unsubmitted-quiz/QuizTitle";
+import AddQuestion from "./update-quiz/AddQuestion";
 
 //Style: 
-import "../styles/quiz.css"; 
+import "../styles/quiz.css";
 
 const MyUnsubmittedQuiz = () => {
     const match = useRouteMatch();
@@ -45,6 +46,9 @@ const MyUnsubmittedQuiz = () => {
                     <div className="quiz-container">
                         <QuizTitle title={title} creator={creator} />
                         <Questions questions={questions} creator={creator} quizId={quizId} />
+                        <div className="add-question-container">
+                            <AddQuestion creator={creator} quizId={quizId} />
+                        </div>
                     </div>);
             };
     };
