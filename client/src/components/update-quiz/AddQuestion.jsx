@@ -79,14 +79,28 @@ class AddQuestion extends React.Component {
         return (
             <div>
                 <form onSubmit={(e) => this.submitQuestion(e)}>
-                    <div>
-                        <label htmlFor="question">Question</label>
-                        <input id="question" onChange={(e) => this.setQuestion(e)} value={question} required />
+                    <div className="question-input-container">
+                        <label htmlFor="question" className="question-label">Question</label>
+                        <input
+                            id="question"
+                            onChange={(e) => this.setQuestion(e)}
+                            value={question} required
+                            className="input"
+                        />
                     </div>
                     <div>
-                        <label htmlFor="options">Option</label>
-                        <input id="options" type="text" onChange={e => this.setOption(e)} value={"" || option} />
-                        <button onClick={e => this.setOptions(e)}>Add Option</button>
+                        <div className="option-input-container">
+                            <label htmlFor="options">Option</label>
+                            <input
+                                id="options"
+                                type="text"
+                                onChange={e => this.setOption(e)}
+                                value={"" || option}
+                                className="input"
+                            />
+                            <button onClick={e => this.setOptions(e)} className="add-option-button">Add Option</button>
+                        </div>
+
                         {options.map((opt, index) => (
                             <div key={index} onDoubleClick={() => this.setState({ setOptionEdit: !setOptionEdit })}>
                                 <input type="radio" name="answer" onChange={() => this.setIsCorrect(index)} />
@@ -106,7 +120,6 @@ class AddQuestion extends React.Component {
                             </div>
                         ))}
                     </div>
-
                     <SubmitQuestion
                         question={question}
                         options={options}
