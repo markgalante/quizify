@@ -90,28 +90,30 @@ class AddQuestion extends React.Component {
                         {options.map((opt, index) => (
                             <div key={index} onDoubleClick={() => this.setState({ setOptionEdit: !setOptionEdit })}>
                                 <input type="radio" name="answer" onChange={() => this.setIsCorrect(index)} />
-                                {
-                                    setOptionEdit
-                                        ? <input type="text" defaultValue={opt.option || ""} onChange={(e) => this.editOption(e, index)} />
-                                        : <label>{opt.option} </label>
+                                {setOptionEdit
+                                    ? <input type="text" defaultValue={opt.option || ""} onChange={(e) => this.editOption(e, index)} />
+                                    : <label>{opt.option} </label>
                                 }
-                                {
-                                    setOptionEdit
-                                        ? null
-                                        : (
-                                            <span
-                                                className="curser-pointer"
-                                                title={`Delete option: ${opt.option}`}
-                                                onClick={() => this.deleteOption(index)}
-                                            > &#9747;</span>
-                                        )
+                                {setOptionEdit
+                                    ? null
+                                    : (<span
+                                        className="curser-pointer"
+                                        title={`Delete option: ${opt.option}`}
+                                        onClick={() => this.deleteOption(index)}
+                                    > &#9747;</span>
+                                    )
                                 }
-
                             </div>
                         ))}
                     </div>
 
-                    <SubmitQuestion question={question} options={options} creator={this.props.creator} quizId={this.props.id} task="AddQuestion" />
+                    <SubmitQuestion
+                        question={question}
+                        options={options}
+                        creator={this.props.creator}
+                        quizId={this.props.quizId}
+                        task="AddQuestion"
+                    />
                 </form>
             </div>
         )
