@@ -32,19 +32,20 @@ const SubmitQuestion = (props) => {
                 },
                 refetchQueries: [{ query: QUIZ_OF_USER, variables: { id: match.params.id } }]
             });
+            props.setEditQuestion(false);
         }
         if (props.task === "AddQuestion") {
             addQuestion({
                 variables: {
                     question: props.question,
                     quizId: props.quizId,
-                    creator: props.creator,
+                    creator: props.creator.id,
                     options: props.options,
                 },
                 refetchQueries: [{ query: QUIZ_OF_USER, variables: { id: props.quizId } }]
             });
         }
-        props.setEditQuestion(false);
+
     };
 
     return (
