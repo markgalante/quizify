@@ -67,17 +67,33 @@ class UpdateQuestion extends React.Component {
 
     render() {
         return (
-            <form onSubmit={(e) => this.submitQuestion(e)}>
-                <label>Question: </label>
-                <input value={this.state.question} onChange={e => { this.setQuestion(e) }} />
-                {
-                    this.state.options.map((opt, index) => (
-                        <div key={index}>
-                            <input type="radio" name="answer" onChange={() => this.setIsCorrect(index)} defaultChecked={opt.isCorrect} />
-                            <input type="text" defaultValue={opt.option} onChange={(e) => this.editOption(e, index)} required />
-                        </div>
-                    ))
-                }
+            <form onSubmit={(e) => this.submitQuestion(e)} className="update-question-form">
+                <div>
+                    <label className="bold">{this.props.index}. </label>
+                    <input
+                        value={this.state.question}
+                        onChange={e => { this.setQuestion(e) }}
+                        className="update-question-input bold"
+                    />
+                </div>
+
+                {this.state.options.map((opt, index) => (
+                    <div key={index} className="update-options-div">
+                        <input
+                            type="radio"
+                            name="answer"
+                            onChange={() => this.setIsCorrect(index)}
+                            defaultChecked={opt.isCorrect}
+                        />
+                        <input
+                            type="text"
+                            className="update-option-input"
+                            defaultValue={opt.option}
+                            onChange={(e) => this.editOption(e, index)}
+                            required
+                        />
+                    </div>
+                ))}
                 <SubmitQuestion
                     question={this.state.question}
                     options={this.state.options}
@@ -85,7 +101,11 @@ class UpdateQuestion extends React.Component {
                     questionId={this.props.questionId}
                     quizId={this.props.quizId}
                     task="EditQuestion"
-                    setEditQuestion={this.props.setEditQuestion} />
+                    setEditQuestion={this.props.setEditQuestion}
+                />
+                <button onClick={() => this.props.setEditQuestion(false)}>
+                    Cancel
+                </button>
             </form>
         );
     };
