@@ -14,7 +14,7 @@
 
 .add-question-container {
     margin: 5vh auto;
-    width: 75%;
+    width : 75%;
 }
 
 .question-input-container {
@@ -36,4 +36,28 @@
 .option-input-container {
     position: relative;
     margin  : 1em 0;
+}
+
+.update-question-form {
+    margin: 1em 0;
+}
+
+.update-question-input {
+    width           : 80%;
+    border-top      : none;
+    border-left     : none;
+    border-right    : none;
+    background-color: transparent;
+    font-size       : 16px;
+    font-family     : 'Montserrat', sans-serif;
+}
+
+.update-options-div {
+    margin: .35em 0;
+}
+
+.update-option-input {
+    width      : 50%;
+    font-size  : 16px;
+    font-family: 'Montserrat', sans-serif;
 }
