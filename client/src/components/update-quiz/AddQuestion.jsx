@@ -77,58 +77,56 @@ class AddQuestion extends React.Component {
     render() {
         const { question, option, options, setOptionEdit } = this.state;
         return (
-            <div>
-                <form onSubmit={(e) => this.submitQuestion(e)}>
-                    <div className="question-input-container">
-                        <label htmlFor="question" className="question-label">Question</label>
+            <form onSubmit={(e) => this.submitQuestion(e)}>
+                <div className="question-input-container">
+                    <label htmlFor="question" className="question-label">Question</label>
+                    <input
+                        id="question"
+                        onChange={(e) => this.setQuestion(e)}
+                        value={question} required
+                        className="input"
+                    />
+                </div>
+                <div>
+                    <div className="option-input-container">
+                        <label htmlFor="options">Option</label>
                         <input
-                            id="question"
-                            onChange={(e) => this.setQuestion(e)}
-                            value={question} required
+                            id="options"
+                            type="text"
+                            onChange={e => this.setOption(e)}
+                            value={"" || option}
                             className="input"
                         />
+                        <button onClick={e => this.setOptions(e)} className="add-option-button">Add Option</button>
                     </div>
-                    <div>
-                        <div className="option-input-container">
-                            <label htmlFor="options">Option</label>
-                            <input
-                                id="options"
-                                type="text"
-                                onChange={e => this.setOption(e)}
-                                value={"" || option}
-                                className="input"
-                            />
-                            <button onClick={e => this.setOptions(e)} className="add-option-button">Add Option</button>
-                        </div>
 
-                        {options.map((opt, index) => (
-                            <div key={index} onDoubleClick={() => this.setState({ setOptionEdit: !setOptionEdit })}>
-                                <input type="radio" name="answer" onChange={() => this.setIsCorrect(index)} />
-                                {setOptionEdit
-                                    ? <input type="text" defaultValue={opt.option || ""} onChange={(e) => this.editOption(e, index)} />
-                                    : <label>{opt.option} </label>
-                                }
-                                {setOptionEdit
-                                    ? null
-                                    : (<span
-                                        className="curser-pointer"
-                                        title={`Delete option: ${opt.option}`}
-                                        onClick={() => this.deleteOption(index)}
-                                    > &#9747;</span>
-                                    )
-                                }
-                            </div>
-                        ))}
-                    </div>
-                    <SubmitQuestion
-                        question={question}
-                        options={options}
-                        creator={this.props.creator}
-                        quizId={this.props.quizId}
-                        task="AddQuestion"
-                    />
-                </form>
-            </div>
+                    {options.map((opt, index) => (
+                        <div key={index} onDoubleClick={() => this.setState({ setOptionEdit: !setOptionEdit })}>
+                            <input type="radio" name="answer" onChange={() => this.setIsCorrect(index)} />
+                            {setOptionEdit
+                                ? <input type="text" defaultValue={opt.option || ""} onChange={(e) => this.editOption(e, index)} />
+                                : <label>{opt.option} </label>
+                            }
+                            {setOptionEdit
+                                ? null
+                                : (<span
+                                    className="curser-pointer"
+                                    title={`Delete option: ${opt.option}`}
+                                    onClick={() => this.deleteOption(index)}
+                                > &#9747;</span>
+                                )
+                            }
+                        </div>
+                    ))}
+                </div>
+                <SubmitQuestion
+                    question={question}
+                    options={options}
+                    creator={this.props.creator}
+                    quizId={this.props.quizId}
+                    task="AddQuestion"
+                />
+            </form>
         )
     }
 };
