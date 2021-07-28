@@ -29,12 +29,19 @@ const Question = ({ question, index, options, creator, questionIndex, questionId
     const [editQuestion, setEditQuestion] = useState(false);
 
     if (editQuestion) {
-        return <UpdateQuestion question={question} options={options} setEditQuestion={setEditQuestion} questionId={questionId} creator={creator} />
+        return <UpdateQuestion
+            question={question}
+            options={options}
+            setEditQuestion={setEditQuestion}
+            questionId={questionId}
+            creator={creator}
+            index={index}
+        />
     } else {
         return (
             <div>
                 <div className="question-title-div"><h3>
-                    {index}: {question}
+                    {index}. {question}
                     <span className="curser-pointer" title="Edit Question" onClick={() => setEditQuestion(true)}> &#9998;</span>
                     <span className="delete-button" title="Delete Question"> &#9747;</span>
                 </h3></div>
