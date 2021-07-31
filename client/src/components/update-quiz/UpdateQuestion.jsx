@@ -54,6 +54,17 @@ class UpdateQuestion extends React.Component {
         this.setState({ options });
     }
 
+    deleteOption(index) {
+        const { options } = this.state;
+        console.log({ options, index });
+        this.setState(() => ({
+            options: [],
+        }), () => {
+            const updatedOptions = options.filter(opt => options[index].option !== opt.option);
+            this.setState({ options: updatedOptions });
+        });
+    };
+
     submitQuestion(e) {
         e.preventDefault();
         showQuestionEdit(false);
@@ -91,7 +102,11 @@ class UpdateQuestion extends React.Component {
                             defaultValue={opt.option}
                             onChange={(e) => this.editOption(e, index)}
                             required
-                        />
+                        /> <span
+                            className="curser-pointer"
+                            title={`Delete option`}
+                            onClick={() => this.deleteOption(index)}
+                        > &#9747;</span>
                     </div>
                 ))}
                 <SubmitQuestion
