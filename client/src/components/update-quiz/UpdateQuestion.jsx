@@ -56,7 +56,6 @@ class UpdateQuestion extends React.Component {
 
     deleteOption(index) {
         const { options } = this.state;
-        console.log({ options, index });
         this.setState(() => ({
             options: [],
         }), () => {
@@ -74,6 +73,22 @@ class UpdateQuestion extends React.Component {
             options: [],
             setOptionEdit: false,
         });
+    };
+
+    addOption(e) {
+        e.preventDefault();
+        const { options } = this.state;
+        this.setState(() => ({
+            options: []
+        }), () => {
+            this.setState({
+                options: [...options, { option: this.state.option, isCorrect: false }],
+            })
+        });
+    };
+
+    setOption(e) {
+        this.setState({ option: e.target.value })
     }
 
     render() {
@@ -87,7 +102,17 @@ class UpdateQuestion extends React.Component {
                         className="update-question-input bold"
                     />
                 </div>
-
+                <div className="option-input-container">
+                    <label htmlFor="options">Option</label>
+                    <input
+                        id="options"
+                        type="text"
+                        onChange={e => this.setOption(e)}
+                        value={"" || this.state.option}
+                        className="input"
+                    />
+                    <button onClick={e => this.addOption(e)} className="add-option-button">Add Option</button>
+                </div>
                 {this.state.options.map((opt, index) => (
                     <div key={index} className="update-options-div">
                         <input
